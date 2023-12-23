@@ -1,0 +1,6 @@
+@API.KM58_HostAddress = http://localhost:5115
+
+GET {{API.KM58_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
