@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34112.27
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.KM58", "API.KM58\API.KM58.csproj", "{DBD76573-34B0-4C21-9668-9A8C513DA462}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FE.KM58", "FE.KM58\FE.KM58.csproj", "{8B3E9187-AEB5-483E-ADB4-897E1CAFD2E4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FE.ADMIN", "FE.ADMIN\FE.ADMIN.csproj", "{97E15584-AE44-406F-96B3-360497F9EB99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{DBD76573-34B0-4C21-9668-9A8C513DA462}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DBD76573-34B0-4C21-9668-9A8C513DA462}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DBD76573-34B0-4C21-9668-9A8C513DA462}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8B3E9187-AEB5-483E-ADB4-897E1CAFD2E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8B3E9187-AEB5-483E-ADB4-897E1CAFD2E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8B3E9187-AEB5-483E-ADB4-897E1CAFD2E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8B3E9187-AEB5-483E-ADB4-897E1CAFD2E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97E15584-AE44-406F-96B3-360497F9EB99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97E15584-AE44-406F-96B3-360497F9EB99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97E15584-AE44-406F-96B3-360497F9EB99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97E15584-AE44-406F-96B3-360497F9EB99}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
