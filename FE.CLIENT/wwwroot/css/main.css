@@ -37,7 +37,7 @@ img {
 .wrap-auth {
   width: 100%;
   height: auto;
-  background-image: url("../assets/images/bg.jpg");
+  background-image: url("/images/bg.jpg");
   background-color: #26a8df;
   background-size: 100% 100%;
   background-repeat: no-repeat;
@@ -68,7 +68,7 @@ img {
   z-index: 6;
   margin: 0 auto 50px;
   position: relative;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 43.1%, rgba(255, 255, 255, 0.6) 91.15%), url("../assets/images/bg-form.png");
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 43.1%, rgba(255, 255, 255, 0.6) 91.15%), url("/images/bg-form.png");
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4), inset 0px 0px 20px rgba(255, 255, 255, 0.5);
   background-size: 100% 100%;
   background-repeat: no-repeat;
@@ -140,7 +140,7 @@ img {
 
 .form-step_btn {
   flex: 1;
-  background: url("../assets/images/bgBtn.html");
+  background: url("/images/bgBtn.html");
   background-size: 100% 100%;
   background-repeat: no-repeat;
   width: 100%;

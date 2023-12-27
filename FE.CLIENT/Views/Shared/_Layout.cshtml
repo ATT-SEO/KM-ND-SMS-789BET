@@ -28,7 +28,7 @@
           mãi của F8BET dành cho</marquee>
       </div>
             @{
-                @RenderBody()
+                    @RenderBody()
             }
       
     </div>
@@ -108,6 +108,7 @@
   <script>
       new Fingerprint2().get(function (result, components) {
           $("#regfingerprint").val(result);
+          console.log($("#regfingerprint").val());
       });
   </script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
