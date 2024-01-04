@@ -36,6 +36,47 @@ namespace API.KM58.Controllers
             }
             return _response;
         }
+        [HttpGet]
+        [Route("GetByStatus/{Status}")]
+        public async Task<ResponseDTO> GetByStatus(int Status)
+        {
+            bool status = false;
+            if(Status == 1)
+            {
+                status = true;
+            }
+            try
+            {
+                List<SMS> SMSList = await _db.SMS.Where(s => s.Status == status).ToListAsync();
+                _response.Result = _mapper.Map<List<SMSDTO>>(SMSList);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+        [HttpGet]
+        [Route("GetDateTimeEnd/{Device}")]
+        public async Task<ResponseDTO> GetDateTimeEnd(string Device)
+        {
+            try
+            {
+                SMS latestSms = await _db.SMS.Where(s => s.Device == Device)
+                    .OrderByDescending(s => s.UpdateTime)
+                    .FirstOrDefaultAsync();
+
+                _response.Result = _mapper.Map<SMSDTO>(latestSms);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
 
         [HttpGet]
         [Route("{Id}")]
@@ -59,14 +100,30 @@ namespace API.KM58.Controllers
         {
             try
             {
-                SMS _SMS = _mapper.Map<SMS>(inputSMS);
-                _db.SMS.Add(_SMS);
-                await _db.SaveChangesAsync();
+                SMS existingSMS = await _db.SMS
+                    .FirstOrDefaultAsync(s => s.Device == inputSMS.Device && s.UpdateTime == inputSMS.UpdateTime && s.Content == inputSMS.Content);
+
+                if (existingSMS == null)
+                {
+                    inputSMS.CreatedTime = DateTime.Now;
+                    inputSMS.EditTime = DateTime.Now;
+                    SMS newSMS = _mapper.Map<SMS>(inputSMS);
+                    _db.SMS.Add(newSMS);
+                    await _db.SaveChangesAsync();
+
+                    _response.IsSuccess = true;
+                    _response.Message = "Thêm mới SMS thành công.";
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "SMS đã tồn tại trong cơ sở dữ liệu.";
+                }
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 _response.IsSuccess = false;
-                _response.Message = Ex.InnerException.Message;
+                _response.Message = ex.InnerException?.Message ?? ex.Message;
             }
             return _response;
         }

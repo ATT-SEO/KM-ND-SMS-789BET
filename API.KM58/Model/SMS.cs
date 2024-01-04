@@ -13,5 +13,8 @@ namespace API.KM58.Model
         [Required]
         public string UpdateTime { get; set; }
         public bool Status { get; set; }
+        public string? Device { get; set; }
+        public DateTime? CreatedTime { get; set; }
+        public DateTime? EditTime { get; set; }
     }
 }

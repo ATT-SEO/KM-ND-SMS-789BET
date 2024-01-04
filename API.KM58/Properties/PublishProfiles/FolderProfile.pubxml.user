@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\Bo-KM58k\FILE_BUILD\API</_PublishTargetUrl>
+    <History>True|2024-01-02T11:40:20.8361123Z;True|2024-01-02T19:22:36.0101574+08:00;True|2023-12-27T15:05:34.4549064+08:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="Model/DTO/RequestDTO.cs">
+      <publishTime>12/27/2023 14:15:13</publishTime>
+    </File>
+    <File Include="Model/DTO/ResponseDTO.cs">
+      <publishTime>12/27/2023 14:15:13</publishTime>
+    </File>
+    <File Include="Model/DTO/SMSDTO.cs">
+      <publishTime>01/02/2024 18:22:06</publishTime>
+    </File>
+  </ItemGroup>
+</Project>
