@@ -128,23 +128,93 @@ namespace API.KM58.Controllers
                 SMS existingSMS = await _db.SMS
                     .FirstOrDefaultAsync(s => s.Device == inputSMS.Device 
                     && s.Content == inputSMS.Content 
-                    && s.Sender == inputSMS.Sender
-                    && s.ProjectCode == inputSMS.ProjectCode);
+                    && s.Sender == inputSMS.Sender);
 
+                if (existingSMS != null && existingSMS.CreatedTime == null)
+                {
+                    inputSMS.CreatedTime = DateTime.Now; // dựa vào CreatedTime là từ app update
+                    //SMS newSMS = _mapper.Map<SMS>(inputSMS);
+                    //_db.SMS.Add(newSMS);
+                    //await _db.SaveChangesAsync();
+
+                    //_response.IsSuccess = true;
+                    //_response.Message = "Thêm mới SMS thành công.";
+                    _db.Entry(existingSMS).State = EntityState.Modified;
+
+                    await _db.SaveChangesAsync();
+
+                    _response.IsSuccess = true;
+                    _response.Message = "Cập nhật thành công.";
+
+
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "SMS không hợp lệ cơ sở dữ liệu.";
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.InnerException?.Message ?? ex.Message;
+            }
+            return _response;
+        }
+
+        [HttpPost]
+        [Route("PostWebsite")]
+        public async Task<ResponseDTO> PostWebsite(SMSDTO inputSMS)
+        {
+            try
+            {
+                SMS existingSMS = await _db.SMS
+                    .FirstOrDefaultAsync(s =>s.Sender == inputSMS.Sender);
                 if (existingSMS == null)
                 {
-                    inputSMS.CreatedTime = DateTime.Now;
+                    inputSMS.SiteTime = DateTime.Now;
                     SMS newSMS = _mapper.Map<SMS>(inputSMS);
                     _db.SMS.Add(newSMS);
                     await _db.SaveChangesAsync();
-
+                    _response.Result = _mapper.Map<SMS>(newSMS);
                     _response.IsSuccess = true;
                     _response.Message = "Thêm mới SMS thành công.";
                 }
                 else
                 {
-                    _response.IsSuccess = false;
-                    _response.Message = "SMS đã tồn tại trong cơ sở dữ liệu.";
+                    _response.Result = _mapper.Map<SMSDTO>(existingSMS);
+                    _response.IsSuccess = true;
+                    _response.Message = "Đã có SMS ở hệ thống.";
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.InnerException?.Message ?? ex.Message;
+            }
+            return _response;
+        }
+
+        [HttpPost]
+        [Route("CheckSMSWebsite")]
+        public async Task<ResponseDTO> CheckSMSWebsite(SMSDTO inputSMS)
+        {
+            try
+            {
+                SMS existingSMS = await _db.SMS
+                    .FirstOrDefaultAsync(s => s.Content == inputSMS.Content&& s.Sender == inputSMS.Sender);
+
+                if (existingSMS != null)
+                {
+                    _response.Result = _mapper.Map<SMS>(existingSMS);
+                    _response.IsSuccess = true;
+                    _response.Message = "Thêm mới SMS thành công.";
+                }
+                else
+                {
+                    _response.Result = null;
+                    _response.IsSuccess = true;
+                    _response.Message = "Thông tin chưa có trên hệ thống.";
                 }
             }
             catch (Exception ex)

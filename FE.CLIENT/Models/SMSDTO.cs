@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace API.KM58.Model.DTO
+﻿namespace FE.CLIENT.Models
 {
     public class SMSDTO
     {
@@ -12,6 +10,5 @@ namespace API.KM58.Model.DTO
         public bool Status { get; set; }
         public DateTime? CreatedTime { get; set; }
         public DateTime? SiteTime { get; set; }
-
     }
 }

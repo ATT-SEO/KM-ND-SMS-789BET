@@ -37,6 +37,21 @@
                         <a class="nav-link" asp-controller="Site" asp-action="Index">Danh sách Site</a>
                     </nav>
                 </div>
+
+                <a class="nav-link collapsed @(currentController == "SMS" ? "active" : "")" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#SMS_Project" aria-expanded="false" aria-controls="SMS_Project">
+                    <div class="nav-link-icon">
+                        <i data-feather="mail"></i>
+                    </div>
+                    Quản lý sms
+                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="SMS_Project" data-bs-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAppsMenu">
+                        <a class="nav-link" asp-controller="SMS" asp-action="Index">Tất cả</a>
+                        <a class="nav-link" asp-controller="SMS" asp-action="Index" asp-route-Status="0">Chưa xác thực</a>
+                        <a class="nav-link" asp-controller="SMS" asp-action="Index" asp-route-Status="1">Đã xác thực</a>
+                    </nav>
+                </div>
               @*   <a class="nav-link @(currentController == "WhiteListIP" ? "active" : "")" asp-controller="WhiteListIP" asp-action="Index">
                     <div class="nav-link-icon"><i data-feather="bar-chart"></i></div>
                     Danh sách IP khách

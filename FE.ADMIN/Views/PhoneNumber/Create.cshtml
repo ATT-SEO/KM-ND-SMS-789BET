@@ -1,26 +1,32 @@
 ﻿@model PhoneNumberDTO
 <form asp-controller="PhoneNumber" asp-action="Create">
 <div class="row">
-    <div class="col-lg-10 m-auto">
+    <div class="col-9 m-auto">
         <div id="default">
             <div class="card mb-4">
                 <div class="card-header">Tạo Số điện thoại</div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-5">
+                        <div class="col-6 mb-2">
                             <div class="form-group">
                                 <label for="Number" class="mb-1">Số điện thoại</label>
                                     <input class="form-control" asp-for="Number" placeholder="Nhập số điện thoại">
                             </div>
                         </div>
-                        <div class="col-5">
+                        <div class="col-6 mb-2">
+                            <div class="form-group">
+                                <label for="Device" class="mb-1">Thiết bị(Mã điện thoại) </label>
+                                <input class="form-control" asp-for="Device" placeholder="Mã điện thoại">
+                            </div>
+                        </div>
+                        <div class="col-6 mb-2">
                             <label for="SiteID" class="mb-1">Chọn Site</label>
                                 <select asp-for="SiteID" asp-items="@ViewBag.SelectSite" class="form-select">
                                 <option value="" selected>-- Chọn site project --</option>
                             </select>
                                 <span asp-validation-for="SiteID" class="text-danger" />
                         </div>
-                        <div class="col-2">
+                        <div class="col-2 mb-2">
                             <div class="form-group">
                                 <label for="top" class="mb-1">Trạng thái</label>
                                 <div class="form-check form-switch">

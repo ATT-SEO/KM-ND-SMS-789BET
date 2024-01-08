@@ -8,20 +8,26 @@
                     <div class="card-header">Chỉnh sửa thông tin số điện thoại</div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-5">
+                            <div class="col-6 mb-3">
                                 <div class="form-group">
                                     <label for="Number" class="mb-1">Số điện thoại</label>
                                     <input class="form-control" id="Number" asp-for="Number" placeholder="Nhập số điện thoại">
                                 </div>
                             </div>
-                            <div class="col-5">
+                            <div class="col-6 mb-3">
+                                <div class="form-group">
+                                    <label for="Device" class="mb-1">Thiết bị(Mã điện thoại) </label>
+                                    <input class="form-control" asp-for="Device" placeholder="Mã điện thoại">
+                                </div>
+                            </div>
+                            <div class="col-6 mb-3">
                                 <label for="SiteID" class="mb-1">Chọn Site</label>
                                 <select asp-for="SiteID" asp-items="@ViewBag.SelectSite" class="form-select">
                                     <option value="" selected>-- Chọn site project --</option>
                                 </select>
                                 <span asp-validation-for="SiteID" class="text-danger" />
                             </div>
-                            <div class="col-2">
+                            <div class="col-2 mb-3">
                                 <div class="form-group">
                                     <label for="top" class="mb-1">Trạng thái</label>
                                     <div class="form-check form-switch">

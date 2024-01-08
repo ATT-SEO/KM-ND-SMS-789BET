@@ -1,4 +1,4 @@
-﻿var superPhone="";
+﻿var superPhone = "";
 
 var clipboard = new ClipboardJS('.button-copy-content');
 clipboard.on('success', function (e) {
@@ -9,22 +9,25 @@ clipboard.on('success', function (e) {
         icon: "success",
     });
 });
+
 function showLoadingSpinner() {
     document.getElementById("loadingOverlay").style.display = "flex";
-}function hideLoadingSpinner() {
+}
+
+function hideLoadingSpinner() {
     document.getElementById("loadingOverlay").style.display = "none";
 }
 $(document).on('click', '#btnCheck', function (e) {
-   
+
     var account = $("#userName").val()
     if (account == "") {
-        ShowErrorMsg("Tài khoản không được để trống")//account not null
+        ShowErrorMsg("Tài khoản không được để trống") //account not null
         return;
     }
     $('#btnCheck').attr('disabled', true);
     var data = {
-      "Account":account,
-      "Regfingerprint":$("#regfingerprint").val()
+        "Account": account,
+        "Regfingerprint": $("#regfingerprint").val()
     };
     showLoadingSpinner();
     $.ajax("/Account/CheckAccount", {
@@ -36,106 +39,122 @@ $(document).on('click', '#btnCheck', function (e) {
             $('#btnCheck').attr('disabled', false);
             hideLoadingSpinner();
 
-            if(response.success){
-              if (response.result.code == 200) {
-                  var phone = response.result.phone;
-                  var smscode = response.result.smsCode;
-                  superPhone = response.result.superPhone;
-				  var verifyCode = response.result.verifyCode
-                  $("#btnCopyContentPhone").attr("data-clipboard-text", superPhone);
-                  $("#btnCopyContent").attr("data-clipboard-text", smscode);
-                  var mobile = superPhone.substring(0, 3) + "." + superPhone.substring(3, 5) + "." + "***" + superPhone.substring(8);
-                  var phone1 = phone.substring(0, 3) +  "." + "***" + phone.substring(6);
-                  $("#phone").val(phone1);
-                  $("#oldphone").val(phone);
-                  $("#content").val(smscode);
-				  $("#verifycode").val(verifyCode);
-                  $("#contentPhone").val(superPhone);
-              } else {
-                  ShowErrorMsg(response.result.message);
-              }
-          }
+            if (response.success) {
+                if (response.result.code == 200) {
+                    var phone = response.result.phone;
+                    var smscode = response.result.smsCode;
+                    superPhone = response.result.superPhone;
+                    var verifyCode = response.result.verifyCode
+                    $("#btnCopyContentPhone").attr("data-clipboard-text", superPhone);
+                    $("#btnCopyContent").attr("data-clipboard-text", smscode);
+                    var mobile = superPhone.substring(0, 3) + "." + superPhone.substring(3, 5) + "." + "***" + superPhone.substring(8);
+                    var phone1 = phone.substring(0, 3) + "." + "***" + phone.substring(6);
+                    $("#phone").val(phone1);
+                    $("#oldphone").val(phone);
+                    $("#content").val(smscode);
+                    $("#verifycode").val(verifyCode);
+                    $("#contentPhone").val(superPhone);
+                } else {
+                    ShowErrorMsg(response.result.message);
+                }
+            }
         },
         error: function (error) {
+            hideLoadingSpinner();
             $('#btnCheck').attr('disabled', false);
-            ShowErrorMsg("Yêu cầu bất thường");// error
+            ShowErrorMsg("Yêu cầu bất thường"); // error
         }
     })
 });
-$(document).on('click', '#wrap-form-send-sms', function(e) {
+$(document).on('click', '#wrap-form-send-sms', function (e) {
     const phone = document.getElementById('oldphone').value;
     const regex = /^\+?[0-9]{3}-?[0-9]{7,11}$/i;
     if (!regex.test(phone)) {
         swal({
-          title: "Thành Công",
-          text: `Vui lòng nhập đúng số điện thoại`,
-          icon: "error",
+            title: "Thành Công",
+            text: `Vui lòng nhập đúng số điện thoại`,
+            icon: "error",
         });
 
     } else {
         if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
-            window.location = "sms://"+superPhone;
+            window.location = "sms://" + superPhone;
         } else {
-            window.location = 'sms:'+superPhone+'?body=' + $("#content").val();
+            window.location = 'sms:' + superPhone + '?body=' + $("#content").val();
         }
     }
 });
-$(document).on('click', '#wrap-form-sended-sms', function(e) {
-  var account = $("#userName").val()
-  var phone = $("#oldphone").val()
-  var smscode = $("#content").val()
-  
-  var verifycode = $("#verifycode").val()
-  if(account == "" || phone == ""){
-    ShowErrorMsg("Tài khoản không được để trống")//account not null
-    return;
-  }
+$(document).on('click', '#wrap-form-sended-sms', function (e) {
+    var account = $("#userName").val()
+    var phone = $("#oldphone").val()
+    var smscode = $("#content").val()
 
-  $("#wrap-form-sended-sms").attr('disabled', true);
-  var data = {
-    "account":account,
-    "phone":phone,
-    "smsCode":smscode,
-    "VerifyCode":verifycode,
-	"Regfingerprint":$("#regfingerprint").val()
-  }
-    $.ajax("/Account/SubmitBouns",{
-    type : "POST",
-    data: JSON.stringify(data),
-    dataType : 'json',
-    contentType : "application/json",
-    success : function(response) {
-      $('#wrap-form-sended-sms').attr('disabled', false);
-      if(response.success){
-        if (response.result.code == 200) {
-          swal({
-            title: "Thành Công",
-            text: "Nhận thành công ,kiểm tra ngay",
-            icon: "success",
-          });
-           // ShowErrorMsg("");//succ
-            window.location.href = "/";
-        }
-        else {
-            ShowErrorMsg(response.result.message);
-        }
-      }
-    },
-    error : function(error) {
-      $('#wrap-form-sended-sms').attr('disabled', false);
-      ShowErrorMsg("Yêu cầu bất thường");//error
+    var verifycode = $("#verifycode").val()
+    if (account == "" || phone == "") {
+        ShowErrorMsg("Tài khoản không được để trống") //account not null
+        return;
     }
-  })
+
+
+    $("#wrap-form-sended-sms").attr('disabled', true);
+    var data = {
+        "account": account,
+        "phone": phone,
+        "smsCode": smscode,
+        "VerifyCode": verifycode,
+        "Regfingerprint": $("#regfingerprint").val()
+    }
+    showLoadingSpinner();
+    var countdown = 30;
+    var countdownInterval = setInterval(function () {
+        if (countdown <= 0) {
+            clearInterval(countdownInterval);
+            $.ajax("/Account/SubmitBouns", {
+                type: "POST",
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: "application/json",
+                success: function (response) {
+                    $('#wrap-form-sended-sms').attr('disabled', false);
+                    hideLoadingSpinner();
+
+                    if (response.success) {
+                        if (response.result.code == 200) {
+                            ShowSuccessMsg(response.result.message);
+                        } else {
+                            ShowErrorMsg(response.result.message);
+                        }
+                    }
+                },
+                error: function (error) {
+                    hideLoadingSpinner();
+                    $('#wrap-form-sended-sms').attr('disabled', false);
+                    ShowErrorMsg("Yêu cầu bất thường"); //error
+                }
+            });
+        } else {
+            $('#text-time-count').html("Hệ thống đang xác nhận. Vui lòng chờ trong " + countdown + " giây...");
+        }
+        countdown--;
+    }, 1000);
 });
 
-$(document).on('click', '#wrap-from-instruct', function(e) {
-  window.location.href = "/";
+$(document).on('click', '#wrap-from-instruct', function (e) {
+    window.location.href = "/";
 });
 
-function ShowErrorMsg(errormsg){
-  swal({
-    title: "Thành Công",
-    text: errormsg,
-    icon: "error",
-  });
+function ShowErrorMsg(errormsg) {
+    swal({
+        title: "Thất bại",
+        text: errormsg,
+        icon: "error",
+    });
+};
+
+function ShowSuccessMsg(successMsg) {
+    swal({
+        title: "Thành Công",
+        text: successMsg,
+        icon: "success",
+    });
 };

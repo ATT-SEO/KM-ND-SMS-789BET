@@ -15,5 +15,6 @@ namespace API.KM58.Model
         public string? Device { get; set; }
         public string? ProjectCode { get; set; }
         public DateTime? CreatedTime { get; set; }
+        public DateTime? SiteTime { get; set; }
     }
 }
