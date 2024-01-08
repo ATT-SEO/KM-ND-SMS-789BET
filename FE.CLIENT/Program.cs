@@ -1,7 +1,35 @@
-var builder = WebApplication.CreateBuilder(args);
+using FE.CLIENT.Services;
+using FE.CLIENT.Services.IService;
+using FE.CLIENT.Utility;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
+var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddHttpClient();
+builder.Services.AddHttpClient<IBOService, BOService>();
+builder.Services.AddHttpClient<ISiteService, SiteService>();
+builder.Services.AddHttpClient<IPhoneNumberService, PhoneNumberService>();
+
+
+builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+builder.Services.AddScoped<IBaseService, BaseService>();
+builder.Services.AddScoped<IBOService, BOService>();
+builder.Services.AddScoped<ISiteService, SiteService>();
+builder.Services.AddScoped<IPhoneNumberService, PhoneNumberService>();
+
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+{
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+    options.LoginPath = "/Auth/Login";
+    options.AccessDeniedPath = "/Auth/AccessDenied";
+});
+
+SD.ApiKM58 = builder.Configuration["ServiceURLs:ApiKM58"];
+
 
 var app = builder.Build();
 
@@ -13,11 +41,12 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

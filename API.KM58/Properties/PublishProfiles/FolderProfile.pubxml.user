@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>D:\Bo-KM58k\FILE_BUILD\API</_PublishTargetUrl>
-    <History>True|2024-01-02T11:40:20.8361123Z;True|2024-01-02T19:22:36.0101574+08:00;True|2023-12-27T15:05:34.4549064+08:00;</History>
+    <History>True|2024-01-07T12:12:40.4281842Z;True|2024-01-07T16:45:11.9450663+08:00;True|2024-01-07T16:45:09.0318129+08:00;True|2024-01-06T18:28:44.7992597+08:00;True|2024-01-02T19:40:20.8361123+08:00;True|2024-01-02T19:22:36.0101574+08:00;True|2023-12-27T15:05:34.4549064+08:00;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>

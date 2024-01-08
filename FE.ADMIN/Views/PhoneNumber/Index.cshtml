@@ -1,0 +1,94 @@
+﻿@model List<PhoneNumberDTO>
+
+<div class="card mb-4">
+	<div class="card-header">
+		Danh sách Số điện thoại nhận tin nhắn
+		<a class="btn btn-primary btn-sm float-end" asp-action="Create"><i class="bi bi-plus-square"></i>Thêm mới</a>
+	</div>
+
+	<div class="card-body">
+		<table id="datatablesSimple">
+			<thead>
+				<tr>
+					<th>
+						#ID
+					</th>
+					<th>
+						SĐT
+					</th>
+					<th>
+						Site
+					</th>
+					<th>
+						Thiết bị
+					</th>
+					<th>
+						Trạng thái
+					</th>
+					<th style="width:215px">
+						Thao tác
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				@if (Model != null && Model.Count > 0)
+				{
+					@foreach (var phoneNumber in Model)
+					{
+						<tr>
+							<td>
+								@phoneNumber.Id
+							</td>
+							<td>
+								@phoneNumber.Number
+							</td>
+							<td>
+								@phoneNumber.Site.Name
+							</td>
+							<td>
+								@phoneNumber.Device
+							</td>
+							<td>
+								@if (@phoneNumber.Status == true)
+								{
+									<div class="form-check form-switch">
+										<input class="form-check-input" type="checkbox" role="switch" disabled checked>
+									</div>
+								}
+								else
+								{
+									<div class="form-check form-switch">
+										<input class="form-check-input" type="checkbox" role="switch" disabled>
+									</div>
+								}
+							</td>
+							<td>
+								<a type="button" class="btn btn-primary btn-sm me-2" asp-controller="PhoneNumber" asp-action="Edit" asp-route-Id="@phoneNumber.Id">
+									<i data-feather="edit"></i>
+									Edit
+								</a>
+								<a type="button" class="btn btn-danger btn-sm" asp-controller="PhoneNumber" asp-action="Delete" asp-route-Id="@phoneNumber.Id" onclick="return confirm('Bạn có chắc chắn muốn xóa không?');">
+									<i data-feather="trash-2"></i> Delete
+								</a>
+							</td>
+						</tr>
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+@section Scripts {
+    <script>
+		window.addEventListener('DOMContentLoaded', event => {
+			// Simple-DataTables
+			// https://github.com/fiduswriter/Simple-DataTables/wiki
+
+			const datatablesSimple = document.getElementById('datatablesSimple');
+			if (datatablesSimple) {
+				new simpleDatatables.DataTable(datatablesSimple);
+			}
+		});
+    </script>
+}

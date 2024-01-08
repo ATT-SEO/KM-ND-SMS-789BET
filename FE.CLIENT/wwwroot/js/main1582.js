@@ -1,24 +1,19 @@
-﻿
-
-const ApiUrl="https://api.f862.com/";
-
-var superPhone="";
-
+﻿var superPhone="";
 
 var clipboard = new ClipboardJS('.button-copy-content');
 clipboard.on('success', function (e) {
-        e.clearSelection();
-        swal({
-          title: "Thành Công",
-          text: `Sao chép nội dung gửi đi: ${e.text} thành công!`,
-          icon: "success",
-        });
-      });
-   
-
-
-
-
+    e.clearSelection();
+    swal({
+        title: "Thành Công",
+        text: `Sao chép nội dung gửi đi: ${e.text} thành công!`,
+        icon: "success",
+    });
+});
+function showLoadingSpinner() {
+    document.getElementById("loadingOverlay").style.display = "flex";
+}function hideLoadingSpinner() {
+    document.getElementById("loadingOverlay").style.display = "none";
+}
 $(document).on('click', '#btnCheck', function (e) {
    
     var account = $("#userName").val()
@@ -31,13 +26,16 @@ $(document).on('click', '#btnCheck', function (e) {
       "Account":account,
       "Regfingerprint":$("#regfingerprint").val()
     };
-    $.ajax(ApiUrl+"api/F8betApi/CheckAccount", {
+    showLoadingSpinner();
+    $.ajax("/Account/CheckAccount", {
         type: "POST",
         data: JSON.stringify(data),
         dataType: 'json',
         contentType: "application/json",
         success: function (response) {
             $('#btnCheck').attr('disabled', false);
+            hideLoadingSpinner();
+
             if(response.success){
               if (response.result.code == 200) {
                   var phone = response.result.phone;
@@ -64,12 +62,10 @@ $(document).on('click', '#btnCheck', function (e) {
         }
     })
 });
-
 $(document).on('click', '#wrap-form-send-sms', function(e) {
     const phone = document.getElementById('oldphone').value;
     const regex = /^\+?[0-9]{3}-?[0-9]{7,11}$/i;
     if (!regex.test(phone)) {
-        
         swal({
           title: "Thành Công",
           text: `Vui lòng nhập đúng số điện thoại`,
@@ -84,7 +80,6 @@ $(document).on('click', '#wrap-form-send-sms', function(e) {
         }
     }
 });
-
 $(document).on('click', '#wrap-form-sended-sms', function(e) {
   var account = $("#userName").val()
   var phone = $("#oldphone").val()
@@ -104,7 +99,7 @@ $(document).on('click', '#wrap-form-sended-sms', function(e) {
     "VerifyCode":verifycode,
 	"Regfingerprint":$("#regfingerprint").val()
   }
-    $.ajax(ApiUrl+"api/F8betApi/SubmitBouns",{
+    $.ajax("/Account/SubmitBouns",{
     type : "POST",
     data: JSON.stringify(data),
     dataType : 'json',
@@ -119,7 +114,7 @@ $(document).on('click', '#wrap-form-sended-sms', function(e) {
             icon: "success",
           });
            // ShowErrorMsg("");//succ
-            window.location.href = "https://f8bet0.com/";
+            window.location.href = "/";
         }
         else {
             ShowErrorMsg(response.result.message);
@@ -134,7 +129,7 @@ $(document).on('click', '#wrap-form-sended-sms', function(e) {
 });
 
 $(document).on('click', '#wrap-from-instruct', function(e) {
-  window.location.href = "https://f8bet0.com/";
+  window.location.href = "/";
 });
 
 function ShowErrorMsg(errormsg){

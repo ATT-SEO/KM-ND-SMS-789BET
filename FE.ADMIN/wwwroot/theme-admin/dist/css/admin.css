@@ -1,0 +1,293 @@
+﻿.upload-image-category {
+    display: none;
+}
+
+.picture {
+    width: 400px;
+    /*aspect-ratio: 16/9;*/
+    min-height:225px;
+    background: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    border: 2px dashed currentcolor;
+    cursor: pointer;
+    font-family: sans-serif;
+    transition: color 300ms ease-in-out, background 300ms ease-in-out;
+    outline: none;
+    overflow: hidden;
+}
+
+    .picture:hover {
+        color: #777;
+        background: #ccc;
+    }
+
+    .picture:active {
+        border-color: turquoise;
+        color: turquoise;
+        background: #eee;
+    }
+
+    .picture:focus {
+        color: #777;
+        background: #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+.picture__img {
+    max-width: 100%;
+}
+
+/* CSS cho spinner container */
+.spinner-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: rgba(255, 255, 255, 0.8); /* Màu nền với độ trong suốt */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+}
+
+/* CSS cho spinner */
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3); /* Màu đậm của vòng tròn spinner */
+    border-top: 4px solid #3498db; /* Màu đậm của vòng tròn spinner khi quay */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 0.8s linear infinite; /* Tạo hiệu ứng quay vòng tròn */
+    margin: 0 auto;
+}
+
+/* Keyframes cho hiệu ứng quay vòng tròn */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+.list-image-cate {
+    max-height: 75vh;
+    overflow-y: auto;
+    padding: 0 15px;
+}
+.item-image-page {
+    margin-bottom: 14px;
+    padding: 0px 15px;
+    border-bottom: 1px dashed #abafaf;
+    padding-bottom: 14px;
+}
+.item-image-page img {
+    max-width: 100%;
+    height: auto;
+}
+.image-table-l {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.image-table-l img {
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+    width: auto;
+    object-fit: cover;
+}
+.label-info {
+    background-color: #5bc0de;
+}
+
+.label {
+    display: inline;
+    padding: 0.2em 0.6em 0.3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25em;
+}
+.bootstrap-tagsinput {
+    width: 100%;
+}
+.bootstrap-tagsinput .tag {
+
+    padding: 1px 3px;
+}
+
+.pcs, .cur, .per {
+    white-space: nowrap;
+}
+
+.pcs:after {
+    content: " pcs";
+}
+
+.cur:before {
+    content: "$";
+}
+
+.per:after {
+    content: "%";
+}
+
+* {
+    box-sizing: border-box;
+}
+/*
+table {
+position: relative;
+width: 100%;
+}
+table th {
+text-align: left;
+vertical-align: bottom;
+border-bottom: 1px solid #ccc;
+text-transform: uppercase;
+font: 0.8em 'Oswald', sans-serif;
+}
+table th, table td {
+padding: 10px 0;
+}
+table.fold-table {
+background: white;
+color: #555;
+}
+table.fold-table > tbody > tr.view {
+transition: all 0.3s ease;
+}
+table.fold-table > tbody > tr.view td, table.fold-table > tbody > tr.view th {
+cursor: pointer;
+}
+table.fold-table > tbody > tr.view td:first-child, table.fold-table > tbody > tr.view th:first-child {
+position: relative;
+padding-left: 20px;
+}
+table.fold-table > tbody > tr.view td:first-child:before, table.fold-table > tbody > tr.view th:first-child:before {
+position: absolute;
+top: 50%;
+left: 5px;
+width: 9px;
+height: 16px;
+margin-top: -8px;
+content: "^";
+transition: all 0.3s ease;
+color: #000;
+}
+table.fold-table > tbody > tr.view {
+background: #eee;
+}
+table.fold-table > tbody > tr.view.open {
+background: #eee;
+background: #ddd;
+}
+table.fold-table > tbody > tr.view.open td:first-child:before, table.fold-table > tbody > tr.view.open th:first-child:before {
+transform: rotate(-180deg);
+}
+table.fold-table > tbody > tr.fold {
+display: none;
+}
+table.fold-table > tbody > tr.fold.open {
+display: table-row;
+}
+.fold-content {
+padding: 0;
+margin: 4px 0 
+}
+.fold-content h3 {
+margin-top: 0;
+}
+.fold-content > table {
+background: white;
+color: #555;     
+}
+.fold-content > table > tbody > tr {
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: space-around;
+}
+.fold-content > table > tbody > tr:nth-child(even) {
+background: #eee;
+}
+.fold-content > table > tbody > tr:hover {
+background: #ddd;
+}
+.visible-small {
+display: none;
+}
+
+.visible-big {
+display: block;
+}
+
+@media (max-width: 700px) {
+body {
+font-size: 0.8em;
+padding: 0 10px;
+}
+
+table th, table td {
+padding: 1em 0.2em;
+}
+
+table th {
+vertical-align: bottom;
+padding-bottom: 0;
+}
+
+table.small-friendly > thead {
+display: none;
+}
+
+table.small-friendly > tbody > tr > td, table.small-friendly > tbody > tr > th {
+position: relative;
+padding: 0;
+padding-left: 50%;
+display: block;
+vertical-align: top;
+border-bottom: 1px solid rgba(0, 0, 0, .05);
+}
+
+table.small-friendly > tbody > tr > td:before, table.small-friendly > tbody > tr > th:before {
+position: absolute;
+top: 0;
+left: 0.5em;
+max-width: 50%;
+content: attr(data-th) ": ";
+display: block;
+font-weight: bold;
+}
+
+table.small-friendly > tbody > tr > td:first-child, table.small-friendly > tbody > tr > th:first-child {
+margin-top: 1em;
+}
+
+table.small-friendly > tbody > tr > td:last-child, table.small-friendly > tbody > tr > th:last-child {
+margin-bottom: 1em;
+border: 0;
+}
+
+.visible-small {
+display: block;
+}
+
+.visible-big {
+display: none;
+}
+}
+*/

@@ -1,4 +1,4 @@
-using FE.CLIENT.Models;
+﻿using FE.CLIENT.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -15,6 +15,9 @@ namespace FE.CLIENT.Controllers
 
         public IActionResult Index()
         {
+            ViewData["Title"] = "Jun88 - Khuyến mãi 58k";
+            ViewData["Description"] = "Chương trình khuyến mãi của Jun88 dành cho thành viên Jun88 - Khuyến mãi 58k ";
+            ViewData["Keywords"] = "Jun88, khuyến mãi, khuyến mãi 58k, đăng ký, hội viên ...";
             return View();
         }
 

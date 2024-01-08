@@ -4,6 +4,7 @@ using API.KM58.Model.DTO;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace API.KM58.Controllers
 {
@@ -65,7 +66,7 @@ namespace API.KM58.Controllers
             try
             {
                 SMS latestSms = await _db.SMS.Where(s => s.Device == Device)
-                    .OrderByDescending(s => s.UpdateTime)
+                    .OrderByDescending(s => s.CreatedTime)
                     .FirstOrDefaultAsync();
 
                 _response.Result = _mapper.Map<SMSDTO>(latestSms);
@@ -77,6 +78,30 @@ namespace API.KM58.Controllers
             }
             return _response;
         }
+
+        [HttpGet]
+        [Route("GetTotalSMS/")]
+        public async Task<ResponseDTO> GetTotalSMS([FromQuery] int Total, [FromQuery] string Device)
+
+        {
+            try
+            {
+                IEnumerable<SMS> listSMS = _db.SMS
+                .Where(s => s.Device == Device)
+                .OrderByDescending(w => w.CreatedTime)
+                .Take(Total)
+                .ToList();
+                _response.Result = _mapper.Map<List<SMSDTO>>(listSMS);
+            }
+            catch (Exception Ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = Ex.Message;
+            }
+            return _response;
+        }
+
+
 
         [HttpGet]
         [Route("{Id}")]
@@ -101,12 +126,14 @@ namespace API.KM58.Controllers
             try
             {
                 SMS existingSMS = await _db.SMS
-                    .FirstOrDefaultAsync(s => s.Device == inputSMS.Device && s.UpdateTime == inputSMS.UpdateTime && s.Content == inputSMS.Content);
+                    .FirstOrDefaultAsync(s => s.Device == inputSMS.Device 
+                    && s.Content == inputSMS.Content 
+                    && s.Sender == inputSMS.Sender
+                    && s.ProjectCode == inputSMS.ProjectCode);
 
                 if (existingSMS == null)
                 {
                     inputSMS.CreatedTime = DateTime.Now;
-                    inputSMS.EditTime = DateTime.Now;
                     SMS newSMS = _mapper.Map<SMS>(inputSMS);
                     _db.SMS.Add(newSMS);
                     await _db.SaveChangesAsync();

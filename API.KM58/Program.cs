@@ -2,6 +2,8 @@ using API.KM58;
 using API.KM58.Data;
 using API.KM58.Extensions;
 using API.KM58.Model;
+using API.KM58.Service.IService;
+using API.KM58.Service;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +29,10 @@ builder.Services.AddHttpClient();
 //builder.Services.AddHttpClient<IBackgroundWorkerService, BackgroundWorkerService>();
 
 //builder.Services.AddScoped<IBackgroundWorkerService, BackgroundWorkerService>();
+
+builder.Services.AddHttpClient<IBOService, BOService>();
+builder.Services.AddScoped<IBOService, BOService>();
+
 
 builder.Services.AddSwaggerGen(option =>
 {

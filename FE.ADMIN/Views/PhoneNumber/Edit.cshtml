@@ -1,0 +1,48 @@
+﻿@model PhoneNumberDTO
+<form asp-controller="PhoneNumber" asp-action="Edit">
+     <input asp-for="Id" hidden/>
+    <div class="row">
+        <div class="col-lg-10 m-auto">
+            <div id="default">
+                <div class="card mb-4">
+                    <div class="card-header">Chỉnh sửa thông tin số điện thoại</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="form-group">
+                                    <label for="Number" class="mb-1">Số điện thoại</label>
+                                    <input class="form-control" id="Number" asp-for="Number" placeholder="Nhập số điện thoại">
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <label for="SiteID" class="mb-1">Chọn Site</label>
+                                <select asp-for="SiteID" asp-items="@ViewBag.SelectSite" class="form-select">
+                                    <option value="" selected>-- Chọn site project --</option>
+                                </select>
+                                <span asp-validation-for="SiteID" class="text-danger" />
+                            </div>
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label for="top" class="mb-1">Trạng thái</label>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" asp-for="Status" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="pt-3 pb-3">
+                                <input type="submit" value="Cập nhật" class="btn btn-success form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+}

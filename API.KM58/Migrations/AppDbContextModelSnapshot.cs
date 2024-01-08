@@ -73,8 +73,8 @@ namespace API.KM58.Migrations
                     b.Property<string>("Device")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("EditTime")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("ProjectCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sender")
                         .IsRequired()
@@ -82,10 +82,6 @@ namespace API.KM58.Migrations
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
-
-                    b.Property<string>("UpdateTime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

@@ -1,0 +1,46 @@
+@font-face {
+  font-family: "SF Pro Display";
+  font-weight: 400;
+  src: url(webfonts/FontsFree-Net-SFProDisplay-Regular.ttf);
+}
+
+@font-face {
+  font-family: "SF Pro Display";
+  font-weight:500;
+  src: url(webfonts/FontsFree-Net-SFProDisplay-Semibold.ttf);
+}
+
+@font-face {
+  font-family: "SF Pro Display";
+  font-weight:bold;
+  src: url(webfonts/FontsFree-Net-SFProDisplay-Bold.ttf);
+}
+
+@font-face {
+  font-family: Merriweather;
+  font-weight:bold;
+  src: url(webfonts/Merriweather-Bold.ttf);
+}
+@font-face {
+  font-family: Merriweather;
+  font-weight:normal;
+  src: url(webfonts/Merriweather-Regular.ttf);
+}
+
+@font-face {
+  font-family: Metrophobic;
+  font-weight:normal;
+  src: url(webfonts/Metrophobic-Regular.ttf);
+}
+
+@font-face {
+  font-family: Roboto;
+  font-weight:normal;
+  src: url(webfonts/Roboto-Regular.ttf);
+}
+
+@font-face {
+  font-family: Roboto;
+  font-weight:bold;
+  src: url(webfonts/Roboto-Bold.ttf);
+}

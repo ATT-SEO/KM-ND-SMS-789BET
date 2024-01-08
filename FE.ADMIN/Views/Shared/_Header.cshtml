@@ -1,0 +1,80 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims;
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+<nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
+    <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 me-2 ms-lg-2 me-lg-0" id="sidebarToggle"><i data-feather="menu"></i></button>
+@*     <div class="navbar-brand pe-3 ps-4 ps-lg-2" href="#">
+        @{
+            // var siteactive = (User.Identity as ClaimsIdentity)?.FindFirst("siteactive")?.Value;
+            var siteactive = HttpContextAccessor.HttpContext.Session.GetString("siteactive");
+
+            var sitesClaim = (User.Identity as ClaimsIdentity)?.FindFirst("sites")?.Value;
+            var sites = string.IsNullOrEmpty(sitesClaim) ? new string[] { } : sitesClaim.Split(',');
+            <div class="dropdown no-caret w-100">
+                <a class="btn btn-teal dropdown-toggle w-100 p-2" href="#" role="button" id="dropdownMenuSite" data-bs-toggle="dropdown" aria-expanded="false">
+                    @siteactive
+                </a>
+                <ul class="dropdown-menu dropdown-menu-start border-0 shadow animated--fade-in-up" aria-labelledby="dropdownMenuSite">
+                    @foreach (var site in sites)
+                    {
+                        <li><a class="dropdown-item" asp-controller="Home" asp-action="LoadSite" asp-route-Site="@site">@site</a></li>
+                    }
+                </ul>
+            </div>
+        }
+    </div> *@
+    <form class="form-inline me-auto d-none d-lg-block me-3">
+        <div class="input-group input-group-joined input-group-solid">
+            <input class="form-control pe-0" type="search" placeholder="Search" aria-label="Search" />
+            <div class="input-group-text"><i data-feather="search"></i></div>
+        </div>
+    </form>
+    <ul class="navbar-nav align-items-center ms-auto">
+        <li class="nav-item dropdown no-caret me-3 d-lg-none">
+            <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="searchDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="search"></i></a>
+            <div class="dropdown-menu dropdown-menu-end p-3 shadow animated--fade-in-up" aria-labelledby="searchDropdown">
+                <form class="form-inline me-auto w-100">
+                    <div class="input-group input-group-joined input-group-solid">
+                        <input class="form-control pe-0" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
+                        <div class="input-group-text"><i data-feather="search"></i></div>
+                    </div>
+                </form>
+            </div>
+        </li>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
+                <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img class="img-fluid" src="/theme-admin/dist/assets/img/illustrations/profiles/profile-1.png" />
+            </a>
+            <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
+                <h6 class="dropdown-header d-flex align-items-center">
+                    <img class="dropdown-user-img" src="~/theme-admin/dist/assets/img/illustrations/profiles/profile-1.png" />
+                    <div class="dropdown-user-details">
+                            <div class="dropdown-user-details-name">Hello @User.Identity.Name</div>
+                       @*  <div class="dropdown-user-details-email">vluna@aol.com</div> *@
+                    </div>
+                </h6>
+                <div class="dropdown-divider"></div>
+                    @if (@User.Identity.Name == "admin")
+                    {
+                        <a class="dropdown-item" asp-controller="UserSite" asp-action="Create">
+                            <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
+                            Setting UserSite
+                        </a>
+                    }
+                    <a class="dropdown-item" href="#">
+                        <div class="dropdown-item-icon"><i data-feather="layout"></i></div>
+                        Thông tin tài khoản
+                    </a>
+                    <a class="dropdown-item" asp-controller="Auth" asp-action="Logout">
+                    <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
+                    Logout
+                </a>
+            </div>
+        </li>
+        }
+    </ul>
+</nav>
