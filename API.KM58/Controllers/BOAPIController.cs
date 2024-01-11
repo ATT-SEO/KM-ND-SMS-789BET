@@ -34,9 +34,13 @@ namespace API.KM58.Controllers
             {
                 string _account = Account;
                 var jsonAllJiLiFishTickets = await _boService.BOGetCheckAccount(_account);
-                var jsonResponseData = (JObject)JsonConvert.DeserializeObject(jsonAllJiLiFishTickets.Result.ToString());
-                _response.Result = jsonResponseData;
-                Console.WriteLine(jsonResponseData);
+                //var jsonResponseData = (JObject)JsonConvert.DeserializeObject(jsonAllJiLiFishTickets.Result['data'].ToString());
+                JObject jsonResponseData = (JObject)JsonConvert.DeserializeObject(jsonAllJiLiFishTickets.Result.ToString());
+
+                JObject resultObject = jsonResponseData["result"] as JObject;
+                JArray dataArray = resultObject?["data"] as JArray;
+                JObject dataObject = dataArray?.FirstOrDefault() as JObject;
+                _response.Result = dataObject;
             }
             catch (Exception Ex)
             {

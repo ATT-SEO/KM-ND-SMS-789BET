@@ -28,7 +28,7 @@ namespace API.KM58.Service
 			_responseDTO = new ResponseDTO();
         }
 
-        public async Task<ResponseDTO?> addPointClient(String Site, String Account, int Point, String PromoID, int Round)
+        public async Task<ResponseDTO?> addPointClient(String Site, String Account, int Point, int Round,String Remarks, String Ecremarks)
         {
             try
             {
@@ -38,16 +38,14 @@ namespace API.KM58.Service
 
                 message.Method = HttpMethod.Post;
                 message.Headers.Add("Accept", "application/json");
-                message.RequestUri = new Uri("https://api-bo-shbet.khuyenmaiapp.com/add-point-bo");
+                message.RequestUri = new Uri($"https://api-bo-jun88k36.khuyenmaiapp.com/api/manualadjusts/add-batch-with-round?site={Site}");
                 message.Content = JsonContent.Create(new Dictionary<string, object>
                 {
-                    ["AccountsString"]=Account,
-                    ["Amount"]=Point.ToString(),
-                    ["Audit"]=(Point*Round).ToString(),
-                    ["Memo"]=PromoID,
-                    ["PortalMemo"] = PromoID,
-                    ["Timestamp"]= DateTimeOffset.Now.ToUnixTimeSeconds(),
-                    ["site"]=Site+"_code"
+                    ["playerid"] =Account,
+                    ["point"] = Point,
+                    ["round"] = Round,
+                    ["ecremarks"] = Ecremarks,
+                    ["remarks"] = Remarks
                 });
 
                 var apiResponse = await client.SendAsync(message);
@@ -85,12 +83,12 @@ namespace API.KM58.Service
             {
                 HttpClient client = _httpclientFactory.CreateClient();
                 HttpRequestMessage message = new HttpRequestMessage();
-                message.Method = HttpMethod.Get;
+                message.Method = HttpMethod.Post;
                 message.Headers.Add("Accept", "application/json");
-                message.RequestUri = new Uri($"https://api-bo-jun88cmd.khuyenmaiapp.com/main/find-id-member?username={Account}");
+                message.RequestUri = new Uri("https://api-bo-jun88k36.khuyenmaiapp.com/api/player/find-player?site=mocbai");
                 message.Content = JsonContent.Create(new Dictionary<string, object>
                 {
-                    ["username"] = Account,
+                    ["playerid"] = Account,
                 });
                 var apiResponse = await client.SendAsync(message);
                 switch (apiResponse.StatusCode)

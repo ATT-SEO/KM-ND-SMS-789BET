@@ -1,9 +1,12 @@
 ﻿using API.KM58.Data;
 using API.KM58.Model;
 using API.KM58.Model.DTO;
+using API.KM58.Service.IService;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System.Linq;
 
 namespace API.KM58.Controllers
@@ -15,11 +18,15 @@ namespace API.KM58.Controllers
         private readonly AppDbContext _db;
         private ResponseDTO _response;
         private IMapper _mapper;
-        public SMSController(AppDbContext db, IMapper mapper)
+        private readonly IBOService _boService;
+
+        public SMSController(AppDbContext db, IMapper mapper, IBOService boService)
         {
             _db = db;
             _mapper = mapper;
             _response = new ResponseDTO();
+            _boService = boService;
+
         }
 
         [HttpGet]
@@ -87,8 +94,8 @@ namespace API.KM58.Controllers
             try
             {
                 IEnumerable<SMS> listSMS = _db.SMS
-                .Where(s => s.Device == Device)
-                .OrderByDescending(w => w.CreatedTime)
+                .Where(s => s.Device == Device && s.CreatedTime == null)
+                .OrderByDescending(w => w.SiteTime)
                 .Take(Total)
                 .ToList();
                 _response.Result = _mapper.Map<List<SMSDTO>>(listSMS);
@@ -125,28 +132,38 @@ namespace API.KM58.Controllers
         {
             try
             {
+                string comparisonPart = inputSMS.Sender.Substring(3);
                 SMS existingSMS = await _db.SMS
                     .FirstOrDefaultAsync(s => s.Device == inputSMS.Device 
-                    && s.Content == inputSMS.Content 
-                    && s.Sender == inputSMS.Sender);
+                    && s.Content == inputSMS.Content
+                    && s.Sender.EndsWith(comparisonPart));
 
                 if (existingSMS != null && existingSMS.CreatedTime == null)
                 {
-                    inputSMS.CreatedTime = DateTime.Now; // dựa vào CreatedTime là từ app update
-                    //SMS newSMS = _mapper.Map<SMS>(inputSMS);
-                    //_db.SMS.Add(newSMS);
-                    //await _db.SaveChangesAsync();
-
-                    //_response.IsSuccess = true;
-                    //_response.Message = "Thêm mới SMS thành công.";
-                    _db.Entry(existingSMS).State = EntityState.Modified;
-
-                    await _db.SaveChangesAsync();
-
-                    _response.IsSuccess = true;
-                    _response.Message = "Cập nhật thành công.";
-
-
+                    string Site = "mocbai";
+                    string Account = existingSMS.Account;
+                    int Point = 66;
+                    int Round = 5;
+                    string Remarks = "MB66k";
+                    string Ecremarks = "Cộng điểm khuyến mãi 66K";
+                    var jsonAllJiLiFishTickets = await _boService.addPointClient(Site, Account, Point, Round,Remarks,Ecremarks);
+                    JObject jsonResponseData = (JObject)JsonConvert.DeserializeObject(jsonAllJiLiFishTickets.Result.ToString());
+                    if (jsonResponseData != null && jsonResponseData["status_code"] != null && (int)jsonResponseData["status_code"] == 200)
+                    {
+                        existingSMS.CreatedTime = DateTime.Now;
+                        existingSMS.ProjectCode = inputSMS.ProjectCode;
+                        existingSMS.Status = true;
+                        _db.Entry(existingSMS).State = EntityState.Modified;
+                        await _db.SaveChangesAsync();
+                        _response.Result = jsonResponseData;
+                        _response.IsSuccess = true;
+                        _response.Message = "Cập nhật điểm thành công.";
+                    }
+                    else
+                    {
+                        _response.IsSuccess = false;
+                        _response.Message = "Lỗi cộng điểm vào bo";
+                    }
                 }
                 else
                 {
@@ -168,8 +185,9 @@ namespace API.KM58.Controllers
         {
             try
             {
+                string comparisonPart = inputSMS.Sender.Substring(3);
                 SMS existingSMS = await _db.SMS
-                    .FirstOrDefaultAsync(s =>s.Sender == inputSMS.Sender);
+                    .FirstOrDefaultAsync(s =>(s.Sender == inputSMS.Sender) || (s.Sender.EndsWith(comparisonPart)));
                 if (existingSMS == null)
                 {
                     inputSMS.SiteTime = DateTime.Now;
@@ -201,14 +219,16 @@ namespace API.KM58.Controllers
         {
             try
             {
+                string comparisonPart = inputSMS.Sender.Substring(3);
                 SMS existingSMS = await _db.SMS
-                    .FirstOrDefaultAsync(s => s.Content == inputSMS.Content&& s.Sender == inputSMS.Sender);
+                    .FirstOrDefaultAsync(s => (s.Account == inputSMS.Account && s.Sender == inputSMS.Sender) ||
+        (s.Account == inputSMS.Account && s.Sender.EndsWith(comparisonPart)));
 
                 if (existingSMS != null)
                 {
                     _response.Result = _mapper.Map<SMS>(existingSMS);
                     _response.IsSuccess = true;
-                    _response.Message = "Thêm mới SMS thành công.";
+                    _response.Message = "Kiểm tra thành công.";
                 }
                 else
                 {

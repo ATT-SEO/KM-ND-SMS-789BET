@@ -7,7 +7,9 @@
 		public string? Content { get; set; }
 		public string? Device { get; set; }
 		public string? ProjectCode { get; set; }
-		public bool Status { get; set; }
+        public string? Account { get; set; }
+
+        public bool Status { get; set; }
 		public DateTime? CreatedTime { get; set; }
 	}
 }

@@ -15,12 +15,11 @@ namespace FE.CLIENT.Controllers
 
         public IActionResult Index()
         {
-            ViewData["Title"] = "Jun88 - Khuyến mãi 58k";
-            ViewData["Description"] = "Chương trình khuyến mãi của Jun88 dành cho thành viên Jun88 - Khuyến mãi 58k ";
-            ViewData["Keywords"] = "Jun88, khuyến mãi, khuyến mãi 58k, đăng ký, hội viên ...";
+            ViewData["Title"] = "MB66 - Khuyến mãi MB66";
+            ViewData["Description"] = "Chương trình khuyến mãi của MB66 dành cho thành viên MB66 - Khuyến mãi MB66 ";
+            ViewData["Keywords"] = "MB66, khuyến mãi, khuyến mãi MB66, đăng ký, hội viên ...";
             return View();
         }
-
         public IActionResult Privacy()
         {
             return View();

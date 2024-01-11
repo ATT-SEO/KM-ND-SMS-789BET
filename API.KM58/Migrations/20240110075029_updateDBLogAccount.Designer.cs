@@ -4,6 +4,7 @@ using API.KM58.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.KM58.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240110075029_updateDBLogAccount")]
+    partial class updateDBLogAccount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,9 +43,6 @@ namespace API.KM58.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IP")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Project")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -134,9 +134,6 @@ namespace API.KM58.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Project")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("Status")

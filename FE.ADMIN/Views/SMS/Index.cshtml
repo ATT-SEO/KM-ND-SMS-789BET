@@ -1,14 +1,18 @@
-﻿@model List<SMSDTO>
+﻿@using FE.ADMIN.Utility
+@model List<SMSDTO>
 
 <div class="card mb-4">
 	<div class="card-header">
-		Danh sách tin nhắn SMS
+		Lịch sử phát thưởng
 	</div>
 
 	<div class="card-body">
 		<table id="datatablesSimple">
 			<thead>
 				<tr>
+					<th>
+						Tài khoản
+					</th>
 					<th>
 						SĐT Gửi
 					</th>
@@ -36,7 +40,10 @@
 					{
 						<tr>
 							<td>
-								@sms.Sender
+								@sms.Account
+							</td>
+							<td>
+								@ConverPhoneShow.FormatPhoneNumber(@sms.Sender)
 							</td>
 							<td>
 								@sms.Content
@@ -45,20 +52,13 @@
 								@sms.Device
 							</td>
 							<td>
-								@sms.Device
-							</td>
-							<td>
-								@if (@sms.Status == true)
+								@if (@sms.Status)
 								{
-									<div class="form-check form-switch">
-										<input class="form-check-input" type="checkbox" role="switch" disabled checked>
-									</div>
+									<span>Đã phát thành công </span>
 								}
 								else
 								{
-									<div class="form-check form-switch">
-										<input class="form-check-input" type="checkbox" role="switch" disabled>
-									</div>
+									<span>Đợi phát</span>
 								}
 							</td>
 							<td>
@@ -68,9 +68,6 @@
 								<a href="#" type="button" class="btn btn-primary btn-sm me-2 views-detail" data-id="@sms.Id">
 									<i data-feather="file-text"></i>
 									View
-								</a>
-								<a type="button" class="btn btn-danger btn-sm" asp-controller="SMS" asp-action="Delete" asp-route-Id="@sms.Id" onclick="return confirm('Bạn có chắc chắn muốn xóa không?');">
-									<i data-feather="trash-2"></i> Delete
 								</a>
 							</td>
 						</tr>
@@ -84,9 +81,7 @@
 @section Scripts {
     <script>
 		window.addEventListener('DOMContentLoaded', event => {
-			// Simple-DataTables
 			// https://github.com/fiduswriter/Simple-DataTables/wiki
-
 			const datatablesSimple = document.getElementById('datatablesSimple');
 			if (datatablesSimple) {
 				new simpleDatatables.DataTable(datatablesSimple);

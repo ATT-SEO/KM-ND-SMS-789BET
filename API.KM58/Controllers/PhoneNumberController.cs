@@ -94,7 +94,7 @@ namespace API.KM58.Controllers
         {
             try
             {
-                IEnumerable<PhoneNumber> phoneNumbers = _db.PhoneNumbers.Include(u => u.Site).Where(u => u.SiteID == SiteID).ToList();
+                IEnumerable<PhoneNumber> phoneNumbers = _db.PhoneNumbers.Include(u => u.Site).Where(u => u.SiteID == SiteID && u.Status==true).ToList();
                 _response.Result = _mapper.Map<IEnumerable<PhoneNumber>>(phoneNumbers);
             }
             catch (Exception Ex)

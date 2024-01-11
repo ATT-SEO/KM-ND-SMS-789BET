@@ -12,6 +12,8 @@ namespace API.KM58.Model
         public string Content { get; set; }
         [Required]
         public bool Status { get; set; }
+        public string? Account { get; set; }
+
         public string? Device { get; set; }
         public string? ProjectCode { get; set; }
         public DateTime? CreatedTime { get; set; }

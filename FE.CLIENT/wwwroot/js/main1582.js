@@ -41,19 +41,26 @@ $(document).on('click', '#btnCheck', function (e) {
 
             if (response.success) {
                 if (response.result.code == 200) {
-                    var phone = response.result.phone;
-                    var smscode = response.result.smsCode;
-                    superPhone = response.result.superPhone;
-                    var verifyCode = response.result.verifyCode
-                    $("#btnCopyContentPhone").attr("data-clipboard-text", superPhone);
-                    $("#btnCopyContent").attr("data-clipboard-text", smscode);
-                    var mobile = superPhone.substring(0, 3) + "." + superPhone.substring(3, 5) + "." + "***" + superPhone.substring(8);
-                    var phone1 = phone.substring(0, 3) + "." + "***" + phone.substring(6);
-                    $("#phone").val(phone1);
-                    $("#oldphone").val(phone);
-                    $("#content").val(smscode);
-                    $("#verifycode").val(verifyCode);
-                    $("#contentPhone").val(superPhone);
+                    if (response.result.status == 2) {
+                        window.confettiful = new Confettiful(document.querySelector(".js-container"));
+                    } else if (response.result.status == 1) {
+                        ShowSuccessMsg(response.result.message);
+                    }else {
+                        var phone = response.result.phone;
+                        var smscode = response.result.smsCode;
+                        superPhone = response.result.superPhone;
+                        var verifyCode = response.result.verifyCode
+                        $("#btnCopyContentPhone").attr("data-clipboard-text", superPhone);
+                        $("#btnCopyContent").attr("data-clipboard-text", smscode);
+                        var mobile = superPhone.substring(0, 3) + "." + superPhone.substring(3, 5) + "." + "***" + superPhone.substring(8);
+                        var phone1 = phone.substring(0, 3) + "." + "***" + phone.substring(6);
+                        $("#phone").val(phone1);
+                        $("#oldphone").val(phone);
+                        $("#content").val(smscode);
+                        $("#verifycode").val(verifyCode);
+                        $("#contentPhone").val(superPhone);
+                    }
+                    
                 } else {
                     ShowErrorMsg(response.result.message);
                 }
@@ -94,8 +101,6 @@ $(document).on('click', '#wrap-form-sended-sms', function (e) {
         ShowErrorMsg("Tài khoản không được để trống") //account not null
         return;
     }
-
-
     $("#wrap-form-sended-sms").attr('disabled', true);
     var data = {
         "account": account,
@@ -120,7 +125,11 @@ $(document).on('click', '#wrap-form-sended-sms', function (e) {
 
                     if (response.success) {
                         if (response.result.code == 200) {
-                            ShowSuccessMsg(response.result.message);
+                            if (response.result.status == 2) {
+                                window.confettiful = new Confettiful(document.querySelector(".js-container"));
+                            } else {
+                                ShowSuccessMsg(response.result.message);
+                            }
                         } else {
                             ShowErrorMsg(response.result.message);
                         }
@@ -157,4 +166,49 @@ function ShowSuccessMsg(successMsg) {
         text: successMsg,
         icon: "success",
     });
+};
+
+function Confettiful(el) {
+    $("#show-congratulations").show();
+        this.el = el;
+        this.containerEl = null;
+        this.confettiFrequency = 3;
+        this.confettiColors = ["#EF2964", "#00C09D", "#2D87B0", "#48485E", "#EFFF1D"];
+        this.confettiAnimations = ["slow", "medium", "fast"];
+        this._setupElements();
+        this._renderConfetti();
+    }
+Confettiful.prototype._setupElements = function () {
+    const containerEl = document.createElement("div");
+    const elPosition = this.el.style.position;
+
+    if (elPosition !== "relative" && elPosition !== "absolute") {
+        this.el.style.position = "relative";
+    }
+
+    containerEl.classList.add("confetti-container");
+    this.el.appendChild(containerEl);
+    this.containerEl = containerEl;
+};
+
+Confettiful.prototype._renderConfetti = function () {
+    this.confettiInterval = setInterval(() => {
+        const confettiEl = document.createElement("div");
+        const confettiSize = Math.floor(Math.random() * 3) + 7 + "px";
+        const confettiBackground = this.confettiColors[Math.floor(Math.random() * this.confettiColors.length)];
+        const confettiLeft = Math.floor(Math.random() * this.el.offsetWidth) + "px";
+        const confettiAnimation = this.confettiAnimations[Math.floor(Math.random() * this.confettiAnimations.length)];
+
+        confettiEl.classList.add("confetti", "confetti--animation-" + confettiAnimation);
+        confettiEl.style.left = confettiLeft;
+        confettiEl.style.width = confettiSize;
+        confettiEl.style.height = confettiSize;
+        confettiEl.style.backgroundColor = confettiBackground;
+
+        confettiEl.removeTimeout = setTimeout(function () {
+            confettiEl.parentNode.removeChild(confettiEl);
+        }, 3000);
+
+        this.containerEl.appendChild(confettiEl);
+    }, 25);
 };

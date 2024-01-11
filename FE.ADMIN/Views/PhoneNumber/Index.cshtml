@@ -2,7 +2,7 @@
 
 <div class="card mb-4">
 	<div class="card-header">
-		Danh sách Số điện thoại nhận tin nhắn
+		Quản lý thiết bị
 		<a class="btn btn-primary btn-sm float-end" asp-action="Create"><i class="bi bi-plus-square"></i>Thêm mới</a>
 	</div>
 
@@ -14,13 +14,13 @@
 						#ID
 					</th>
 					<th>
+						Thiết bị
+					</th>
+					<th>
 						SĐT
 					</th>
 					<th>
 						Site
-					</th>
-					<th>
-						Thiết bị
 					</th>
 					<th>
 						Trạng thái
@@ -40,13 +40,13 @@
 								@phoneNumber.Id
 							</td>
 							<td>
+								@phoneNumber.Device
+							</td>
+							<td>
 								@phoneNumber.Number
 							</td>
 							<td>
 								@phoneNumber.Site.Name
-							</td>
-							<td>
-								@phoneNumber.Device
 							</td>
 							<td>
 								@if (@phoneNumber.Status == true)

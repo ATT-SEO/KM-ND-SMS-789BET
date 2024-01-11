@@ -12,7 +12,8 @@ namespace API.KM58.Data
         public DbSet<Site> Sites { get; set; }
         public DbSet<PhoneNumber> PhoneNumbers { get; set; }
         public DbSet<SMS> SMS { get; set; }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+		public DbSet<LogAccount> LogAccounts { get; set; }
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
         }
