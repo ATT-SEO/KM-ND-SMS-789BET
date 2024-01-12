@@ -11,7 +11,7 @@ namespace FE.CLIENT.Utility
             {
                 return "+" + cleanedPhoneNumber;
             }
-            else if (cleanedPhoneNumber.StartsWith("0"))
+            else if (cleanedPhoneNumber.StartsWith("0") || cleanedPhoneNumber.StartsWith("+"))
             {
                 return cleanedPhoneNumber;
             }

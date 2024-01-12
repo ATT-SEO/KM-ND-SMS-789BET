@@ -27,15 +27,44 @@
                 <div class="card-header">Thông tin site</div>
                 <div class="card-body">
                     <div class="row gx-3 mb-3">
-                        <div class="col-md-6">
-                            <label class="small mb-1" for="Site">Name</label>
-                            <input class="form-control" id="Site" asp-for="Name">
+                        <div class="col-6">
+                            <label class="small mb-1" for="Name">Name</label>
+                            <input class="form-control" id="Name" asp-for="Name">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-6">
+                            <label class="small mb-1" for="Project">Project</label>
+                            <input class="form-control" asp-for="Project">
+                        </div>
+                        <div class="col-4">
+                            <label class="small mb-1" for="Point">Số điểm cộng</label>
+                            <input class="form-control" asp-for="Point">
+                        </div>
+                        <div class="col-4">
+                            <label class="small mb-1" for="Round">Số vòng cược</label>
+                            <input class="form-control" asp-for="Round">
+                        </div>
+                        <div class="col-4">
                             <label class="small mb-1" for="Status">Ẩn hiện</label>
                             <div class="form-check form-switch">
                                 <input class="form-check-input" id="Status" type="checkbox" role="switch" asp-for="Status" />
                             </div>
+                        </div>
+                        <div class="col-6">
+                            <label class="small mb-1" for="Remarks">Mã khuyến mãi </label>
+                            <input class="form-control" asp-for="Remarks">
+                        </div>
+                        <div class="col-6">
+                            <label class="small mb-1" for="Ecremarks">Tiêu đề hiển thị phía người dùng </label>
+                            <input class="form-control" asp-for="Ecremarks">
+                        </div>
+
+                        <div class="col-12">
+                            <label class="small mb-1" for="CheckAccountAPI">API check người dùng </label>
+                            <input class="form-control" asp-for="CheckAccountAPI">
+                        </div>
+                        <div class="col-12">
+                            <label class="small mb-1" for="PointClientAPI">API cộng điểm </label>
+                            <input class="form-control" asp-for="PointClientAPI">
                         </div>
                         
                     </div>

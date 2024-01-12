@@ -1,4 +1,4 @@
-﻿namespace API.KM58.Models.Auth
+﻿namespace API.KM58.Model.Auth
 {
     public class JwtOptions
     {

@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\FE.JunCMD.Client.props" />
+</Project>

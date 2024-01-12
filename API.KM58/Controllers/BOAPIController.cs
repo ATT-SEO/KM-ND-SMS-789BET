@@ -1,14 +1,9 @@
 ﻿using API.KM58.Data;
-using API.KM58.Model;
 using API.KM58.Model.DTO;
-using API.KM58.Models;
 using API.KM58.Service.IService;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Serilog;
-using System;
-using System.Security.Policy;
 
 namespace API.KM58.Controllers
 {
@@ -49,5 +44,27 @@ namespace API.KM58.Controllers
             }
             return _response;
         }
+
+
+        [HttpGet]
+        [Route("CheckAccountCMDUserName/{Account}")]
+        public async Task<ResponseDTO> CheckAccountCMDUserName(string Account)
+        {
+            try
+            {
+                string _account = Account;
+                var jsonAllJiLiFishTickets = await _boService.BOGetCheckAccountCMD(_account);
+                JObject jsonResponseData = (JObject)JsonConvert.DeserializeObject(jsonAllJiLiFishTickets.Result.ToString());
+                JObject resultObject = jsonResponseData["result"] as JObject;
+                _response.Result = resultObject;
+            }
+            catch (Exception Ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = Ex.Message;
+            }
+            return _response;
+        }
+
     }
 }

@@ -17,6 +17,12 @@
 						Site
 					</th>
 					<th>
+						Project
+					</th>
+					<th>
+						Mã KM
+					</th>
+					<th>
 						Trạng thái
 					</th>
 					<th>
@@ -44,6 +50,12 @@
 								@Model[i].Name
 							</td>
 							<td>
+								@Model[i].Project
+							</td>
+							<td>
+								@Model[i].Ecremarks
+							</td>
+							<td>
 								@if (@Model[i].Status == true)
 								{
 									<div class="form-check form-switch">
@@ -69,7 +81,7 @@
 									<i data-feather="edit"></i>
 									Edit
 								</a>
-								<a type="button" class="btn btn-danger btn-md" asp-controller="Site" asp-action="Delete" asp-route-Id="@Model[i].Id onclick="return confirm('Bạn có chắc chắn muốn xóa không?');">
+								<a type="button" class="btn btn-danger btn-md d-none" asp-controller="Site" asp-action="Delete" asp-route-Id="@Model[i].Id onclick="return confirm('Bạn có chắc chắn muốn xóa không?');">
 									<i data-feather="trash-2"></i> Delete
 								</a>
 							</td>

@@ -1,6 +1,4 @@
-﻿using API.KM58.Model;
-using API.KM58.Models.Auth;
-using API.KM58.Service.IService;
+﻿using API.KM58.Service.IService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

@@ -1,4 +1,4 @@
-﻿namespace API.KM58.Models.Auth.DTO
+﻿namespace API.KM58.Model.Auth.DTO
 {
     public class RegistrationRequestDTO
     {

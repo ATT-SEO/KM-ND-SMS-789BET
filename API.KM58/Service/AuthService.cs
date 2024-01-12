@@ -1,12 +1,7 @@
 ﻿using API.KM58.Data;
-using API.KM58.Models.Auth.DTO;
 using API.KM58.Service.IService;
 
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Diagnostics;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
 namespace API.KM58.Service
 {

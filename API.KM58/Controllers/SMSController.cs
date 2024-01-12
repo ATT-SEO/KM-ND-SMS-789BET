@@ -140,14 +140,29 @@ namespace API.KM58.Controllers
 
                 if (existingSMS != null && existingSMS.CreatedTime == null)
                 {
-                    string Site = "mocbai";
+                    Site site = _db.Sites.First(u => u.Name == inputSMS.ProjectCode || u.Project == inputSMS.ProjectCode);
+
+                    string Site = site.Name;
                     string Account = existingSMS.Account;
-                    int Point = 66;
-                    int Round = 5;
-                    string Remarks = "MB66k";
-                    string Ecremarks = "Cộng điểm khuyến mãi 66K";
-                    var jsonAllJiLiFishTickets = await _boService.addPointClient(Site, Account, Point, Round,Remarks,Ecremarks);
-                    JObject jsonResponseData = (JObject)JsonConvert.DeserializeObject(jsonAllJiLiFishTickets.Result.ToString());
+                    int Point =  site.Point;
+                    int Round = site.Round;
+                    string Remarks = site.Remarks;
+                    string Ecremarks = site.Ecremarks;
+
+                    JObject jsonResponseData;
+
+                    if (Site.Trim() == "mocbai")
+                    {
+                        var jsonAllJiLiFishTickets = await _boService.addPointClient(Site, Account, Point, Round, Remarks, Ecremarks);
+                        jsonResponseData = (JObject)JsonConvert.DeserializeObject(jsonAllJiLiFishTickets.Result.ToString());
+
+                    }
+                    else
+                    {
+                        var jsonAllJiLiFishTickets = await _boService.addPointClientCMD(Site, Account, Point, Round, Remarks, Ecremarks);
+                        jsonResponseData = (JObject)JsonConvert.DeserializeObject(jsonAllJiLiFishTickets.Result.ToString());
+                    }
+
                     if (jsonResponseData != null && jsonResponseData["status_code"] != null && (int)jsonResponseData["status_code"] == 200)
                     {
                         existingSMS.CreatedTime = DateTime.Now;

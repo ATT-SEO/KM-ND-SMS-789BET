@@ -130,14 +130,32 @@ namespace API.KM58.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CheckAccountAPI")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("CreatedTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Ecremarks")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Point")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PointClientAPI")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Project")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Round")
+                        .HasColumnType("int");
 
                     b.Property<bool?>("Status")
                         .HasColumnType("bit");
