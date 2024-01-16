@@ -45,7 +45,12 @@ namespace API.KM58.Migrations
                     b.Property<string>("Project")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SiteID")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SiteID");
 
                     b.ToTable("LogAccounts");
                 });
@@ -104,6 +109,9 @@ namespace API.KM58.Migrations
                     b.Property<string>("Device")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Point")
+                        .HasColumnType("int");
+
                     b.Property<string>("ProjectCode")
                         .HasColumnType("nvarchar(max)");
 
@@ -139,6 +147,12 @@ namespace API.KM58.Migrations
                     b.Property<string>("Ecremarks")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("MaxPoint")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinPoint")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -166,6 +180,17 @@ namespace API.KM58.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sites");
+                });
+
+            modelBuilder.Entity("API.KM58.Model.LogAccount", b =>
+                {
+                    b.HasOne("API.KM58.Model.Site", "Site")
+                        .WithMany()
+                        .HasForeignKey("SiteID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Site");
                 });
 
             modelBuilder.Entity("API.KM58.Model.PhoneNumber", b =>

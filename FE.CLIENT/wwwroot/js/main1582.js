@@ -42,9 +42,23 @@ $(document).on('click', '#btnCheck', function (e) {
             if (response.success) {
                 if (response.result.code == 200) {
                     if (response.result.status == 2) {
+                        $('#message-success').html(response.result.message);
                         window.confettiful = new Confettiful(document.querySelector(".js-container"));
                     } else if (response.result.status == 1) {
                         ShowSuccessMsg(response.result.message);
+                        var phone = response.result.phone;
+                        var smscode = response.result.smsCode;
+                        superPhone = response.result.superPhone;
+                        var verifyCode = response.result.verifyCode
+                        $("#btnCopyContentPhone").attr("data-clipboard-text", superPhone);
+                        $("#btnCopyContent").attr("data-clipboard-text", smscode);
+                        var mobile = superPhone.substring(0, 3) + "." + superPhone.substring(3, 5) + "." + "***" + superPhone.substring(8);
+                        var phone1 = phone.substring(0, 3) + "." + "***" + phone.substring(6);
+                        $("#phone").val(phone1);
+                        $("#oldphone").val(phone);
+                        $("#content").val(smscode);
+                        $("#verifycode").val(verifyCode);
+                        $("#contentPhone").val(superPhone);
                     }else {
                         var phone = response.result.phone;
                         var smscode = response.result.smsCode;
@@ -126,6 +140,7 @@ $(document).on('click', '#wrap-form-sended-sms', function (e) {
                     if (response.success) {
                         if (response.result.code == 200) {
                             if (response.result.status == 2) {
+                                $('#message-success').html(response.result.message);
                                 window.confettiful = new Confettiful(document.querySelector(".js-container"));
                             } else {
                                 ShowSuccessMsg(response.result.message);

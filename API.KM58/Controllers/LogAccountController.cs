@@ -3,6 +3,7 @@ using API.KM58.Model;
 using API.KM58.Model.DTO;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -100,15 +101,34 @@ namespace API.KM58.Controllers
 
 		// POST api/<LogAccountController>
 		[HttpPost]
-		public ResponseDTO Post(LogAccount logAccountDTO)
+		public async Task<ResponseDTO> Post(LogAccount logAccountDTO)
 		{
 			try
 			{
-                logAccountDTO.CreatedTime = DateTime.Now;
-                LogAccount logAccount = _mapper.Map<LogAccount>(logAccountDTO);
-				_db.LogAccounts.Add(logAccountDTO);
-				_db.SaveChanges();
-				_response.Result = _mapper.Map<LogAccount>(logAccount);
+                LogAccount logAccount1 = await _db.LogAccounts.FirstOrDefaultAsync(s => s.IP == logAccountDTO.IP &&  s.FP == logAccountDTO.FP && s.SiteID == logAccountDTO.SiteID);
+
+				if(logAccount1 == null)
+				{
+                    logAccountDTO.CreatedTime = DateTime.Now;
+                    LogAccount logAccount = _mapper.Map<LogAccount>(logAccountDTO);
+                    _db.LogAccounts.Add(logAccountDTO);
+                    _db.SaveChanges();
+                    _response.Result = _mapper.Map<LogAccount>(logAccount);
+				}
+				else
+				{
+					if(logAccount1.Account == logAccountDTO.Account)
+					{
+                        _response.Result = _mapper.Map<SMSDTO>(logAccount1);
+                        _response.IsSuccess = true;
+                        _response.Message = "Đã có SMS ở hệ thống.";
+					}
+					else
+					{
+                        _response.IsSuccess = false;
+                        _response.Message = "Dấu hiệu bất thường.";
+                    }
+				}
 
 			}
 			catch (Exception Ex)

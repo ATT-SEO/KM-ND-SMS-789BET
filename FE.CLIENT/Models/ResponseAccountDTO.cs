@@ -7,9 +7,10 @@
         public string? PlayerId { get; set; }
         public string? FirstName { get; set; }
         public string? Mobile { get; set; }
+        public string? BanksNameAccount { get; set; }
         public int totaldeposit { get; set; }
         public int totalwithdraw { get; set; }
-        public int totaldepositcount { get; set; }
+        public int TotalDepositCount { get; set; }
         public int totalwithdrawcount { get; set; }
         public long CreateDate { get; set; }
 

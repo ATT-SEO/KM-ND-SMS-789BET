@@ -33,79 +33,176 @@ namespace FE.CLIENT.Controllers
             string Username = checkAccountRequestDTO.Account;
             object responseJson;
 
-            if (!string.IsNullOrWhiteSpace(Username))
+            List<PhoneNumberDTO>? phoneNumbers = new List<PhoneNumberDTO>();
+            ResponseDTO? res = await _phoneNumber.GetListPhoneBySiteIDAsync(1);
+            if (res != null && res.IsSuccess)
             {
-                ResponseDTO userAccountInfo = await _boService.BoCheckUserAccount(Username);
-                Console.WriteLine(userAccountInfo);
-                ResponseAccountDTO responseJsonData = JsonConvert.DeserializeObject<ResponseAccountDTO>(Convert.ToString(userAccountInfo.Result));
-                if (responseJsonData != null)
+                phoneNumbers = JsonConvert.DeserializeObject<List<PhoneNumberDTO>>(Convert.ToString(res.Result)!);
+                Random random = new Random();
+                PhoneNumberDTO randomPhoneNumber = phoneNumbers[random.Next(phoneNumbers.Count)];
+
+
+                if (!string.IsNullOrWhiteSpace(Username))
                 {
-                    try
+                    ResponseDTO userAccountInfo = await _boService.BoCheckUserAccount(Username);
+                    Console.WriteLine(userAccountInfo);
+                    ResponseAccountDTO responseJsonData = JsonConvert.DeserializeObject<ResponseAccountDTO>(Convert.ToString(userAccountInfo.Result));
+                    if (responseJsonData != null)
                     {
-                        string clientIPAddress = HttpContext.Request.Headers["X-Forwarded-For"];
-                        var log = new LogAccountDTO
+                        
+                        string phone = ConvertPhoneNumber.ConvertPhone(responseJsonData.Mobile);
+                        long createDateTicks = responseJsonData.CreateDate;
+                        DateTimeOffset createDate = DateTimeOffset.FromUnixTimeMilliseconds(createDateTicks);
+                        DateTimeOffset currentUtcTime = DateTimeOffset.UtcNow;
+                        if(Username != "kawaitcn")
                         {
-                            Account = Username,
-                            FP = checkAccountRequestDTO.Regfingerprint,
-                            IP = clientIPAddress,
-                            Project = "KM66_MB66"
-                        };
-
-                        await _logAccountService.CreateAsync(log);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex);
-                    }
-                    string phone = ConvertPhoneNumber.ConvertPhone(responseJsonData.Mobile);
-                    long createDateTicks = responseJsonData.CreateDate;
-                    DateTime createDate = new DateTime(createDateTicks);
-
-                    if (createDate < DateTime.Now.AddHours(-24) || Username != "kawaitcn")
-                    {
-                        var smsCheck = new SMSDTO
-                        {
-                            Account = responseJsonData.PlayerId,
-                            Sender = phone
-                        };
-                        ResponseDTO? checkSMS = await _SMS.CheckSMSWebsite(smsCheck);
-                        Console.WriteLine(checkSMS);
-                        if (checkSMS.Result != null && checkSMS.IsSuccess)
-                        {
-                            SMSDTO? OneSMS = JsonConvert.DeserializeObject<SMSDTO>(Convert.ToString(checkSMS.Result));
-                            Console.WriteLine(OneSMS);
-                            if (OneSMS.Status)
+                            try
                             {
-                                responseJson = new
+
+                                //// check log
+                                string clientIPAddress = HttpContext.Request.Headers["X-Forwarded-For"];
+                                var log = new LogAccountDTO
                                 {
-                                    result = new
-                                    {
-                                        status = 2,
-                                        code = 200,
-                                        message = "Đã cộng khuyến mãi. Nổ pháo hoa chúc mừng"
-                                    },
-                                    success = true,
-                                    __abp = true
+                                    Account = Username,
+                                    FP = checkAccountRequestDTO.Regfingerprint,
+                                    IP = clientIPAddress,
+                                    SiteID = 1,
+                                    Project = "KM66_MB66"
                                 };
-                                return Json(responseJson);
-                            }
-                            else
-                            {
-                                if (OneSMS.CreatedTime != null)
+
+                                ResponseDTO? checkLog = await _logAccountService.CreateAsync(log);
+
+                                if (checkLog.IsSuccess == false)
                                 {
                                     responseJson = new
                                     {
                                         result = new
                                         {
-                                            status = 1,
-                                            code = 200,
-                                            message = "Hệ thống đã nhận được tin nhắn khuyến mãi của bạn. Hệ thống sẽ xử lý và cộng điểm trong giây lát"
+                                            code = 250,
+                                            message = "Tài khoản của quý khách không đủ điều kiện nhận thưởng. Vui lòng xem lại quy tắc nhận thưởng !!!"
                                         },
                                         success = true,
+                                        error = "error",
                                         unAuthorizedRequest = false,
-                                        __abp = true
+                                        __abp = false
                                     };
                                     return Json(responseJson);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine(ex);
+                            }
+                            if (responseJsonData.BanksNameAccount == null)
+                            {
+                                responseJson = new
+                                {
+                                    result = new
+                                    {
+                                        code = 250,
+                                        message = "Tài khoản của quý khách không đủ điều kiện nhận thưởng. Vui lòng xem lại quy tắc nhận thưởng !!!"
+                                    },
+                                    success = true,
+                                    error = "error",
+                                    unAuthorizedRequest = false,
+                                    __abp = false
+                                };
+                                return Json(responseJson);
+                            }
+
+                            if (responseJsonData.TotalDepositCount > 1)
+                            {
+                                responseJson = new
+                                {
+                                    result = new
+                                    {
+                                        code = 250,
+                                        message = "Tài khoản của quý khách không đủ điều kiện nhận thưởng. Vui lòng xem lại quy tắc nhận thưởng !!!"
+                                    },
+                                    success = true,
+                                    error = "error",
+                                    unAuthorizedRequest = false,
+                                    __abp = false
+                                };
+                                return Json(responseJson);
+                            }
+                            
+                            if (createDate < DateTime.Now.AddHours(-24))
+                            {
+                                var smsCheck = new SMSDTO
+                                {
+                                    Account = Username,
+                                    Sender = phone
+                                };
+                                ResponseDTO? checkSMS = await _SMS.CheckSMSWebsite(smsCheck);
+
+                                if (checkSMS.Result != null && checkSMS.IsSuccess)
+                                {
+                                    SMSDTO? OneSMS = JsonConvert.DeserializeObject<SMSDTO>(Convert.ToString(checkSMS.Result));
+                                    PhoneNumberDTO matchingPhoneNumber = phoneNumbers.FirstOrDefault(p => p.Device == OneSMS.Device);
+
+                                    string resultNumber = matchingPhoneNumber?.Number;
+
+                                    if (OneSMS.Status)
+                                    {
+                                        responseJson = new
+                                        {
+                                            result = new
+                                            {
+                                                status = 2,
+                                                code = 200,
+                                                message = $"Quý khách đã nhận thưởng thành công {OneSMS.Point} điểm từ khuyến mãi Free66 lúc {OneSMS.CreatedTime.Value.ToString("dd-MM-yyyy HH:mm:ss")}"
+                                            },
+                                            success = true,
+                                            __abp = true
+                                        };
+                                        return Json(responseJson);
+                                    }
+                                    else
+                                    {
+                                        if (OneSMS.CreatedTime != null)
+                                        {
+                                            responseJson = new
+                                            {
+                                                result = new
+                                                {
+                                                    phone = phone,
+                                                    smsCode = OneSMS.Content,
+                                                    verifyCode = "",
+                                                    voiceSum = 0,
+                                                    superPhone = resultNumber,
+                                                    status = 1,
+                                                    code = 200,
+                                                    message = "Hệ thống đang kiểm tra tin nhắn khuyến mãi của quý khách. Hệ thống sẽ xử lý và cộng điểm trong giây lát"
+                                                },
+                                                success = true,
+                                                unAuthorizedRequest = false,
+                                                __abp = true
+                                            };
+                                            return Json(responseJson);
+                                        }
+                                        else
+                                        {
+                                            responseJson = new
+                                            {
+                                                result = new
+                                                {
+                                                    phone = phone,
+                                                    smsCode = OneSMS.Content,
+                                                    verifyCode = "",
+                                                    voiceSum = 0,
+                                                    superPhone = resultNumber,
+                                                    status = 1,
+                                                    code = 200,
+                                                    message = "Hệ thống đang kiểm tra tin nhắn khuyến mãi của quý khách. Chúng tôi sẽ cập nhật trong giây lát"
+                                                },
+                                                success = true,
+                                                unAuthorizedRequest = false,
+                                                __abp = true
+                                            };
+                                            return Json(responseJson);
+                                        }
+                                    }
                                 }
                                 else
                                 {
@@ -113,46 +210,19 @@ namespace FE.CLIENT.Controllers
                                     {
                                         result = new
                                         {
-                                            status = 1,
-                                            code = 200,
-                                            message = "Hệ thống đã nhận được tin nhắn khuyến mãi của bạn. Chúng tôi sẽ cập nhật trong giây lát"
+                                            code = 250,
+                                            message = "Không thể yêu cầu nhận thưởng. Tài khoản của quý khách đã đăng ký quá 24h"
                                         },
                                         success = true,
+                                        error = "error",
                                         unAuthorizedRequest = false,
-                                        __abp = true
+                                        __abp = false
                                     };
                                     return Json(responseJson);
                                 }
                             }
                         }
-                        else
-                        {
-                            responseJson = new
-                            {
-                                result = new
-                                {
-                                    code = 250,
-                                    message = "Không thể yêu cầu nhận thưởng. Tài khoản của bạn đã đăng ký quá 24h"
-                                },
-                                success = true,
-                                error = (string)null,
-                                targetUrl = (string)null,
-                                unAuthorizedRequest = false,
-                                __abp = true
-                            };
-                            return Json(responseJson);
-                        }
-                    }
-                    List<PhoneNumberDTO>? phoneNumbers = new List<PhoneNumberDTO>();
-                    ResponseDTO? res = await _phoneNumber.GetListPhoneBySiteIDAsync(1);
-                    if (res != null && res.IsSuccess)
-                    {
-                        phoneNumbers = JsonConvert.DeserializeObject<List<PhoneNumberDTO>>(Convert.ToString(res.Result)!);
-                        Random random = new Random();
-                        PhoneNumberDTO randomPhoneNumber = phoneNumbers[random.Next(phoneNumbers.Count)];
-
                         string smsCode = RandomString.GenerateString(9, 3, 3, 3);
-
                         var smsNew = new SMSDTO
                         {
                             Account = Username,
@@ -187,12 +257,9 @@ namespace FE.CLIENT.Controllers
                                         status = 2,
                                         superPhone = resultNumber,
                                         code = 200,
-                                        message = "Đã cộng khuyến mãi.Pháo hoa chúc mừng"
+                                        message = $"Quý khách đã nhận thưởng thành công {OneSMS.Point} điểm từ khuyến mãi Free66 lúc {OneSMS.CreatedTime.Value.ToString("dd-MM-yyyy HH:mm:ss")}"
                                     },
                                     success = true,
-                                    error = (string)null,
-                                    targetUrl = (string)null,
-                                    unAuthorizedRequest = false,
                                     __abp = true
                                 };
                                 return Json(responseJson);
@@ -211,11 +278,9 @@ namespace FE.CLIENT.Controllers
                                             voiceSum = 0,
                                             superPhone = resultNumber,
                                             code = 200,
-                                            message = "Hệ thống đã nhận được tin nhắn khuyến mãi của bạn trước đó. Chúng tôi sẽ cập nhật trong giây lát"
+                                            message = "Hệ thống đã nhận được tin nhắn khuyến mãi của quý khách trước đó. Chúng tôi sẽ cập nhật trong giây lát"
                                         },
                                         success = true,
-                                        error = (string)null,
-                                        targetUrl = (string)null,
                                         unAuthorizedRequest = false,
                                         __abp = true
                                     };
@@ -237,8 +302,6 @@ namespace FE.CLIENT.Controllers
                                             ///message = ""
                                         },
                                         success = true,
-                                        error = (string)null,
-                                        targetUrl = (string)null,
                                         unAuthorizedRequest = false,
                                         __abp = true
                                     };
@@ -256,7 +319,7 @@ namespace FE.CLIENT.Controllers
                                     message = "Lỗi hệ thống"
                                 },
                                 success = true,
-                                error = (string)null,
+                                error = "error",
                             };
                             return Json(responseJson);
                         }
@@ -268,52 +331,48 @@ namespace FE.CLIENT.Controllers
                             result = new
                             {
                                 code = 250,
-                                message = "Lỗi hệ thống"
+                                message = "Tài khoản của quý khách không tồn tại"
                             },
                             success = true,
-                            error = (string)null,
-                            targetUrl = (string)null,
+                            error = "error",
                             unAuthorizedRequest = false,
-                            __abp = true
+                            __abp = false
                         };
                         return Json(responseJson);
                     }
 
-                }
-                else
-                {
-                    responseJson = new
-                    {
-                        result = new
-                        {
-                            code = 250,
-                            message = "Tài khoản của bạn không tồn tại"
-                        },
-                        success = true,
-                        error = (string)null,
-                        targetUrl = (string)null,
-                        unAuthorizedRequest = false,
-                        __abp = true
-                    };
-                    return Json(responseJson);
-                }
-                
 
-            }
-            responseJson = new
-            {
-                result = new
+                }
+                responseJson = new
                 {
-                    code = 250,
-                    message = "Kiểm tra lại tài khoản của bạn"
-                },
-                success = true,
-                error = (string)null,
-                targetUrl = (string)null,
-                unAuthorizedRequest = false,
-                __abp = true
-            };
-            return Json(responseJson);
+                    result = new
+                    {
+                        code = 250,
+                        message = "Kiểm tra lại tài khoản của quý khách"
+                    },
+                    success = true,
+                    error = "error",
+                    unAuthorizedRequest = false,
+                    __abp = false
+                };
+                return Json(responseJson);
+            }
+            else
+            {
+                responseJson = new
+                {
+                    result = new
+                    {
+                        code = 250,
+                        message = "Lỗi hệ thống"
+                    },
+                    success = true,
+                    error = "error",
+                    unAuthorizedRequest = false,
+                    __abp = false
+                };
+                return Json(responseJson);
+            }
         }
         public async Task<IActionResult> SubmitBouns([FromBody] AccountDTO accountDTO)
         {
@@ -355,7 +414,7 @@ namespace FE.CLIENT.Controllers
 								{
                                     status = 1,
                                     code = 200,
-									message = "Hệ thống đã nhận được tin nhắn khuyến mãi của bạn. Hệ thống sẽ xử lý và cộng điểm trong giây lát"
+									message = "Hệ thống đã nhận được tin nhắn khuyến mãi của quý khách. Hệ thống sẽ xử lý và cộng điểm trong giây lát"
 								},
 								success = true,
 								unAuthorizedRequest = false,
@@ -371,7 +430,7 @@ namespace FE.CLIENT.Controllers
 								{
                                     status = 1,
                                     code = 250,
-									message = "Hệ thống chưa nhận được tin nhắn SMS của bạn. Vui lòng gửi đúng nội dung"
+									message = "Hệ thống chưa nhận được tin nhắn SMS của quý khách. Vui lòng gửi đúng nội dung"
 								},
 								success = true,
 								unAuthorizedRequest = false,
@@ -394,10 +453,9 @@ namespace FE.CLIENT.Controllers
 					code = 250,
 					message = "Vui lòng khiểm tra lại quy trình"
 				},
-				error = (string)null,
-				targetUrl = (string)null,
+				error = "error",
 				unAuthorizedRequest = false,
-				__abp = true
+				__abp = false
 			};
 			return Json(responseJson2);
 		}

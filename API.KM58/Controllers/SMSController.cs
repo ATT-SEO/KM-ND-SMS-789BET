@@ -142,9 +142,10 @@ namespace API.KM58.Controllers
                 {
                     Site site = _db.Sites.First(u => u.Name == inputSMS.ProjectCode || u.Project == inputSMS.ProjectCode);
 
+                    Random rnd = new Random();
+                    int Point = rnd.Next(site.MinPoint, site.MaxPoint + 1);
                     string Site = site.Name;
                     string Account = existingSMS.Account;
-                    int Point =  site.Point;
                     int Round = site.Round;
                     string Remarks = site.Remarks;
                     string Ecremarks = site.Ecremarks;
@@ -167,6 +168,7 @@ namespace API.KM58.Controllers
                     {
                         existingSMS.CreatedTime = DateTime.Now;
                         existingSMS.ProjectCode = inputSMS.ProjectCode;
+                        existingSMS.Point = Point;
                         existingSMS.Status = true;
                         _db.Entry(existingSMS).State = EntityState.Modified;
                         await _db.SaveChangesAsync();
