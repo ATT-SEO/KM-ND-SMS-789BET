@@ -170,7 +170,7 @@ namespace API.KM58.Controllers
                         existingSMS.Status = true;
                         _db.Entry(existingSMS).State = EntityState.Modified;
                         await _db.SaveChangesAsync();
-                        _response.Result = jsonResponseData;
+                        _response.Result = existingSMS;
                         _response.IsSuccess = true;
                         _response.Message = "Cập nhật điểm thành công.";
                     }

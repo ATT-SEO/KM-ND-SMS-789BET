@@ -13,7 +13,7 @@ namespace API.KM58.Model
         [Required]
         public bool Status { get; set; }
         public string? Account { get; set; }
-
+        public int Point { get; set; }
         public string? Device { get; set; }
         public string? ProjectCode { get; set; }
         public DateTime? CreatedTime { get; set; }

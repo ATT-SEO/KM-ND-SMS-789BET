@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FE.JunCMD.Client")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d280d033f2a2c88a3894a5bf89b158c4f684f893")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
 [assembly: System.Reflection.AssemblyProductAttribute("FE.JunCMD.Client")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FE.JunCMD.Client")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

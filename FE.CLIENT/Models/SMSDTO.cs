@@ -9,7 +9,7 @@
         public string? ProjectCode { get; set; }
         public bool Status { get; set; }
         public string? Account { get; set; }
-
+        public int Point { get; set; }
         public DateTime? CreatedTime { get; set; }
         public DateTime? SiteTime { get; set; }
     }

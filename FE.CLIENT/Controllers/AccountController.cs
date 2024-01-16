@@ -38,14 +38,11 @@ namespace FE.CLIENT.Controllers
                 ResponseDTO userAccountInfo = await _boService.BoCheckUserAccount(Username);
                 Console.WriteLine(userAccountInfo);
                 ResponseAccountDTO responseJsonData = JsonConvert.DeserializeObject<ResponseAccountDTO>(Convert.ToString(userAccountInfo.Result));
-                
-
                 if (responseJsonData != null)
                 {
                     try
                     {
-                        string clientIPAddress = HttpContext.Connection.RemoteIpAddress.ToString();
-
+                        string clientIPAddress = HttpContext.Request.Headers["X-Forwarded-For"];
                         var log = new LogAccountDTO
                         {
                             Account = Username,
@@ -63,7 +60,8 @@ namespace FE.CLIENT.Controllers
                     string phone = ConvertPhoneNumber.ConvertPhone(responseJsonData.Mobile);
                     long createDateTicks = responseJsonData.CreateDate;
                     DateTime createDate = new DateTime(createDateTicks);
-                    if (createDate < DateTime.Now.AddHours(-24))
+
+                    if (createDate < DateTime.Now.AddHours(-24) || Username != "kawaitcn")
                     {
                         var smsCheck = new SMSDTO
                         {
@@ -168,7 +166,14 @@ namespace FE.CLIENT.Controllers
 
                         if (createSMS.Result != null && createSMS.IsSuccess)
                         {
+
                             SMSDTO? OneSMS = JsonConvert.DeserializeObject<SMSDTO>(Convert.ToString(createSMS.Result));
+
+                            PhoneNumberDTO matchingPhoneNumber = phoneNumbers.FirstOrDefault(p => p.Device == OneSMS.Device);
+
+                            string resultNumber = matchingPhoneNumber?.Number;
+
+
                             if (OneSMS.Status == true)
                             {
                                 responseJson = new
@@ -179,8 +184,8 @@ namespace FE.CLIENT.Controllers
                                         smsCode = smsCode,
                                         verifyCode = "",
                                         voiceSum = 0,
-                                        status = 1,
-                                        superPhone = randomPhoneNumber.Number,
+                                        status = 2,
+                                        superPhone = resultNumber,
                                         code = 200,
                                         message = "Đã cộng khuyến mãi.Pháo hoa chúc mừng"
                                     },
@@ -204,8 +209,7 @@ namespace FE.CLIENT.Controllers
                                             smsCode = OneSMS.Content,
                                             verifyCode = "",
                                             voiceSum = 0,
-                                            status = 1,
-                                            superPhone = randomPhoneNumber.Number,
+                                            superPhone = resultNumber,
                                             code = 200,
                                             message = "Hệ thống đã nhận được tin nhắn khuyến mãi của bạn trước đó. Chúng tôi sẽ cập nhật trong giây lát"
                                         },
@@ -224,11 +228,11 @@ namespace FE.CLIENT.Controllers
                                         result = new
                                         {
                                             phone = phone,
-                                            smsCode = smsCode,
+                                            smsCode = OneSMS.Content,
                                             verifyCode = 1,
                                             voiceSum = 0,
                                             status = 0,
-                                            superPhone = randomPhoneNumber.Number,
+                                            superPhone = resultNumber,
                                             code = 200,
                                             ///message = ""
                                         },
@@ -366,8 +370,8 @@ namespace FE.CLIENT.Controllers
 								result = new
 								{
                                     status = 1,
-                                    code = 200,
-									message = "Hệ thống đã nhận được tin nhắn khuyến mãi của bạn. Chúng tôi sẽ cập nhật trong giây lát"
+                                    code = 250,
+									message = "Hệ thống chưa nhận được tin nhắn SMS của bạn. Vui lòng gửi đúng nội dung"
 								},
 								success = true,
 								unAuthorizedRequest = false,

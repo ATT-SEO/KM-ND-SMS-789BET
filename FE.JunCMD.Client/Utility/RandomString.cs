@@ -25,7 +25,7 @@ namespace FE.JunCMD.Client.Utility
         private static string GenerateRandomLetters(int count)
         {
             Random random = new Random();
-            string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string letters = "ABCDEFGHJKMNOPQRSTUVWXYZ";
             letters += letters.ToLower();
             return new string(Enumerable.Repeat(letters, count)
               .Select(s => s[random.Next(s.Length)]).ToArray());

@@ -8,7 +8,7 @@
 		public string? Device { get; set; }
 		public string? ProjectCode { get; set; }
         public string? Account { get; set; }
-
+        public int Point { get; set; }
         public bool Status { get; set; }
 		public DateTime? CreatedTime { get; set; }
 	}
