@@ -12,9 +12,9 @@ builder.Services.AddHttpContextAccessor();
 //builder.Services.AddHttpClient<IBOService, BOService>();
 builder.Services.AddHttpClient<ISiteService, SiteService>();
 builder.Services.AddHttpClient<IPhoneNumberService, PhoneNumberService>();
+builder.Services.AddHttpClient<ISMSRawDataService, SMSRawDataService>();
 builder.Services.AddHttpClient<ISMSService, SMSService>();
 builder.Services.AddHttpClient<ILogAccountService, LogAccountService>();
-
 
 
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
@@ -22,9 +22,9 @@ builder.Services.AddScoped<IBaseService, BaseService>();
 //builder.Services.AddScoped<IBOService, BOService>();
 builder.Services.AddScoped<ISiteService, SiteService>();
 builder.Services.AddScoped<IPhoneNumberService, PhoneNumberService>();
+builder.Services.AddScoped<ISMSRawDataService, SMSRawDataService>();
 builder.Services.AddScoped<ISMSService, SMSService>();
 builder.Services.AddScoped<ILogAccountService, LogAccountService>();
-
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {

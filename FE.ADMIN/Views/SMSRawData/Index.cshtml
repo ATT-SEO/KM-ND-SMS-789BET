@@ -1,0 +1,94 @@
+﻿@using FE.ADMIN.Utility
+@model List<SMSRawDataDTO>
+
+<div class="card mb-4">
+	<div class="card-header">
+		DANH SÁCH TIN NHẮN ĐẾN
+	</div>
+
+	<div class="card-body">
+		<table id="datatablesSimple">
+			<thead>
+				<tr>
+					<th>
+						SĐT Gửi
+					</th>
+					<th>
+						Nội dung
+					</th>
+					<th>
+						Trạng thái
+					</th>
+					<th>T/gian gửi</th>
+				</tr>
+			</thead>
+			<tbody>
+				@if (Model != null && Model.Count > 0)
+				{
+					@foreach (var sms in Model)
+					{
+						<tr>
+							<td>
+								@ConverPhoneShow.FormatPhoneNumber(@sms.Sender)
+							</td>
+							<td>
+								@sms.Content
+							</td>
+							<td>
+								@if (@sms.Status)
+								{
+									<span>Đã kiểm duyệt</span>
+								}
+								else
+								{
+									<span>Chưa kiểm duyệt</span>
+								}
+							</td>
+							<td>
+								@(sms.CreatedTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "")
+							</td>
+						</tr>
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+@section Scripts {
+	<script>
+		window.addEventListener('DOMContentLoaded', event => {
+			// https://github.com/fiduswriter/Simple-DataTables/wiki
+			const datatablesSimple = document.getElementById('datatablesSimple');
+			if (datatablesSimple) {
+				new simpleDatatables.DataTable(datatablesSimple);
+				// const searchInput = document.getElementById('searchInput');
+				// searchInput.addEventListener('input', () => {
+				// 	const searchTerm = searchInput.value;
+
+				// 	// Gọi API với tham số tìm kiếm
+				// 	fetch(`/api/yourApiEndpoint?searchTerm=${encodeURIComponent(searchTerm)}`)
+				// 		.then(response => response.json())
+				// 		.then(data => {
+				// 			// Xóa dữ liệu cũ
+				// 			datatablesSimple.destroy();
+				// 			const tableBody = document.querySelector('#datatablesSimple tbody');
+				// 			tableBody.innerHTML = '';
+
+				// 			// Thêm dữ liệu mới
+				// 			data.forEach(item => {
+				// 				const row = tableBody.insertRow();
+				// 				// Thêm các ô dữ liệu vào hàng tương ứng
+				// 				// ...
+				// 			});
+				// 			// Tạo lại DataTable
+				// 			datatablesSimple.init();
+				// 		})
+				// 		.catch(error => console.error('Error:', error));
+				// });
+			}
+
+
+
+		});
+	</script>
+}
