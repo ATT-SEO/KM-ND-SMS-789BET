@@ -75,6 +75,8 @@ Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .CreateLogger();
 
+builder.Services.AddHostedService<WorkerService>();
+
 var app = builder.Build();
 
 app.UseHangfireDashboard("/myDashboard", new DashboardOptions
