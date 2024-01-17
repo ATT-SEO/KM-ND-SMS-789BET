@@ -31,6 +31,9 @@ namespace FE.CLIENT.Controllers
         public async Task<IActionResult> CheckAccount([FromBody] CheckAccountRequestDTO checkAccountRequestDTO)
         {
             string Username = checkAccountRequestDTO.Account;
+            Username = Username.Trim();
+            Username = Username.ToLower();
+
             object responseJson;
 
             List<PhoneNumberDTO>? phoneNumbers = new List<PhoneNumberDTO>();
@@ -151,7 +154,7 @@ namespace FE.CLIENT.Controllers
                                             {
                                                 status = 2,
                                                 code = 200,
-                                                message = $"Quý khách đã nhận thưởng thành công {OneSMS.Point} điểm từ khuyến mãi Free66 lúc {OneSMS.CreatedTime.Value.ToString("dd-MM-yyyy HH:mm:ss")}"
+                                                message = $"Quý khách đã nhận thưởng thành công. \n KM: FREE66. \n Số điểm: {OneSMS.Point}. \n Thời gian {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm:ss")}"
                                             },
                                             success = true,
                                             __abp = true
@@ -257,7 +260,7 @@ namespace FE.CLIENT.Controllers
                                         status = 2,
                                         superPhone = resultNumber,
                                         code = 200,
-                                        message = $"Quý khách đã nhận thưởng thành công {OneSMS.Point} điểm từ khuyến mãi Free66 lúc {OneSMS.CreatedTime.Value.ToString("dd-MM-yyyy HH:mm:ss")}"
+                                        message = $"Quý khách đã nhận thưởng thành công. \n KM: FREE66. \n Số điểm: {OneSMS.Point}. \n Thời gian {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm:ss")}"
                                     },
                                     success = true,
                                     __abp = true
@@ -389,6 +392,7 @@ namespace FE.CLIENT.Controllers
 				{
 					SMSDTO? OneSMS = JsonConvert.DeserializeObject<SMSDTO>(Convert.ToString(checkSMS.Result));
 					Console.WriteLine(OneSMS);
+
 					if (OneSMS.Status == true)
 					{
 						responseJson = new
@@ -397,8 +401,8 @@ namespace FE.CLIENT.Controllers
 							{
                                 status = 2,
                                 code = 200,
-								message = "Đã cộng khuyến mãi. Nổ pháo hoa chúc mừng"
-							},
+                                message = $"Quý khách đã nhận thưởng thành công. \n KM: FREE66. \n Số điểm: {OneSMS.Point}. \n Thời gian {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm:ss")}"
+                            },
 							success = true,
 							__abp = true
 						};

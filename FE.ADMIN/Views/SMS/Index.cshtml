@@ -25,9 +25,8 @@
 					<th>
 						Trạng thái
 					</th>
-					<th>
-						Project
-					</th>
+					<th>T/gian yêu cầu</th>
+					<th>T/gian nhận thưởng</th>
 					<th style="width:215px">
 						Thao tác
 					</th>
@@ -62,7 +61,11 @@
 								}
 							</td>
 							<td>
-								@sms.ProjectCode
+								@(sms.SiteTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "Null")
+
+							</td>
+							<td>
+								@(sms.CreatedTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "Null")
 							</td>
 							<td>
 								<a href="#" type="button" class="btn btn-primary btn-sm me-2 views-detail" data-id="@sms.Id">
@@ -85,7 +88,34 @@
 			const datatablesSimple = document.getElementById('datatablesSimple');
 			if (datatablesSimple) {
 				new simpleDatatables.DataTable(datatablesSimple);
+				// const searchInput = document.getElementById('searchInput');
+				// searchInput.addEventListener('input', () => {
+				// 	const searchTerm = searchInput.value;
+
+				// 	// Gọi API với tham số tìm kiếm
+				// 	fetch(`/api/yourApiEndpoint?searchTerm=${encodeURIComponent(searchTerm)}`)
+				// 		.then(response => response.json())
+				// 		.then(data => {
+				// 			// Xóa dữ liệu cũ
+				// 			datatablesSimple.destroy();
+				// 			const tableBody = document.querySelector('#datatablesSimple tbody');
+				// 			tableBody.innerHTML = '';
+
+				// 			// Thêm dữ liệu mới
+				// 			data.forEach(item => {
+				// 				const row = tableBody.insertRow();
+				// 				// Thêm các ô dữ liệu vào hàng tương ứng
+				// 				// ...
+				// 			});
+				// 			// Tạo lại DataTable
+				// 			datatablesSimple.init();
+				// 		})
+				// 		.catch(error => console.error('Error:', error));
+				// });
 			}
+
+
+
 		});
     </script>
 }

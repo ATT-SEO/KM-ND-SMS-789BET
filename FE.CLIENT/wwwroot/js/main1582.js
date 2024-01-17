@@ -42,7 +42,8 @@ $(document).on('click', '#btnCheck', function (e) {
             if (response.success) {
                 if (response.result.code == 200) {
                     if (response.result.status == 2) {
-                        $('#message-success').html(response.result.message);
+                        document.body.style.overflow = 'hidden';
+                        $('#message-success').html(response.result.message.replace(/\n/g, '<br>'));
                         window.confettiful = new Confettiful(document.querySelector(".js-container"));
                     } else if (response.result.status == 1) {
                         ShowSuccessMsg(response.result.message);
@@ -140,7 +141,8 @@ $(document).on('click', '#wrap-form-sended-sms', function (e) {
                     if (response.success) {
                         if (response.result.code == 200) {
                             if (response.result.status == 2) {
-                                $('#message-success').html(response.result.message);
+                                document.body.style.overflow = 'hidden';
+                                $('#message-success').html(response.result.message.replace(/\n/g, '<br>'));
                                 window.confettiful = new Confettiful(document.querySelector(".js-container"));
                             } else {
                                 ShowSuccessMsg(response.result.message);

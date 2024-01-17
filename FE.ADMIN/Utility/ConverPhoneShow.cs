@@ -10,9 +10,9 @@ namespace FE.ADMIN.Utility
 			if (cleanedPhoneNumber.Length >= 10)
 			{
 				string prefix = cleanedPhoneNumber.Substring(0, 4);
-				string suffix = cleanedPhoneNumber.Substring(cleanedPhoneNumber.Length - 3);
+				string suffix = cleanedPhoneNumber.Substring(cleanedPhoneNumber.Length - 5);
 
-				cleanedPhoneNumber = $"{prefix}xxxxx{suffix}";
+				cleanedPhoneNumber = $"{prefix}xxx{suffix}";
 				return cleanedPhoneNumber;
 			}
 			else

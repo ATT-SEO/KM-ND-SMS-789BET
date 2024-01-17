@@ -27,11 +27,15 @@
         transform: translate3d(-50px, 105vh, 0) rotateX(10deg) rotateY(250deg);
     }
 }
-
+.hp-ss {
+    overflow: hidden;
+    width: 100%;
+    position: absolute;
+}
 .congrat-container {
     width: 100vw;
     height: 100vh;
-    background: rgb(165 165 165 / 70%);
+    background: #ffcdcc;
     border: 1px solid white;
     display: fixed;
     top: 0;
@@ -50,7 +54,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    line-height: 48px;
+    line-height: 36px;
 }
 
 .confetti {
@@ -263,11 +267,25 @@
 .congrat-main p {
     display: flex;
     font-size: 1.4em;
-    color: #fff;
+    color: #000;
+    text-align: center;
+    font-weight: 600;
 }
 
 .congrat-score {
     font-size: 1.2em !important;
     font-weight: 600;
     padding: 0 8px;
+}
+@media screen and (max-width: 567.98px) {
+    .congrat-main.confetti-container {
+        width: 100%;
+        padding: 0 15px;
+        line-height: 28px;
+    }
+
+    .congrat-main p {
+        font-size: 1.1em;
+        text-align: center;
+    }
 }
