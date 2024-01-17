@@ -5,117 +5,144 @@
 	<div class="card-header">
 		Lịch sử phát thưởng
 	</div>
-
 	<div class="card-body">
-		<table id="datatablesSimple">
-			<thead>
-				<tr>
-					<th>
-						Tài khoản
-					</th>
-					<th>
-						SĐT Gửi
-					</th>
-					<th>
-						Nội dung
-					</th>
-					<th>
-						Thiết bị
-					</th>
-					<th>
-						Trạng thái
-					</th>
-					<th>T/gian yêu cầu</th>
-					<th>T/gian nhận thưởng</th>
-					<th style="width:215px">
-						Thao tác
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				@if (Model != null && Model.Count > 0)
-				{
-					@foreach (var sms in Model)
+		<div class="row form-search mb-4">
+			<div class="col-12">
+				<form asp-controller="SMS" asp-action="Index" method="get">
+					<div class="row mb-3">
+						<div class="col-4">
+							<label class="small mb-1" for="Account">Tài khoản:</label>
+							<input class="form-control" type="text" name="Account" value="@Context.Request.Query["Account"]">
+						</div>
+						<div class="col-4">
+							<label class="small mb-1" for="Sender">SĐT:</label>
+							<input class="form-control" type="text" name="Sender" value="@Context.Request.Query["Sender"]">
+						</div>
+						<div class="col-4">
+							<label class="small mb-1" for="Content">Nội dung SMS:</label>
+							<input class="form-control" type="text" name="Content" value="@Context.Request.Query["Content"]">
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-2">
+							<label class="small mb-1" for="ProjectCode">Project:</label>
+							<input class="form-control" type="text" name="ProjectCode" value="@Context.Request.Query["ProjectCode"]">
+						</div>
+						<div class="col-2">
+							<label class="small mb-1" for="SeachStatus">Trạng thái:</label>
+							<select class="form-control" id="SeachStatus" name="SeachStatus">
+								<option value=""> Tất cả</option>
+								<option value="1">Đã nhận</option>
+								<option value="9">Chưa nhận</option>
+							</select>
+						</div>
+						<div class="col-1">
+							<label class="small mb-1" for="Page">Page:</label>
+							<input class="form-control" type="number" name="Page" value="1">
+						</div>
+						<div class="col-1">
+							<label class="small mb-1" for="PageSize">Page Size:</label>
+							<input class="form-control" type="number" name="PageSize" value="50">
+						</div>
+						<div class="col-2">
+							<label class="small mb-1" for="SortBy">Lọc theo trường :</label>
+							<select class="form-control" id="SortBy" name="SortBy">
+								<option value="Id"> ID</option>
+								<option value="SiteTime">Thời gian tạo</option>
+								<option value="CreatedTime">Thời gian cộng điểm</option>
+								<option value="Point">Điểm nhận được</option>
+							</select>
+						</div>
+						<div class="col-2">
+							<label class="small mb-1" for="SortDirection">Sắp xếp</label>
+							<select class="form-control" id="SortDirection" name="SortDirection">
+								<option value="desc">Giảm dần</option>
+								<option value="asc"> Tăng dần</option>
+							</select>
+						</div>
+						<div class="col-2 d-flex align-items-end">
+							<button class="btn btn-primary" type="submit"><span class="me-2"><i data-feather="search"></i></span> Filter</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="conten-data">
+			<table class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>
+							Tài khoản
+						</th>
+						<th>
+							SĐT Gửi
+						</th>
+						<th>
+							Nội dung
+						</th>
+						<th>
+							Thiết bị
+						</th>
+						<th>
+							Trạng thái
+						</th>
+						<th>T/gian yêu cầu</th>
+						<th>T/gian nhận thưởng</th>
+						<th style="width:215px">
+							Thao tác
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					@if (Model != null && Model.Count > 0)
 					{
-						<tr>
-							<td>
-								@sms.Account
-							</td>
-							<td>
-								@ConverPhoneShow.FormatPhoneNumber(@sms.Sender)
-							</td>
-							<td>
-								@sms.Content
-							</td>
-							<td>
-								@sms.Device
-							</td>
-							<td>
-								@if (@sms.Status)
-								{
-									<span>Đã phát thành công </span>
-								}
-								else
-								{
-									<span>Đợi phát</span>
-								}
-							</td>
-							<td>
-								@(sms.SiteTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "Null")
+						@foreach (var sms in Model)
+						{
+							<tr>
+								<td>
+									@sms.Account
+								</td>
+								<td>
+									@ConverPhoneShow.FormatPhoneNumber(@sms.Sender)
+								</td>
+								<td>
+									@sms.Content
+								</td>
+								<td>
+									@sms.Device
+								</td>
+								<td>
+									@if (@sms.Status)
+									{
+										<span>Đã phát thành công </span>
+									}
+									else
+									{
+										<span>Đợi phát</span>
+									}
+								</td>
+								<td>
+									@(sms.SiteTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "Null")
 
-							</td>
-							<td>
-								@(sms.CreatedTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "Null")
-							</td>
-							<td>
-								<a href="#" type="button" class="btn btn-primary btn-sm me-2 views-detail" data-id="@sms.Id">
-									<i data-feather="file-text"></i>
-									View
-								</a>
-							</td>
-						</tr>
+								</td>
+								<td>
+									@(sms.CreatedTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "Null")
+								</td>
+								<td>
+									<a href="#" type="button" class="btn btn-primary btn-sm me-2 views-detail" data-id="@sms.Id">
+										<i data-feather="file-text"></i>
+										View
+									</a>
+								</td>
+							</tr>
+						}
 					}
-				}
-			</tbody>
-		</table>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>
 
 @section Scripts {
-    <script>
-		window.addEventListener('DOMContentLoaded', event => {
-			// https://github.com/fiduswriter/Simple-DataTables/wiki
-			const datatablesSimple = document.getElementById('datatablesSimple');
-			if (datatablesSimple) {
-				new simpleDatatables.DataTable(datatablesSimple);
-				// const searchInput = document.getElementById('searchInput');
-				// searchInput.addEventListener('input', () => {
-				// 	const searchTerm = searchInput.value;
 
-				// 	// Gọi API với tham số tìm kiếm
-				// 	fetch(`/api/yourApiEndpoint?searchTerm=${encodeURIComponent(searchTerm)}`)
-				// 		.then(response => response.json())
-				// 		.then(data => {
-				// 			// Xóa dữ liệu cũ
-				// 			datatablesSimple.destroy();
-				// 			const tableBody = document.querySelector('#datatablesSimple tbody');
-				// 			tableBody.innerHTML = '';
-
-				// 			// Thêm dữ liệu mới
-				// 			data.forEach(item => {
-				// 				const row = tableBody.insertRow();
-				// 				// Thêm các ô dữ liệu vào hàng tương ứng
-				// 				// ...
-				// 			});
-				// 			// Tạo lại DataTable
-				// 			datatablesSimple.init();
-				// 		})
-				// 		.catch(error => console.error('Error:', error));
-				// });
-			}
-
-
-
-		});
-    </script>
 }

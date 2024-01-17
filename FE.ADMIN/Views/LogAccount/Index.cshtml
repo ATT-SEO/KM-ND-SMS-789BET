@@ -1,5 +1,136 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using FE.ADMIN.Utility
+@model List<LogAccountDTO>
 @{
+	int currentPage = ViewBag.CurrentPage ?? 1;
+	int pageSize = ViewBag.PageSize ?? 100;
+	int totalPages = ViewBag.TotalPages ?? 1;
+}
+
+<div class="card mb-4">
+	<div class="card-header">
+		Lịch sử IP/FP khách truy cập khuyến mãi  
+	</div>
+
+	<div class="card-body">
+		<div class="row form-search">
+			<div class="col-12">
+				<form asp-controller="LogAccount" asp-action="Index" method="get">
+					<div class="row gx-3 mb-3">
+						<div class="col-2">
+							<label class="small mb-1" for="IP">IP:</label>
+							<input class="form-control" type="text" name="IP" value="">
+						</div>
+						<div class="col-2">
+							<label class="small mb-1" for="FP">FP:</label>
+							<input class="form-control" type="text" name="FP" value="">
+						</div>
+						<div class="col-2">
+							<label class="small mb-1" for="Account">Account:</label>
+							<input class="form-control" type="text" name="Account" value="">
+						</div>
+						<div class="col-2">
+							<label class="small mb-1" for="Site">SiteID:</label>
+							<input class="form-control" type="number" name="SiteID" value="">
+						</div>
+						<div class="col-1">
+							<label class="small mb-1" for="Page">Page:</label>
+							<input class="form-control" type="number" name="Page" value="1">
+						</div>
+						<div class="col-1">
+							<label class="small mb-1" for="PageSize">Page Size:</label>
+							<input class="form-control" type="number" name="PageSize" value="50">
+						</div>
+						<div class="col-2 d-flex align-items-end">
+							<button class="btn btn-primary" type="submit"><span class="me-2"><i data-feather="search"></i></span> Filter</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<table class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>
+						Tài khoản
+					</th>
+					<th>
+						IP
+					</th>
+					<th>
+						FP
+					</th>
+					<th>
+						Site
+					</th>
+					<th style="width:215px">
+						Thao tác
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				@if (Model != null && Model.Count > 0)
+				{
+					@foreach (var logAccount in Model)
+					{
+						<tr>
+							<td>
+								@logAccount.Account
+							</td>
+							<td>
+								@logAccount.IP
+							</td>
+							<td>
+								@logAccount.FP
+							</td>
+							<td>
+								@logAccount.Site.Name
+							</td>
+							<td>
+								<a href="#" type="button" class="btn btn-primary btn-sm me-2 views-detail" data-id="@logAccount.Id">
+									<i data-feather="file-text"></i>
+									View
+								</a>
+							</td>
+						</tr>
+					}
+				}
+			</tbody>
+		</table>
+		@if (totalPages > 1)
+		{
+			<nav aria-label="Page navigation example">
+				<ul class="pagination">
+					@if (currentPage > 1)
+					{
+						<li class="page-item"><a class="page-link" href="@Url.Action("Index", new { page = 1, pageSize = pageSize })">1</a></li>
+						@if (currentPage > 3)
+						{
+							<li class="page-item disabled"><span class="page-link">...</span></li>
+						}
+					}
+
+					@for (int i = Math.Max(2, currentPage - 2); i <= Math.Min(currentPage + 2, totalPages); i++)
+					{
+						if (i > currentPage - 2 && i < currentPage + 2)
+						{
+							<li class="page-item"><a class="@(i == currentPage ? "active" : "") page-link" href="@Url.Action("Index", new { page = i, pageSize = pageSize })">@i</a></li>
+						}
+					}
+
+					@if (currentPage < totalPages)
+					{
+						if (currentPage < totalPages - 2)
+						{
+							<li class="page-item disabled"><span class="page-link">...</span></li>
+						}
+						<li class="page-item"><a class="page-link" href="@Url.Action("Index", new { page = totalPages, pageSize = pageSize })">@totalPages</a></li>
+					}
+				</ul>
+			</nav>
+		}
+	</div>
+</div>
+
+@section Scripts {
+
 }

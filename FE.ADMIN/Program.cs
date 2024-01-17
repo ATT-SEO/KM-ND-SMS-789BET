@@ -13,6 +13,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient<ISiteService, SiteService>();
 builder.Services.AddHttpClient<IPhoneNumberService, PhoneNumberService>();
 builder.Services.AddHttpClient<ISMSService, SMSService>();
+builder.Services.AddHttpClient<ILogAccountService, LogAccountService>();
 
 
 
@@ -22,6 +23,7 @@ builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<ISiteService, SiteService>();
 builder.Services.AddScoped<IPhoneNumberService, PhoneNumberService>();
 builder.Services.AddScoped<ISMSService, SMSService>();
+builder.Services.AddScoped<ILogAccountService, LogAccountService>();
 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>

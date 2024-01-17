@@ -1,6 +1,11 @@
-﻿using FE.ADMIN.Services.IService;
+﻿using FE.ADMIN.Models;
+using FE.ADMIN.Services.IService;
+using FE.ADMIN.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Drawing.Printing;
 
 namespace FE.ADMIN.Controllers
 {
@@ -9,15 +14,50 @@ namespace FE.ADMIN.Controllers
 		// GET: LogAccountController
 
 
-		private readonly ISMSService _sms;
-		public LogAccountController(ISMSService sms)
+		private readonly ILogAccountService _logAccount;
+		public LogAccountController(ILogAccountService logAccount)
 		{
-			_sms = sms;
+            _logAccount = logAccount;
 		}
 
-		public ActionResult Index()
+        public async Task<IActionResult> Index(QueryParametersDTO parameters)
         {
+
+			Console.WriteLine(JsonConvert.SerializeObject(parameters, Formatting.Indented));
+			try
+            {
+                ResponseDTO? res = await _logAccount.GetAllLogAccountAsync(parameters);
+                if (res != null && res.IsSuccess)
+                {
+					var resultObject = JObject.FromObject(res.Result);
+					if (resultObject.TryGetValue("data", out var data) && data != null)
+					{
+
+						var logAccountDTOs = JsonConvert.DeserializeObject<List<LogAccountDTO>>(data.ToString());
+						ViewBag.CurrentPage = parameters.Page;
+						ViewBag.PageSize = parameters.PageSize;
+						int totalCount = resultObject.GetValue("totalCount").Value<int>();
+						int totalPages = CoreBase.CalculateTotalPages(totalCount, parameters.PageSize);
+						ViewBag.TotalPages = totalPages;
+						return View(logAccountDTOs);
+					}
+					else
+					{
+						ViewBag.TotalPages = 1;
+						TempData["error"] = "Danh sách LogAccount không tồn tại hoặc là null.";
+					}
+				}
+                else
+                {
+                    TempData["error"] = res?.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = ex.Message;
+            }
             return View();
+
         }
 
         // GET: LogAccountController/Details/5
@@ -88,5 +128,5 @@ namespace FE.ADMIN.Controllers
                 return View();
             }
         }
-    }
+	}
 }

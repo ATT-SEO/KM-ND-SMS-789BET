@@ -5,8 +5,8 @@ namespace FE.ADMIN.Services.IService
 {
     public interface ISMSService
     {
-        Task<ResponseDTO?> GetAllAsync();
-        Task<ResponseDTO?> GetByStatus(int Status);
+        Task<ResponseDTO?> GetAllAsync(QueryParametersDTO parameters);
+		Task<ResponseDTO?> GetByStatus(int Status);
         Task<ResponseDTO?> GetDateTimeEndDevice(string Device);
         Task<ResponseDTO?> GetTotalSMS(int Total, string Device);
         Task<ResponseDTO?> GetOneSMSByID(int Id);

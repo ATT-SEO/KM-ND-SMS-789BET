@@ -38,7 +38,6 @@ namespace API.KM58.Controllers
             }
             return _response;
         }
-
         // GET api/<SiteController>/5
         [HttpGet]
         [Route("{Id}")]
@@ -92,7 +91,6 @@ namespace API.KM58.Controllers
             }
             return _response;
         }
-
         [HttpPut]
         public ResponseDTO Put([FromBody] Site siteDTO)
         {

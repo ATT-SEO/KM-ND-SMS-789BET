@@ -148,6 +148,14 @@
 * {
     box-sizing: border-box;
 }
+
+.form-search input,
+.form-search select,
+.form-search button {
+    max-height: 38px;
+    height: 100%;
+    padding: 4px 16px;
+}
 /*
 table {
 position: relative;
