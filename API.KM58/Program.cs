@@ -26,10 +26,6 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddHttpClient();
 
-//builder.Services.AddHttpClient<IBackgroundWorkerService, BackgroundWorkerService>();
-
-//builder.Services.AddScoped<IBackgroundWorkerService, BackgroundWorkerService>();
-
 builder.Services.AddHttpClient<IBOService, BOService>();
 builder.Services.AddScoped<IBOService, BOService>();
 
