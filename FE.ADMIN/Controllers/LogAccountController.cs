@@ -9,8 +9,8 @@ namespace FE.ADMIN.Controllers
 		// GET: LogAccountController
 
 
-		private readonly ISMSService _sms;
-		public LogAccountController(ISMSService sms)
+		private readonly ISMSRawDataService _sms;
+		public LogAccountController(ISMSRawDataService sms)
 		{
 			_sms = sms;
 		}

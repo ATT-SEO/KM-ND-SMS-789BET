@@ -4,4 +4,7 @@ FE.CLIENT/obj/
 FE.CLIENT/bin/
 FE.ADMIN/obj/
 FE.ADMIN/bin/
+FE.JunCMD.Client/bin/
+FE.JunCMD.Client/obj/
+API.KM58/Migrations/
 .vs

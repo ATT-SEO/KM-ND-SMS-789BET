@@ -13,6 +13,7 @@ namespace API.KM58
                 config.CreateMap<Site, SiteDTO>().ReverseMap();
                 config.CreateMap<PhoneNumber, PhoneNumberDTO>().ReverseMap();
                 config.CreateMap<SMS, SMSDTO>().ReverseMap();
+                config.CreateMap<SMSRawData, SMSRawDataDTO>().ReverseMap();
             });
             return mappingConfig;
         }

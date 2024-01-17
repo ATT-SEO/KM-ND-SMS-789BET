@@ -52,6 +52,12 @@
                         <a class="nav-link" asp-controller="SMS" asp-action="Index" asp-route-Status="1">Đã xác thực</a>
                     </nav>
                 </div>
+                <a class="nav-link" asp-controller="SMSRawData" asp-action="Index">
+                    <div class="nav-link-icon">
+                        <i data-feather="mail"></i>
+                    </div>
+                    Tin nhắn đến
+                </a>
               @*   <a class="nav-link @(currentController == "WhiteListIP" ? "active" : "")" asp-controller="WhiteListIP" asp-action="Index">
                     <div class="nav-link-icon"><i data-feather="bar-chart"></i></div>
                     Danh sách IP khách
