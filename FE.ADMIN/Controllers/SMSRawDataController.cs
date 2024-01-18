@@ -8,10 +8,14 @@ namespace FE.ADMIN.Controllers
 {
     public class SMSRawDataController : Controller
     {
+        private readonly ITokenProvider _tokenProvider;
         private readonly ISMSRawDataService _smsRawData;
-        public SMSRawDataController(ISMSRawDataService sms)
+        private UserDTO _userDTO;
+
+        public SMSRawDataController(ISMSRawDataService sms, ITokenProvider TokenProvider)
         {
             _smsRawData = sms;
+            _userDTO = TokenProvider.ReadTokenClearInformation();
         }
 
         [HttpGet]
@@ -20,6 +24,8 @@ namespace FE.ADMIN.Controllers
             try
             {
                 ResponseDTO _responseDTO = await _smsRawData.GetAllAsync();
+                ViewBag.LoginUser = _userDTO;
+
                 if (_responseDTO != null && _responseDTO.IsSuccess)
                 {
                     List<SMSRawDataDTO> smsList = JsonConvert.DeserializeObject<List<SMSRawDataDTO>>(Convert.ToString(_responseDTO.Result.ToString())!);

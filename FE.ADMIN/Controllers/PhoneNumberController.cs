@@ -11,15 +11,19 @@ namespace FE.ADMIN.Controllers
     {
         private readonly IPhoneNumberService _phoneNumber;
         private readonly ISiteService _site;
+        private readonly ITokenProvider _tokenProvider;
+        private UserDTO _userDTO;
 
-        public PhoneNumberController(IPhoneNumberService phoneNumber, ISiteService siteService)
+        public PhoneNumberController(IPhoneNumberService phoneNumber, ISiteService siteService, ITokenProvider TokenProvider)
         {
+            _tokenProvider = TokenProvider;
+            _userDTO = _tokenProvider.ReadTokenClearInformation();
             _phoneNumber = phoneNumber;
             _site = siteService;
         }
         public async Task<IActionResult> Index()
         {
-
+            ViewBag.LoginUser = _userDTO;
             List<PhoneNumberDTO>? phoneNumbers = new List<PhoneNumberDTO>();
             //var SiteID = HttpContext.Session.GetInt32("SITEID");
             ResponseDTO? res = await _phoneNumber.GetAllAsync();
@@ -39,6 +43,7 @@ namespace FE.ADMIN.Controllers
         {
             try
             {
+                ViewBag.LoginUser = _userDTO;
                 List<SiteDTO>? siteList = new List<SiteDTO>();
                 ResponseDTO? res = await _site.GetAllAsync();
                 if (res != null && res.IsSuccess)
@@ -72,6 +77,7 @@ namespace FE.ADMIN.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    ViewBag.LoginUser = _userDTO;
                     ResponseDTO? res = await _phoneNumber.CreateAsync(phoneNumberDTO);
                     if (res != null && res.IsSuccess)
                     {
@@ -96,6 +102,7 @@ namespace FE.ADMIN.Controllers
         {
             try
             {
+                ViewBag.LoginUser = _userDTO;
                 List<SiteDTO>? siteList = new List<SiteDTO>();
                 ResponseDTO? resSite = await _site.GetAllAsync();
                 if (resSite != null && resSite.IsSuccess)
@@ -132,6 +139,7 @@ namespace FE.ADMIN.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    ViewBag.LoginUser = _userDTO;
                     ResponseDTO? res = await _phoneNumber.EditAsync(phoneNumberDTO);
                     if (res != null && res.IsSuccess)
                     {
@@ -158,6 +166,7 @@ namespace FE.ADMIN.Controllers
         {
             try
             {
+                ViewBag.LoginUser = _userDTO;
                 ResponseDTO? res = await _phoneNumber.DeleteAsync(id);
                 if (res != null && res.IsSuccess)
                 {

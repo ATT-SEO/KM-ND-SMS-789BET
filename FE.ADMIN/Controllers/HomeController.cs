@@ -9,7 +9,7 @@ namespace FE.ADMIN.Controllers
     public class HomeController : Controller
     {
         private readonly ITokenProvider _tokenProvider;
-        private readonly UserDTO _userDTO;
+        private UserDTO _userDTO;
         public HomeController(ITokenProvider TokenProvider)
         {
             _tokenProvider = TokenProvider;
@@ -24,20 +24,9 @@ namespace FE.ADMIN.Controllers
             }else
             {
                 ViewBag.LoginUser = _userDTO;
-                return View();
+                return View(_userDTO);
             }
             
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
