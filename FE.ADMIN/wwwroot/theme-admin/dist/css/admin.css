@@ -156,6 +156,10 @@
     height: 100%;
     padding: 4px 16px;
 }
+
+.sidenav-menu-heading {
+    text-align:center
+}
 /*
 table {
 position: relative;
