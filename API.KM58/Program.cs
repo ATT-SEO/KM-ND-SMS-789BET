@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,8 +26,8 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddHttpClient();
-
 builder.Services.AddHttpClient<IBOService, BOService>();
+
 builder.Services.AddScoped<IBOService, BOService>();
 
 
