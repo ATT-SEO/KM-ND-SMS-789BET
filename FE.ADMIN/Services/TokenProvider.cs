@@ -26,5 +26,20 @@ namespace FE.ADMIN.Services
         {
             _contextAccessor.HttpContext.Response.Cookies.Append(SD.TokenCookie, token);
         }
+
+        public String GetProjectCode()
+        {
+            string projectCodeResult = string.Empty;
+            string? Token = null;
+            bool? hasProjectCode = _contextAccessor.HttpContext?.Request.Cookies.TryGetValue(SD.TokenCookie, out Token);
+            if (hasProjectCode == true)
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var jsonToken = handler.ReadToken(Token);
+                var tokenS = jsonToken as JwtSecurityToken;
+                projectCodeResult = tokenS.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sub).Value;
+            }
+            return projectCodeResult;
+        }
     }
 }
