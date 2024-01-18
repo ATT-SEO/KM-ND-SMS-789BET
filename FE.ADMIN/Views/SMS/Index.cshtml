@@ -1,6 +1,10 @@
 ﻿@using FE.ADMIN.Utility
 @model List<SMSDTO>
-
+@{
+	int currentPage = ViewBag.CurrentPage ?? 1;
+	int pageSize = ViewBag.PageSize ?? 50;
+	int totalPages = ViewBag.TotalPages ?? 1;
+}
 <div class="card mb-4">
 	<div class="card-header">
 		Lịch sử phát thưởng
@@ -38,12 +42,14 @@
 						</div>
 						<div class="col-1">
 							<label class="small mb-1" for="Page">Page:</label>
-							<input class="form-control" type="number" name="Page" value="1">
+							<input class="form-control" type="number" name="Page" value="@currentPage">
 						</div>
+
 						<div class="col-1">
 							<label class="small mb-1" for="PageSize">Page Size:</label>
-							<input class="form-control" type="number" name="PageSize" value="50">
+							<input class="form-control" type="number" name="PageSize" value="@pageSize">
 						</div>
+
 						<div class="col-2">
 							<label class="small mb-1" for="SortBy">Lọc theo trường :</label>
 							<select class="form-control" id="SortBy" name="SortBy">
@@ -72,6 +78,9 @@
 				<thead>
 					<tr>
 						<th>
+							STT
+						</th>
+						<th>
 							Tài khoản
 						</th>
 						<th>
@@ -94,11 +103,19 @@
 					</tr>
 				</thead>
 				<tbody>
+					@{
+						var stt = 0;
+					}
+
 					@if (Model != null && Model.Count > 0)
 					{
 						@foreach (var sms in Model)
 						{
+							stt++;
 							<tr>
+								<td>
+									@stt
+								</td>
 								<td>
 									@sms.Account
 								</td>
@@ -139,6 +156,36 @@
 					}
 				</tbody>
 			</table>
+			<nav aria-label="Page navigation example">
+				<ul class="pagination">
+					@if (currentPage > 1)
+					{
+						<li class="page-item"><a class="page-link" href="@Url.Action("Index", new { page = 1, pageSize = pageSize, Account = Context.Request.Query["Account"], Sender = Context.Request.Query["Sender"], Content = Context.Request.Query["Content"], ProjectCode = Context.Request.Query["ProjectCode"], SeachStatus = Context.Request.Query["SeachStatus"], SortBy = Context.Request.Query["SortBy"], SortDirection = Context.Request.Query["SortDirection"] })">1</a></li>
+						@if (currentPage > 3)
+						{
+							<li class="page-item disabled"><span class="page-link">...</span></li>
+						}
+					}
+
+					@for (int i = Math.Max(2, currentPage - 2); i <= Math.Min(currentPage + 2, totalPages); i++)
+					{
+						if (i > currentPage - 2 && i < currentPage + 2)
+						{
+							<li class="page-item"><a class="@(i == currentPage ? "active" : "") page-link" href="@Url.Action("Index", new { page = i, pageSize = pageSize, Account = Context.Request.Query["Account"], Sender = Context.Request.Query["Sender"], Content = Context.Request.Query["Content"], ProjectCode = Context.Request.Query["ProjectCode"], SeachStatus = Context.Request.Query["SeachStatus"], SortBy = Context.Request.Query["SortBy"], SortDirection = Context.Request.Query["SortDirection"] })">@i</a></li>
+						}
+					}
+
+					@if (currentPage < totalPages)
+					{
+						if (currentPage < totalPages - 2)
+						{
+							<li class="page-item disabled"><span class="page-link">...</span></li>
+						}
+						<li class="page-item"><a class="page-link" href="@Url.Action("Index", new { page = totalPages, pageSize = pageSize, Account = Context.Request.Query["Account"], Sender = Context.Request.Query["Sender"], Content = Context.Request.Query["Content"], ProjectCode = Context.Request.Query["ProjectCode"], SeachStatus = Context.Request.Query["SeachStatus"], SortBy = Context.Request.Query["SortBy"], SortDirection = Context.Request.Query["SortDirection"] })">@totalPages</a></li>
+					}
+				</ul>
+			</nav>
+
 		</div>
 	</div>
 </div>
