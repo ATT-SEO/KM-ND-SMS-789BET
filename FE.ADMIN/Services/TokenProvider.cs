@@ -1,5 +1,9 @@
-﻿using FE.ADMIN.Services.IService;
+﻿using FE.ADMIN.Models;
+using FE.ADMIN.Services.IService;
 using FE.ADMIN.Utility;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace FE.ADMIN.Services
 {
@@ -27,9 +31,9 @@ namespace FE.ADMIN.Services
             _contextAccessor.HttpContext.Response.Cookies.Append(SD.TokenCookie, token);
         }
 
-        public String GetProjectCode()
+        public UserDTO ReadTokenClearInformation()
         {
-            string projectCodeResult = string.Empty;
+            UserDTO myUserResult = new UserDTO();
             string? Token = null;
             bool? hasProjectCode = _contextAccessor.HttpContext?.Request.Cookies.TryGetValue(SD.TokenCookie, out Token);
             if (hasProjectCode == true)
@@ -37,9 +41,11 @@ namespace FE.ADMIN.Services
                 var handler = new JwtSecurityTokenHandler();
                 var jsonToken = handler.ReadToken(Token);
                 var tokenS = jsonToken as JwtSecurityToken;
-                projectCodeResult = tokenS.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sub).Value;
+                myUserResult.ProjectCode = tokenS.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sub).Value;
+                myUserResult.UserName = tokenS.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Name).Value;
+                myUserResult.Role = tokenS.Claims.First(claim => claim.Type == "role").Value;
             }
-            return projectCodeResult;
+            return myUserResult;
         }
     }
 }

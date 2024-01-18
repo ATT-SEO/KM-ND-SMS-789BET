@@ -1,25 +1,32 @@
 using FE.ADMIN.Models;
+using FE.ADMIN.Services.IService;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
 
 namespace FE.ADMIN.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ITokenProvider _tokenProvider;
+        private readonly UserDTO _userDTO;
+        public HomeController(ITokenProvider TokenProvider)
         {
-            _logger = logger;
+            _tokenProvider = TokenProvider;
+            _userDTO = _tokenProvider.ReadTokenClearInformation();
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             if (!User.Identity.IsAuthenticated) 
             {
                 return RedirectToAction("Login", "Auth");
             }else
+            {
+                ViewBag.LoginUser = _userDTO;
                 return View();
+            }
+            
         }
 
         public IActionResult Privacy()

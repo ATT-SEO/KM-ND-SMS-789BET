@@ -2,6 +2,10 @@
 @using System.Security.Claims;
 @using Microsoft.AspNetCore.Http
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    UserDTO LoginUser = ViewBag.LoginUser as UserDTO;
+}
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
     <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 me-2 ms-lg-2 me-lg-0" id="sidebarToggle"><i data-feather="menu"></i></button>
 @*     <div class="navbar-brand pe-3 ps-4 ps-lg-2" href="#">
@@ -53,7 +57,7 @@
                     <h6 class="dropdown-header d-flex align-items-center">
                         <img class="dropdown-user-img" src="~/theme-admin/dist/assets/img/illustrations/profiles/profile-1.png" />
                         <div class="dropdown-user-details">
-                                <div class="dropdown-user-details-name">Hello @User.Identity.Name</div>
+                                <div class="dropdown-user-details-name">@LoginUser.UserName</div>
                            @*  <div class="dropdown-user-details-email">vluna@aol.com</div> *@
                         </div>
                     </h6>
