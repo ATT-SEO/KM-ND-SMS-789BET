@@ -1,5 +1,7 @@
 ﻿@{
     var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+
 }
 <div id="layoutSidenav_nav">
    
@@ -21,8 +23,8 @@
                 </a>
                 <div class="collapse show" id="collapsePages" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPagesMenu">
-                        <a class="nav-link" asp-controller="PhoneNumber" asp-action="Create">Thêm mới</a>
-                        <a class="nav-link" asp-controller="PhoneNumber" asp-action="Index">Danh sách</a>
+                        <a class="nav-link @(currentController == "PhoneNumber" && currentAction == "Create" ? " active" : "" )" asp-controller="PhoneNumber" asp-action="Create">Thêm mới</a>
+                        <a class="nav-link @(currentController == "PhoneNumber" && currentAction == "Index" ? " active" : "" )" asp-controller="PhoneNumber" asp-action="Index">Danh sách</a>
                     </nav>
                 </div>
                 <!-- Sidenav Accordion (Flows)-->
@@ -33,8 +35,8 @@
                 </a>
                 <div class="collapse show" id="collapseFlows" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav">
-                        <a class="nav-link" asp-controller="Site" asp-action="Create">Thêm mới</a>
-                        <a class="nav-link" asp-controller="Site" asp-action="Index">Danh sách Site</a>
+                        <a class="nav-link @(currentController == "Site" && currentAction == "Create" ? " active" : "" )" asp-controller="Site" asp-action="Create">Thêm mới</a>
+                        <a class="nav-link @(currentController == "Site" && currentAction == "Index" ? " active" : "" )" asp-controller="Site" asp-action="Index">Danh sách Site</a>
                     </nav>
                 </div>
 
@@ -48,8 +50,8 @@
                 <div class="collapse show" id="SMS_Project" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAppsMenu">
                         <a class="nav-link" asp-controller="SMS" asp-action="Index">Tất cả</a>
-                        <a class="nav-link" asp-controller="SMS" asp-action="Index" asp-route-SeachStatus="9">Chưa xác thực</a>
-                        <a class="nav-link" asp-controller="SMS" asp-action="Index" asp-route-SeachStatus="1">Đã xác thực</a>
+                        <a class="nav-link @(currentController == "SMS" && currentAction == "Index" && @Context.Request.Query["SeachStatus"].ToString() == "1" ? " active" : "" )" asp-controller="SMS" asp-action="Index" asp-route-SeachStatus="1">Đã xác thực</a>
+                        <a class="nav-link @(currentController == "SMS" && currentAction == "Index" && @Context.Request.Query["SeachStatus"].ToString() == "9" ? "active" : "" )" asp-controller="SMS" asp-action="Index" asp-route-SeachStatus="9">Chưa xác thực</a>
                     </nav>
                 </div>
                 <a class="nav-link @(currentController == "LogAccount" ? "active" : "")" asp-controller="LogAccount" asp-action="Index">
