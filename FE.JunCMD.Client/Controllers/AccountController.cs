@@ -51,7 +51,7 @@ namespace FE.JunCMD.Client.Controllers
                             Account = Username,
                             FP = checkAccountRequestDTO.Regfingerprint,
                             IP = clientIPAddress,
-                            Project = "KM66_MB66"
+                            Project = "FREE66"
                         };
 
                         await _logAccountService.CreateAsync(log);

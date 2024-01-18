@@ -143,27 +143,7 @@ namespace API.KM58.Controllers
             return _response;
         }
 
-        [HttpGet]
-        [Route("GetTotalSMS/")]
-        public async Task<ResponseDTO> GetTotalSMS([FromQuery] int Total, [FromQuery] string Device)
-
-        {
-            try
-            {
-                IEnumerable<SMS> listSMS = _db.SMS
-                .Where(s => s.Device == Device && s.CreatedTime == null)
-                .OrderByDescending(w => w.SiteTime)
-                .Take(Total)
-                .ToList();
-                _response.Result = _mapper.Map<List<SMSDTO>>(listSMS);
-            }
-            catch (Exception Ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = Ex.Message;
-            }
-            return _response;
-        }
+        
 
 
 
@@ -184,74 +164,74 @@ namespace API.KM58.Controllers
             return _response;
         }
 
-        [HttpPost]
-        public async Task<ResponseDTO> Post(SMSDTO inputSMS)
-        {
-            try
-            {
-                string comparisonPart = inputSMS.Sender.Substring(3);
-                SMS existingSMS = await _db.SMS
-                    .FirstOrDefaultAsync(s => s.Device == inputSMS.Device 
-                    && s.Content == inputSMS.Content
-                    && s.Sender.EndsWith(comparisonPart));
+        //[HttpPost]
+        //public async Task<ResponseDTO> Post(SMSDTO inputSMS)
+        //{
+        //    try
+        //    {
+        //        string comparisonPart = inputSMS.Sender.Substring(3);
+        //        SMS existingSMS = await _db.SMS
+        //            .FirstOrDefaultAsync(s => s.Device == inputSMS.Device 
+        //            && s.Content == inputSMS.Content
+        //            && s.Sender.EndsWith(comparisonPart));
 
-                if (existingSMS != null && existingSMS.CreatedTime == null)
-                {
-                    Site site = _db.Sites.First(u => u.Name == inputSMS.ProjectCode || u.Project == inputSMS.ProjectCode);
+        //        if (existingSMS != null && existingSMS.CreatedTime == null)
+        //        {
+        //            Site site = _db.Sites.First(u => u.Name == inputSMS.ProjectCode || u.Project == inputSMS.ProjectCode);
 
-                    Random rnd = new Random();
-                    int Point = rnd.Next(site.MinPoint, site.MaxPoint + 1);
-                    string Site = site.Name;
-                    string Account = existingSMS.Account;
-                    int Round = site.Round;
-                    string Remarks = site.Remarks;
-                    string Ecremarks = site.Ecremarks;
+        //            Random rnd = new Random();
+        //            int Point = rnd.Next(site.MinPoint, site.MaxPoint + 1);
+        //            string Site = site.Name;
+        //            string Account = existingSMS.Account;
+        //            int Round = site.Round;
+        //            string Remarks = site.Remarks;
+        //            string Ecremarks = site.Ecremarks;
 
-                    JObject jsonResponseData;
+        //            JObject jsonResponseData;
 
-                    if (Site.Trim() == "mocbai")
-                    {
-                        var jsonAllJiLiFishTickets = await _boService.addPointClient(Site, Account, Point, Round, Remarks, Ecremarks);
-                        jsonResponseData = (JObject)JsonConvert.DeserializeObject(jsonAllJiLiFishTickets.Result.ToString());
+        //            if (Site.Trim() == "mocbai")
+        //            {
+        //                var jsonAllJiLiFishTickets = await _boService.addPointClient(Site, Account, Point, Round, Remarks, Ecremarks);
+        //                jsonResponseData = (JObject)JsonConvert.DeserializeObject(jsonAllJiLiFishTickets.Result.ToString());
 
-                    }
-                    else
-                    {
-                        var jsonAllJiLiFishTickets = await _boService.addPointClientCMD(Site, Account, Point, Round, Remarks, Ecremarks);
-                        jsonResponseData = (JObject)JsonConvert.DeserializeObject(jsonAllJiLiFishTickets.Result.ToString());
-                    }
+        //            }
+        //            else
+        //            {
+        //                var jsonAllJiLiFishTickets = await _boService.addPointClientCMD(Site, Account, Point, Round, Remarks, Ecremarks);
+        //                jsonResponseData = (JObject)JsonConvert.DeserializeObject(jsonAllJiLiFishTickets.Result.ToString());
+        //            }
 
-                    if (jsonResponseData != null && jsonResponseData["status_code"] != null && (int)jsonResponseData["status_code"] == 200)
-                    {
-                        existingSMS.CreatedTime = DateTime.Now;
-                        existingSMS.ProjectCode = inputSMS.ProjectCode;
-                        existingSMS.Point = Point;
-                        existingSMS.Status = true;
-                        _db.Entry(existingSMS).State = EntityState.Modified;
-                        await _db.SaveChangesAsync();
-                        _response.Result = existingSMS;
-                        _response.IsSuccess = true;
-                        _response.Message = "Cập nhật điểm thành công.";
-                    }
-                    else
-                    {
-                        _response.IsSuccess = false;
-                        _response.Message = "Lỗi cộng điểm vào bo";
-                    }
-                }
-                else
-                {
-                    _response.IsSuccess = false;
-                    _response.Message = "SMS không hợp lệ cơ sở dữ liệu.";
-                }
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.InnerException?.Message ?? ex.Message;
-            }
-            return _response;
-        }
+        //            if (jsonResponseData != null && jsonResponseData["status_code"] != null && (int)jsonResponseData["status_code"] == 200)
+        //            {
+        //                existingSMS.CreatedTime = DateTime.Now;
+        //                existingSMS.ProjectCode = inputSMS.ProjectCode;
+        //                existingSMS.Point = Point;
+        //                existingSMS.Status = true;
+        //                _db.Entry(existingSMS).State = EntityState.Modified;
+        //                await _db.SaveChangesAsync();
+        //                _response.Result = existingSMS;
+        //                _response.IsSuccess = true;
+        //                _response.Message = "Cập nhật điểm thành công.";
+        //            }
+        //            else
+        //            {
+        //                _response.IsSuccess = false;
+        //                _response.Message = "Lỗi cộng điểm vào bo";
+        //            }
+        //        }
+        //        else
+        //        {
+        //            _response.IsSuccess = false;
+        //            _response.Message = "SMS không hợp lệ cơ sở dữ liệu.";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _response.IsSuccess = false;
+        //        _response.Message = ex.InnerException?.Message ?? ex.Message;
+        //    }
+        //    return _response;
+        //}
 
         [HttpPost]
         [Route("PostWebsite")]
