@@ -15,7 +15,11 @@ namespace FE.ADMIN.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            if (!User.Identity.IsAuthenticated) 
+            {
+                return RedirectToAction("Login", "Auth");
+            }else
+                return View();
         }
 
         public IActionResult Privacy()

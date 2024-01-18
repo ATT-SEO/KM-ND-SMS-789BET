@@ -14,41 +14,25 @@ namespace FE.ADMIN.Services
             _baseService = baseService;
         }
 
-        public async Task<ResponseDTO?> GetAsync()
-        {
-            return await _baseService.SendAsync(new RequestDTO()
-            {
-                APIType = SD.APIType.GET,
-                Url = SD.ApiKM58 + "/api/auth",
-            });
-        }
-
-		public async Task<ResponseDTO?> DeleteAsync(String IdentityUser)
-		{
-			return await _baseService.SendAsync(new RequestDTO()
-			{
-				APIType = SD.APIType.DELETE,
-				Url = SD.ApiKM58 + "/api/auth?UserID="+ IdentityUser,
-			});
-		}
-
-		public async Task<ResponseDTO?> AssignRoleAsync(RegistrationRequestDTO requestDTO)
+        public async Task<ResponseDTO?> AssignRoleAsync(RegistrationRequestDTO requestDTO)
         {
             return await _baseService.SendAsync(new RequestDTO()
             {
                 APIType = SD.APIType.POST,
                 Data = requestDTO,
-                Url = SD.ApiKM58 + "/api/auth/assignrole",
+                Url = SD.AuthAPIBase + "/api/Account/assignrole",
             }, withBearer: false);
         }
 
         public async Task<ResponseDTO?> LoginAsync(LoginRequestDTO requestDTO)
         {
+            String jsonString = JsonConvert.SerializeObject(requestDTO);
+            Console.WriteLine($" >>>>> {jsonString}");
             return await _baseService.SendAsync(new RequestDTO()
             {
                 APIType = SD.APIType.POST,
                 Data = requestDTO,
-                Url = SD.ApiKM58 + "/api/auth/Login",
+                Url = SD.AuthAPIBase + "/api/Account/Login",
             }, withBearer: false);
         }
 
@@ -58,10 +42,8 @@ namespace FE.ADMIN.Services
             {
                 APIType = SD.APIType.POST,
                 Data = requestDTO,
-                Url = SD.ApiKM58 + "/api/auth/register",
+                Url = SD.AuthAPIBase + "/api/Account/register",
             }, withBearer: false);
         }
-
-		
-	}
+    }
 }

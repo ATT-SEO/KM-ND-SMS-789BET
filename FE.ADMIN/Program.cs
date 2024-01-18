@@ -25,6 +25,7 @@ builder.Services.AddScoped<IPhoneNumberService, PhoneNumberService>();
 builder.Services.AddScoped<ISMSRawDataService, SMSRawDataService>();
 builder.Services.AddScoped<ISMSService, SMSService>();
 builder.Services.AddScoped<ILogAccountService, LogAccountService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
@@ -34,6 +35,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 });
 
 SD.ApiKM58 = builder.Configuration["ServiceURLs:ApiKM58"];
+SD.AuthAPIBase = builder.Configuration["ServiceURLs:AuthAPIBase"];
 
 var app = builder.Build();
 

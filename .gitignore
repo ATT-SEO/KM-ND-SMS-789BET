@@ -7,4 +7,5 @@ FE.ADMIN/bin/
 FE.JunCMD.Client/bin/
 FE.JunCMD.Client/obj/
 API.KM58/Migrations/
+API.KM58/Logs/
 .vs
