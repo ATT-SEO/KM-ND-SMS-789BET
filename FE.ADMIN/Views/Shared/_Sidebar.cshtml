@@ -13,67 +13,50 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                     <div class="sidenav-menu-heading">@LoginUser.ProjectCode Ver1.01</div>
-                    <a class="nav-link" href="#">
-                    <div class="nav-link-icon"></div>
-                    API
-                </a>
-                <!-- Sidenav Accordion (Pages)-->
-                <a class="nav-link collapsed @(currentController == "PhoneNumber" ? "active" : "")" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-                    <div class="nav-link-icon"><i data-feather="grid"></i></div>
-                    Quản lý thiết bị
-                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse show" id="collapsePages" data-bs-parent="#accordionSidenav">
-                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPagesMenu">
-                        <a class="nav-link @(currentController == "PhoneNumber" && currentAction == "Create" ? " active" : "" )" asp-controller="PhoneNumber" asp-action="Create">Thêm mới</a>
-                        <a class="nav-link @(currentController == "PhoneNumber" && currentAction == "Index" ? " active" : "" )" asp-controller="PhoneNumber" asp-action="Index">Danh sách</a>
-                    </nav>
-                </div>
-                <!-- Sidenav Accordion (Flows)-->
-                <a class="nav-link collapsed  @(currentController == "Site" ? "active" : "")" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseFlows" aria-expanded="false" aria-controls="collapseFlows">
-                    <div class="nav-link-icon"><i data-feather="globe"></i></div>
-                    Quản lý site
-                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse show" id="collapseFlows" data-bs-parent="#accordionSidenav">
-                    <nav class="sidenav-menu-nested nav">
-                        <a class="nav-link @(currentController == "Site" && currentAction == "Create" ? " active" : "" )" asp-controller="Site" asp-action="Create">Thêm mới</a>
-                        <a class="nav-link @(currentController == "Site" && currentAction == "Index" ? " active" : "" )" asp-controller="Site" asp-action="Index">Danh sách Site</a>
-                    </nav>
-                </div>
+                    @if (LoginUser.Role == "ADMIN")
+                    {
+                        <a class="nav-link" asp-controller="Site" asp-action="Index">
+                            <div class="nav-link-icon"><i data-feather="globe"></i></div>
+                            Cài đặt khuyến mãi
+                        </a>
 
-                <a class="nav-link collapsed @(currentController == "SMS" ? "active" : "")" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#SMS_Project" aria-expanded="false" aria-controls="SMS_Project">
-                    <div class="nav-link-icon">
-                        <i data-feather="mail"></i>
-                    </div>
-                    Quản lý sms
-                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse show" id="SMS_Project" data-bs-parent="#accordionSidenav">
-                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAppsMenu">
-                        <a class="nav-link" asp-controller="SMS" asp-action="Index">Tất cả</a>
-                        <a class="nav-link @(currentController == "SMS" && currentAction == "Index" && @Context.Request.Query["SeachStatus"].ToString() == "1" ? " active" : "" )" asp-controller="SMS" asp-action="Index" asp-route-SeachStatus="1">Đã xác thực</a>
-                        <a class="nav-link @(currentController == "SMS" && currentAction == "Index" && @Context.Request.Query["SeachStatus"].ToString() == "9" ? "active" : "" )" asp-controller="SMS" asp-action="Index" asp-route-SeachStatus="9">Chưa xác thực</a>
-                    </nav>
-                </div>
-                <a class="nav-link @(currentController == "LogAccount" ? "active" : "")" asp-controller="LogAccount" asp-action="Index">
-                <div class="nav-link-icon"><i data-feather="bar-chart"></i></div>
-                Danh sách IP/FP Account</a>
-                
-                <a class="nav-link" asp-controller="SMSRawData" asp-action="Index">
-                    <div class="nav-link-icon">
-                        <i data-feather="mail"></i>
-                    </div>
-                    Tin nhắn đến
-                </a>
-              @*   <a class="nav-link @(currentController == "WhiteListIP" ? "active" : "")" asp-controller="WhiteListIP" asp-action="Index">
-                    <div class="nav-link-icon"><i data-feather="bar-chart"></i></div>
-                    Danh sách IP khách
-                    </a> *@
-                        @*  <a class="nav-link  @(currentController == "Auth" ? "active" : "")" asp-controller="Auth" asp-action="Index">
-                        <div class="nav-link-icon"><i data-feather="user"></i></div>
-                        Quản lý tài khoản
-                    </a> *@
+                        <a class="nav-link" asp-controller="PhoneNumber" asp-action="Index">
+                            <div class="nav-link-icon"><i data-feather="grid"></i></div>
+                            Cài đặt thiết bị
+                        </a>
+
+                        <a class="nav-link" asp-controller="SMS" asp-action="Index">
+                            <div class="nav-link-icon"><i data-feather="mail"></i></div>
+                            Yêu cầu nhận thưởng
+                        </a>
+
+                        <a class="nav-link" asp-controller="LogAccount" asp-action="Index">
+                            <div class="nav-link-icon"><i data-feather="bar-chart"></i></div>
+                            Danh sách IP/FP Account
+                        </a>
+
+                        <a class="nav-link" asp-controller="SMSRawData" asp-action="Index">
+                            <div class="nav-link-icon"><i data-feather="mail"></i></div>
+                            Tin nhắn đến
+                        </a>
+                    }
+                    @if (LoginUser.Role == "CUSTOMER")
+                    {
+                        <a class="nav-link" asp-controller="SMS" asp-action="Index">
+                            <div class="nav-link-icon"><i data-feather="mail"></i></div>
+                            Yêu cầu nhận thưởng
+                        </a>
+
+                        <a class="nav-link" asp-controller="LogAccount" asp-action="Index">
+                            <div class="nav-link-icon"><i data-feather="bar-chart"></i></div>
+                            Danh sách IP/FP Account
+                        </a>
+
+                        <a class="nav-link" asp-controller="SMSRawData" asp-action="Index">
+                            <div class="nav-link-icon"><i data-feather="mail"></i></div>
+                            Tin nhắn đến
+                        </a>
+                    }
                 }
             </div>
         </div>
