@@ -8,7 +8,9 @@
 * {
   box-sizing: border-box;
 }
-
+.grecaptcha-badge{
+    display: none !important;
+}
 body {
     font-family: "Arial";
     margin: 0;

@@ -73,7 +73,10 @@
 				</form>
 			</div>
 		</div>
-		<div class="conten-data">
+		<div class="card-title fw-700 fs-6" >
+			Số lượng : <span class="text-black"> @ViewBag.totalCount </span>
+		</div>
+		<div class="content-data">
 			<table class="table table-bordered table-hover">
 				<thead>
 					<tr>
@@ -94,6 +97,9 @@
 						</th>
 						<th>
 							Trạng thái
+						</th>
+						<th>
+							Điểm thưởng
 						</th>
 						<th>T/gian yêu cầu</th>
 						<th>T/gian nhận thưởng</th>
@@ -137,6 +143,10 @@
 									{
 										<span>Đợi phát</span>
 									}
+								</td>
+								<td>
+									@sms.Point
+
 								</td>
 								<td>
 									@(sms.SiteTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "Null")

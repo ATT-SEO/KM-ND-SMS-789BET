@@ -13,6 +13,7 @@ namespace FE.CLIENT.Controllers
 {
     public class AccountController : Controller
     {
+        private const string RecaptchaSecretKey = "6LdjDFYpAAAAAJsGL5I-hHeMPNaSURINvSEoM6uH";
         private readonly IBOService _boService;
         private readonly ILogger<AccountController> _logger;
         private readonly IPhoneNumberService _phoneNumber;
@@ -33,9 +34,32 @@ namespace FE.CLIENT.Controllers
             string Username = checkAccountRequestDTO.Account;
             Username = Username.Trim();
             Username = Username.ToLower();
+            string recaptchaToken = checkAccountRequestDTO.RecaptchaToken;
 
             object responseJson;
+            using (HttpClient httpClient = new HttpClient())
+            {
+                var response = await httpClient.GetStringAsync($"https://www.google.com/recaptcha/api/siteverify?secret={RecaptchaSecretKey}&response={recaptchaToken}");
 
+                var recaptchaResponse = JsonConvert.DeserializeObject<RecaptchaResponse>(response);
+                Console.WriteLine(response);
+                if (!recaptchaResponse.Success)
+                {
+                    responseJson = new
+                    {
+                        result = new
+                        {
+                            code = 250,
+                            message = "Qúy khách vui lòng kiểm tra lại điều kiện nhận thưởng hoặc vui load lại trang !!!"
+                        },
+                        success = true,
+                        error = "error",
+                        unAuthorizedRequest = false,
+                        __abp = false
+                    };
+                    return Json(responseJson);
+                }
+            }
             List<PhoneNumberDTO>? phoneNumbers = new List<PhoneNumberDTO>();
             ResponseDTO? res = await _phoneNumber.GetListPhoneBySiteIDAsync(1);
             if (res != null && res.IsSuccess)

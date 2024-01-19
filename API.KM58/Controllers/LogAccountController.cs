@@ -170,9 +170,9 @@ namespace API.KM58.Controllers
 		[HttpPost]
 		public async Task<ResponseDTO> Post(LogAccount logAccountDTO)
 		{
-			try
+			try 
 			{
-                LogAccount logAccount1 = await _db.LogAccounts.FirstOrDefaultAsync(s => s.IP == logAccountDTO.IP &&  s.FP == logAccountDTO.FP && s.SiteID == logAccountDTO.SiteID);
+                LogAccount logAccount1 = await _db.LogAccounts.FirstOrDefaultAsync(s => s.FP == logAccountDTO.FP && s.SiteID == logAccountDTO.SiteID);
 
 				if(logAccount1 == null)
 				{
@@ -207,7 +207,7 @@ namespace API.KM58.Controllers
 			return _response;
 		}
 		// DELETE api/<LogAccountController>/5
-		[HttpDelete("DeleteLog/{id}")]
+		[HttpDelete("DeleteLog/{Id}")]
 		public ResponseDTO Delete(int Id)
 		{
 			try

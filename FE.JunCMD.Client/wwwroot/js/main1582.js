@@ -30,47 +30,69 @@ $(document).on('click', '#btnCheck', function (e) {
         "Regfingerprint": $("#regfingerprint").val()
     };
     showLoadingSpinner();
-    $.ajax("/Account/CheckAccount", {
-        type: "POST",
-        data: JSON.stringify(data),
-        dataType: 'json',
-        contentType: "application/json",
-        success: function (response) {
-            $('#btnCheck').attr('disabled', false);
-            hideLoadingSpinner();
+    grecaptcha.ready(function () {
+        grecaptcha.execute('6LdjDFYpAAAAAPXMRR9_yYBOfBLq5Ikjw0yM8G48', {
+            action: 'submit_form'
+        }).then(function (token) {
+            data.RecaptchaToken = token;
+            $.ajax("/Account/CheckAccount", {
+                type: "POST",
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: "application/json",
+                success: function (response) {
+                    $('#btnCheck').attr('disabled', false);
+                    hideLoadingSpinner();
 
-            if (response.success) {
-                if (response.result.code == 200) {
-                    if (response.result.status == 2) {
-                        window.confettiful = new Confettiful(document.querySelector(".js-container"));
-                    } else if (response.result.status == 1) {
-                        ShowSuccessMsg(response.result.message);
-                    } else {
-                        var phone = response.result.phone;
-                        var smscode = response.result.smsCode;
-                        superPhone = response.result.superPhone;
-                        var verifyCode = response.result.verifyCode
-                        $("#btnCopyContentPhone").attr("data-clipboard-text", superPhone);
-                        $("#btnCopyContent").attr("data-clipboard-text", smscode);
-                        var mobile = superPhone.substring(0, 3) + "." + superPhone.substring(3, 5) + "." + "***" + superPhone.substring(8);
-                        var phone1 = phone.substring(0, 3) + "." + "***" + phone.substring(6);
-                        $("#phone").val(phone1);
-                        $("#oldphone").val(phone);
-                        $("#content").val(smscode);
-                        $("#verifycode").val(verifyCode);
-                        $("#contentPhone").val(superPhone);
+                    if (response.success) {
+                        if (response.result.code == 200) {
+                            if (response.result.status == 2) {
+                                document.body.style.overflow = 'hidden';
+                                $('#message-success').html(response.result.message.replace(/\n/g, '<br>'));
+                                window.confettiful = new Confettiful(document.querySelector(".js-container"));
+                            } else if (response.result.status == 1) {
+                                ShowSuccessMsg(response.result.message);
+                                var phone = response.result.phone;
+                                var smscode = response.result.smsCode;
+                                superPhone = response.result.superPhone;
+                                var verifyCode = response.result.verifyCode
+                                $("#btnCopyContentPhone").attr("data-clipboard-text", superPhone);
+                                $("#btnCopyContent").attr("data-clipboard-text", smscode);
+                                var mobile = superPhone.substring(0, 3) + "." + superPhone.substring(3, 5) + "." + "***" + superPhone.substring(8);
+                                var phone1 = phone.substring(0, 3) + "." + "***" + phone.substring(6);
+                                $("#phone").val(phone1);
+                                $("#oldphone").val(phone);
+                                $("#content").val(smscode);
+                                $("#verifycode").val(verifyCode);
+                                $("#contentPhone").val(superPhone);
+                            } else {
+                                var phone = response.result.phone;
+                                var smscode = response.result.smsCode;
+                                superPhone = response.result.superPhone;
+                                var verifyCode = response.result.verifyCode
+                                $("#btnCopyContentPhone").attr("data-clipboard-text", superPhone);
+                                $("#btnCopyContent").attr("data-clipboard-text", smscode);
+                                var mobile = superPhone.substring(0, 3) + "." + superPhone.substring(3, 5) + "." + "***" + superPhone.substring(8);
+                                var phone1 = phone.substring(0, 3) + "." + "***" + phone.substring(6);
+                                $("#phone").val(phone1);
+                                $("#oldphone").val(phone);
+                                $("#content").val(smscode);
+                                $("#verifycode").val(verifyCode);
+                                $("#contentPhone").val(superPhone);
+                            }
+
+                        } else {
+                            ShowErrorMsg(response.result.message);
+                        }
                     }
-
-                } else {
-                    ShowErrorMsg(response.result.message);
+                },
+                error: function (error) {
+                    hideLoadingSpinner();
+                    $('#btnCheck').attr('disabled', false);
+                    ShowErrorMsg("Yêu cầu bất thường"); // error
                 }
             }
-        },
-        error: function (error) {
-            hideLoadingSpinner();
-            $('#btnCheck').attr('disabled', false);
-            ShowErrorMsg("Yêu cầu bất thường"); // error
-        }
+        );
     })
 });
 $(document).on('click', '#wrap-form-send-sms', function (e) {
@@ -78,7 +100,7 @@ $(document).on('click', '#wrap-form-send-sms', function (e) {
     const regex = /^\+?[0-9]{3}-?[0-9]{7,11}$/i;
     if (!regex.test(phone)) {
         swal({
-            title: "Thành Công",
+            title: "Thất bại",
             text: `Vui lòng nhập đúng số điện thoại`,
             icon: "error",
         });
@@ -126,6 +148,8 @@ $(document).on('click', '#wrap-form-sended-sms', function (e) {
                     if (response.success) {
                         if (response.result.code == 200) {
                             if (response.result.status == 2) {
+                                document.body.style.overflow = 'hidden';
+                                $('#message-success').html(response.result.message.replace(/\n/g, '<br>'));
                                 window.confettiful = new Confettiful(document.querySelector(".js-container"));
                             } else {
                                 ShowSuccessMsg(response.result.message);
