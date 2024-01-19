@@ -15,10 +15,14 @@ namespace FE.ADMIN.Controllers
 
 
 		private readonly ILogAccountService _logAccount;
-		public LogAccountController(ILogAccountService logAccount)
+        private readonly ITokenProvider _tokenProvider;
+        private UserDTO _userDTO;
+        public LogAccountController(ILogAccountService logAccount, ITokenProvider TokenProvider)
 		{
             _logAccount = logAccount;
-		}
+            _tokenProvider = TokenProvider;
+            _userDTO = _tokenProvider.ReadTokenClearInformation();
+        }
 
         public async Task<IActionResult> Index(QueryParametersDTO parameters)
         {
@@ -29,7 +33,8 @@ namespace FE.ADMIN.Controllers
                 ResponseDTO? res = await _logAccount.GetAllLogAccountAsync(parameters);
                 if (res != null && res.IsSuccess)
                 {
-					var resultObject = JObject.FromObject(res.Result);
+                    ViewBag.LoginUser = _userDTO;
+                    var resultObject = JObject.FromObject(res.Result);
 					if (resultObject.TryGetValue("data", out var data) && data != null)
 					{
 
@@ -64,12 +69,14 @@ namespace FE.ADMIN.Controllers
         // GET: LogAccountController/Details/5
         public ActionResult Details(int id)
         {
+            ViewBag.LoginUser = _userDTO;
             return View();
         }
 
         // GET: LogAccountController/Create
         public ActionResult Create()
         {
+            ViewBag.LoginUser = _userDTO;
             return View();
         }
 
@@ -80,6 +87,7 @@ namespace FE.ADMIN.Controllers
         {
             try
             {
+                ViewBag.LoginUser = _userDTO;
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -91,6 +99,7 @@ namespace FE.ADMIN.Controllers
         // GET: LogAccountController/Edit/5
         public ActionResult Edit(int id)
         {
+            ViewBag.LoginUser = _userDTO;
             return View();
         }
 
@@ -101,6 +110,7 @@ namespace FE.ADMIN.Controllers
         {
             try
             {
+                ViewBag.LoginUser = _userDTO;
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -112,6 +122,7 @@ namespace FE.ADMIN.Controllers
         // GET: LogAccountController/Delete/5
         public ActionResult Delete(int id)
         {
+            ViewBag.LoginUser = _userDTO;
             return View();
         }
 
@@ -122,6 +133,7 @@ namespace FE.ADMIN.Controllers
         {
             try
             {
+                ViewBag.LoginUser = _userDTO;
                 return RedirectToAction(nameof(Index));
             }
             catch

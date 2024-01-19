@@ -62,5 +62,45 @@ namespace API.KM58.Controllers
             return _response;
         }
 
+        [HttpGet]
+        [Route("GetTotalSMS/")]
+        public async Task<ResponseDTO> GetTotalSMS(int Total, string Device)
+        {
+            try
+            {
+                List<SMSRawData> listSMS = _db.SMSRawData.Where(s => s.Device == Device)
+                .OrderByDescending(w => w.CreatedTime)
+                .Take(Total)
+                .ToList();
+                _response.Result = _mapper.Map<List<SMSRawDataDTO>>(listSMS);
+            }
+            catch (Exception Ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = Ex.Message;
+            }
+            return _response;
+        }
+
+        [HttpDelete]
+        [Route("{Id}")]
+        public async Task<ResponseDTO> Delete(int Id)
+        {
+            try
+            {
+                SMSRawData _SMS = await _db.SMSRawData.Where(x => x.Id == Id).FirstOrDefaultAsync();
+                if (_SMS != null)
+                {
+                    _db.SMSRawData.Remove(_SMS);
+                    await _db.SaveChangesAsync();
+                }
+            }
+            catch (Exception Ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = Ex.InnerException.Message;
+            }
+            return _response;
+        }
     }
 }

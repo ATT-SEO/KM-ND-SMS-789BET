@@ -10,14 +10,21 @@ namespace FE.ADMIN.Controllers
     {
         // GET: SiteController
         private readonly ISiteService _site;
-        public SiteController(ISiteService siteService)
+        private readonly ITokenProvider _tokenProvider;
+        private UserDTO _userDTO;
+
+        public SiteController(ISiteService siteService, ITokenProvider TokenProvider)
         {
             _site = siteService;
+            _tokenProvider = TokenProvider;
+            _userDTO = _tokenProvider.ReadTokenClearInformation();
         }
+
         public async Task<IActionResult> Index()
         {
             try
             {
+                ViewBag.LoginUser = _userDTO;
                 List<SiteDTO>? siteList = new List<SiteDTO>();
                 ResponseDTO? res = await _site.GetAllAsync();
                 if (res != null && res.IsSuccess)
@@ -36,10 +43,13 @@ namespace FE.ADMIN.Controllers
             }
             return View();
         }
+
         public async Task<IActionResult> Create()
         {
+            ViewBag.LoginUser = _userDTO;
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Create(SiteDTO siteDTO)
         {
@@ -47,6 +57,7 @@ namespace FE.ADMIN.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    ViewBag.LoginUser = _userDTO;
                     ResponseDTO? res = await _site.CreateAsync(siteDTO);
                     if (res != null && res.IsSuccess)
                     {
@@ -78,6 +89,7 @@ namespace FE.ADMIN.Controllers
 
             try
             {
+                ViewBag.LoginUser = _userDTO;
                 ResponseDTO? res = await _site.GetSiteByIDAsync(Id);
                 if (res != null && res.IsSuccess)
                 {
@@ -99,6 +111,7 @@ namespace FE.ADMIN.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    ViewBag.LoginUser = _userDTO;
                     ResponseDTO? res = await _site.EditAsync(siteDTO);
                     if (res != null && res.IsSuccess)
                     {
@@ -123,6 +136,7 @@ namespace FE.ADMIN.Controllers
         {
             try
             {
+                ViewBag.LoginUser = _userDTO;
                 ResponseDTO? res = await _site.DeleteAsync(id);
                 if (res != null && res.IsSuccess)
                 {

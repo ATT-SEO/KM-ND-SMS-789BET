@@ -11,9 +11,13 @@ namespace FE.ADMIN.Controllers
     public class SMSController : Controller
     {
         private readonly ISMSService _sms;
-        public SMSController(ISMSService sms)
+        private readonly ITokenProvider _tokenProvider;
+        private UserDTO _userDTO;
+        public SMSController(ISMSService sms, ITokenProvider TokenProvider)
         {
             _sms = sms;
+            _tokenProvider = TokenProvider;
+            _userDTO = _tokenProvider.ReadTokenClearInformation();
         }
         // GET: SMSController
 		public async Task<IActionResult> Index(QueryParametersDTO parameters)
@@ -25,7 +29,8 @@ namespace FE.ADMIN.Controllers
 				ResponseDTO? res = await _sms.GetAllAsync(parameters);
 				if (res != null && res.IsSuccess)
 				{
-					var resultObject = JObject.FromObject(res.Result);
+                    ViewBag.LoginUser = _userDTO;
+                    var resultObject = JObject.FromObject(res.Result);
 					if (resultObject.TryGetValue("data", out var data) && data != null)
 					{
 
@@ -63,6 +68,7 @@ namespace FE.ADMIN.Controllers
         {
             try
             {
+                ViewBag.LoginUser = _userDTO;
                 ResponseDTO? res = await _sms.GetOneSMSByID(id);
                 if (res != null && res.IsSuccess)
                 {
@@ -81,6 +87,7 @@ namespace FE.ADMIN.Controllers
         {
             try
             {
+                ViewBag.LoginUser = _userDTO;
                 ResponseDTO? res = await _sms.GetOneSMSByID(id);
                 if (res != null && res.IsSuccess)
                 {
@@ -103,6 +110,7 @@ namespace FE.ADMIN.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    ViewBag.LoginUser = _userDTO;
                     ResponseDTO? res = await _sms.EditAsync(smsDTO);
                     if (res != null && res.IsSuccess)
                     {
@@ -125,6 +133,7 @@ namespace FE.ADMIN.Controllers
         // GET: SMSController/Delete/5
         public ActionResult Delete(int id)
         {
+            ViewBag.LoginUser = _userDTO;
             return View();
         }
     }

@@ -94,7 +94,7 @@ namespace FE.CLIENT.Controllers
                                     FP = checkAccountRequestDTO.Regfingerprint,
                                     IP = clientIPAddress,
                                     SiteID = 1,
-                                    Project = "KM66_MB66"
+                                    Project = "FREE66"
                                 };
 
                                 ResponseDTO? checkLog = await _logAccountService.CreateAsync(log);

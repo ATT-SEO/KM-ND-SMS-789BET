@@ -4,13 +4,8 @@ namespace FE.ADMIN.Models
 {
     public class UserDTO
     {
-        [Key]
-        public string? ID { get; set; }
-        [Required]
-        public string? UserName { get; set; }
-        [Required]
-        public string? Password { get; set; }
-        [Required]
-        public string? Role { get; set; }
+        public String UserName { get; set; }
+        public String Role { get; set; }
+        public String ProjectCode { get; set; }
     }
 }

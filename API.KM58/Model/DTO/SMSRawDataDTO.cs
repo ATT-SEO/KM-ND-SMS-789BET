@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace API.KM58.Model
+namespace API.KM58.Model.DTO
 {
     public class SMSRawDataDTO
     {

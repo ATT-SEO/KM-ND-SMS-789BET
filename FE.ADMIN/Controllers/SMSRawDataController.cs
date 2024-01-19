@@ -10,10 +10,14 @@ namespace FE.ADMIN.Controllers
 {
     public class SMSRawDataController : Controller
     {
+        private readonly ITokenProvider _tokenProvider;
         private readonly ISMSRawDataService _smsRawData;
-        public SMSRawDataController(ISMSRawDataService sms)
+        private UserDTO _userDTO;
+
+        public SMSRawDataController(ISMSRawDataService sms, ITokenProvider TokenProvider)
         {
             _smsRawData = sms;
+            _userDTO = TokenProvider.ReadTokenClearInformation();
         }
 
         [HttpGet]
