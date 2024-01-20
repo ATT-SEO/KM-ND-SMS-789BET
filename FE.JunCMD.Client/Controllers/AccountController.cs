@@ -13,7 +13,8 @@ namespace FE.JunCMD.Client.Controllers
 {
 	public class AccountController : Controller
 	{
-		private readonly IBOService _boService;
+        private const string RecaptchaSecretKey = "6Lda01YpAAAAAA7cQ7ui2XSTWgaEiwIezh2VT2C8";
+        private readonly IBOService _boService;
 		private readonly ILogger<AccountController> _logger;
 		private readonly IPhoneNumberService _phoneNumber;
 		private readonly ISMSService _SMS;
@@ -33,17 +34,41 @@ namespace FE.JunCMD.Client.Controllers
 			string Username = checkAccountRequestDTO.Account;
 			Username = Username.Trim();
 			Username = Username.ToLower();
+            string recaptchaToken = checkAccountRequestDTO.RecaptchaToken;
 
-			object responseJson;
+            object responseJson;
 
-			List<PhoneNumberDTO>? phoneNumbers = new List<PhoneNumberDTO>();
+            using (HttpClient httpClient = new HttpClient())
+            {
+                var response = await httpClient.GetStringAsync($"https://www.google.com/recaptcha/api/siteverify?secret={RecaptchaSecretKey}&response={recaptchaToken}");
+
+                var recaptchaResponse = JsonConvert.DeserializeObject<RecaptchaResponse>(response);
+                Console.WriteLine(response);
+                if (!recaptchaResponse.Success)
+                {
+                    responseJson = new
+                    {
+                        result = new
+                        {
+                            code = 250,
+                            message = "Qúy khách vui lòng kiểm tra lại điều kiện nhận thưởng hoặc vui load lại trang !!!"
+                        },
+                        success = true,
+                        error = "error",
+                        unAuthorizedRequest = false,
+                        __abp = false
+                    };
+                    return Json(responseJson);
+                }
+            }
+
+            List<PhoneNumberDTO>? phoneNumbers = new List<PhoneNumberDTO>();
 			ResponseDTO? res = await _phoneNumber.GetListPhoneBySiteIDAsync(2);
 			if (res != null && res.IsSuccess)
 			{
 				phoneNumbers = JsonConvert.DeserializeObject<List<PhoneNumberDTO>>(Convert.ToString(res.Result)!);
 				Random random = new Random();
 				PhoneNumberDTO randomPhoneNumber = phoneNumbers[random.Next(phoneNumbers.Count)];
-
 
 				if (!string.IsNullOrWhiteSpace(Username))
 				{
@@ -56,11 +81,10 @@ namespace FE.JunCMD.Client.Controllers
 						string phone = ConvertPhoneNumber.ConvertPhone(responseJsonData.Phone);
 						DateTimeOffset createDate = responseJsonData.CreatedDate;
 						DateTimeOffset currentUtcTime = DateTimeOffset.UtcNow;
-						if (Username != "kawaitcn")
+						if (Username != "ceshi9999")
 						{
 							try
 							{
-
 								//// check log
 								string clientIPAddress = HttpContext.Request.Headers["X-Forwarded-For"];
 								var log = new LogAccountDTO
@@ -153,7 +177,7 @@ namespace FE.JunCMD.Client.Controllers
 											{
 												status = 2,
 												code = 200,
-												message = $"Quý khách đã nhận thưởng thành công. \n KM: FREE66. \n Số điểm: {OneSMS.Point}. \n Thời gian {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm:ss")}"
+												message = $"Quý khách đã nhận thưởng thành công. \n KM: Jun88. \n Số điểm: {OneSMS.Point}. \n Thời gian {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm:ss")}"
 											},
 											success = true,
 											__abp = true
@@ -259,7 +283,7 @@ namespace FE.JunCMD.Client.Controllers
 										status = 2,
 										superPhone = resultNumber,
 										code = 200,
-										message = $"Quý khách đã nhận thưởng thành công. \n KM: FREE66. \n Số điểm: {OneSMS.Point}. \n Thời gian {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm:ss")}"
+										message = $"Quý khách đã nhận thưởng thành công. \n KM: Jun88. \n Số điểm: {OneSMS.Point}. \n Thời gian {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm:ss")}"
 									},
 									success = true,
 									__abp = true
@@ -400,7 +424,7 @@ namespace FE.JunCMD.Client.Controllers
 							{
 								status = 2,
 								code = 200,
-								message = $"Quý khách đã nhận thưởng thành công. \n KM: FREE66. \n Số điểm: {OneSMS.Point}. \n Thời gian {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm:ss")}"
+								message = $"Quý khách đã nhận thưởng thành công. \n KM: Jun88. \n Số điểm: {OneSMS.Point}. \n Thời gian {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm:ss")}"
 							},
 							success = true,
 							__abp = true

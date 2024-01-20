@@ -18,7 +18,6 @@ function hideLoadingSpinner() {
     document.getElementById("loadingOverlay").style.display = "none";
 }
 $(document).on('click', '#btnCheck', function (e) {
-
     var account = $("#userName").val()
     if (account == "") {
         ShowErrorMsg("Tài khoản không được để trống") //account not null
@@ -27,11 +26,12 @@ $(document).on('click', '#btnCheck', function (e) {
     $('#btnCheck').attr('disabled', true);
     var data = {
         "Account": account,
-        "Regfingerprint": $("#regfingerprint").val()
+        "Regfingerprint": $("#regfingerprint").val(),
+        "RecaptchaToken": ""
     };
     showLoadingSpinner();
     grecaptcha.ready(function () {
-        grecaptcha.execute('6LdjDFYpAAAAAPXMRR9_yYBOfBLq5Ikjw0yM8G48', {
+        grecaptcha.execute('6Lda01YpAAAAAImdaEG061wW8SogEx7mZU-sTDBK', {
             action: 'submit_form'
         }).then(function (token) {
             data.RecaptchaToken = token;
@@ -91,8 +91,8 @@ $(document).on('click', '#btnCheck', function (e) {
                     $('#btnCheck').attr('disabled', false);
                     ShowErrorMsg("Yêu cầu bất thường"); // error
                 }
-            }
-        );
+            });
+        });
     })
 });
 $(document).on('click', '#wrap-form-send-sms', function (e) {

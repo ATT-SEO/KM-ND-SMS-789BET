@@ -10,7 +10,7 @@ namespace FE.JunCMD.Client.Utility
             int remainingChars = total;
 
             int text1Chars = Math.Min(text1, remainingChars);
-            string result = GenerateRandomLetters(text1Chars).ToLower();
+            string result = GenerateRandomLetters(text1Chars);
             remainingChars -= text1Chars;
 
             int numberChars = Math.Min(number, remainingChars);
@@ -18,7 +18,7 @@ namespace FE.JunCMD.Client.Utility
             remainingChars -= numberChars;
 
             int text2Chars = Math.Min(text2, remainingChars);
-            result += GenerateRandomLetters(text2Chars).ToLower();
+            result += GenerateRandomLetters(text2Chars);
             return result;
         }
 
