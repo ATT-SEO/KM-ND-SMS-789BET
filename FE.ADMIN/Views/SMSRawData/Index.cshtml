@@ -11,61 +11,6 @@
 	</div>
 
 	<div class="card-body">
-<<<<<<< HEAD
-		<table id="datatablesSimple">
-			<thead>
-				<tr>
-					<th>
-						SĐT Gửi
-					</th>
-					<th>
-						Nội dung
-					</th>
-					<th>
-						Trạng thái
-					</th>
-					<th>
-						Thiết bị
-					</th>
-					<th>
-						Project
-					</th>
-					<th>T/gian gửi</th>
-				</tr>
-			</thead>
-			<tbody>
-				@if (Model != null && Model.Count > 0)
-				{
-					@foreach (var sms in Model)
-					{
-						<tr>
-							<td>
-								@ConverPhoneShow.FormatPhoneNumber(@sms.Sender)
-							</td>
-							<td>
-								@sms.Content
-							</td>
-							<td>
-								@if (@sms.Status)
-								{
-									<span>Đã kiểm duyệt</span>
-								}
-								else
-								{
-									<span>Chưa kiểm duyệt</span>
-								}
-							</td>
-							<td>
-								@sms.Device
-							</td>
-							<td>
-								@sms.ProjectID
-							</td>
-							<td>
-								@(sms.CreatedTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "")
-							</td>
-						</tr>
-=======
 		<div class="row form-search mb-4">
 			<div class="col-12">
 				<form asp-controller="SMSRawData" asp-action="Index" method="get">
@@ -182,7 +127,6 @@
 								</td>
 							</tr>
 						}
->>>>>>> cac32b5d69e48380e297999e6e72b1cb1ceda330
 					}
 				</tbody>
 			</table>
@@ -218,6 +162,3 @@
 		</div>
 	</div>
 </div>
-@section Scripts {
-
-}

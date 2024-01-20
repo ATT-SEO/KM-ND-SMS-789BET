@@ -172,13 +172,8 @@ namespace API.KM58.Controllers
 		{
 			try 
 			{
-<<<<<<< HEAD
 				LogAccount logAccount1 = await _db.LogAccounts.FirstOrDefaultAsync(s => (s.IP == logAccountDTO.IP ||  s.FP == logAccountDTO.FP ) && s.SiteID == logAccountDTO.SiteID);
-				//LogAccount logAccount1 = await _db.LogAccounts.FirstOrDefaultAsync(s => s.FP == logAccountDTO.FP && s.SiteID == logAccountDTO.SiteID);
-=======
-                LogAccount logAccount1 = await _db.LogAccounts.FirstOrDefaultAsync(s => s.FP == logAccountDTO.FP && s.SiteID == logAccountDTO.SiteID);
->>>>>>> cac32b5d69e48380e297999e6e72b1cb1ceda330
-
+				
 				if (logAccount1 == null)
 				{
                     logAccountDTO.CreatedTime = DateTime.Now;

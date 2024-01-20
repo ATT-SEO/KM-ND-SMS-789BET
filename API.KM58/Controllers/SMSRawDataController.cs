@@ -33,10 +33,6 @@ namespace API.KM58.Controllers
         {
             try
             {
-<<<<<<< HEAD
-                List<SMSRawData> SMSList = await _db.SMSRawData.OrderByDescending(sms => sms.CreatedTime).ToListAsync();
-                _response.Result = _mapper.Map<List<SMSRawDataDTO>>(SMSList);
-=======
                 var query = _db.SMSRawData.AsQueryable();
                 if (!string.IsNullOrEmpty(parameters.Sender))
                 {
@@ -93,7 +89,6 @@ namespace API.KM58.Controllers
                 };
 
                 _response.Result = result;
->>>>>>> cac32b5d69e48380e297999e6e72b1cb1ceda330
             }
             catch (Exception Ex)
             {

@@ -27,11 +27,7 @@ $(document).on('click', '#btnCheck', function (e) {
     var data = {
         "Account": account,
         "Regfingerprint": $("#regfingerprint").val(),
-<<<<<<< HEAD
         "RecaptchaToken": ""
-=======
-        "RecaptchaToken" : ""
->>>>>>> cac32b5d69e48380e297999e6e72b1cb1ceda330
     };
     showLoadingSpinner();
     grecaptcha.ready(function () {
