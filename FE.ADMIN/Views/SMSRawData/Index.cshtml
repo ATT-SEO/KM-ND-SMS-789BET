@@ -55,9 +55,7 @@
 							<label class="small mb-1" for="SortBy">Lọc theo trường :</label>
 							<select class="form-control" id="SortBy" name="SortBy">
 								<option value="Id"> ID</option>
-								<option value="SiteTime">Thời gian tạo</option>
-								<option value="CreatedTime">Thời gian cộng điểm</option>
-								<option value="Point">Điểm nhận được</option>
+								<option value="CreatedTime">Thời gian</option>
 							</select>
 						</div>
 						<div class="col-2">
@@ -75,7 +73,7 @@
 			</div>
 		</div>
 		<div class="content-data">
-			<table class="table table-bordered table-hover" id="datatablesSimple">
+			<table class="table table-bordered table-hover">
 				<thead>
 					<tr>
 						<th>
@@ -165,12 +163,5 @@
 	</div>
 </div>
 @section Scripts {
-	<script>
-		window.addEventListener('DOMContentLoaded', event => {
-			const datatablesSimple = document.getElementById('datatablesSimple');
-			if (datatablesSimple) {
-				new simpleDatatables.DataTable(datatablesSimple);
-			}
-		});
-	</script>
+
 }
