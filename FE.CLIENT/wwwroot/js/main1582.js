@@ -18,7 +18,6 @@ function hideLoadingSpinner() {
     document.getElementById("loadingOverlay").style.display = "none";
 }
 $(document).on('click', '#btnCheck', function (e) {
-
     var account = $("#userName").val()
     if (account == "") {
         ShowErrorMsg("Tài khoản không được để trống") //account not null
@@ -27,65 +26,73 @@ $(document).on('click', '#btnCheck', function (e) {
     $('#btnCheck').attr('disabled', true);
     var data = {
         "Account": account,
-        "Regfingerprint": $("#regfingerprint").val()
+        "Regfingerprint": $("#regfingerprint").val(),
+        "RecaptchaToken": ""
     };
     showLoadingSpinner();
-    $.ajax("/Account/CheckAccount", {
-        type: "POST",
-        data: JSON.stringify(data),
-        dataType: 'json',
-        contentType: "application/json",
-        success: function (response) {
-            $('#btnCheck').attr('disabled', false);
-            hideLoadingSpinner();
+    grecaptcha.ready(function () {
+        grecaptcha.execute('6LdjDFYpAAAAAPXMRR9_yYBOfBLq5Ikjw0yM8G48', {
+            action: 'submit_form'
+        }).then(function (token) {
+            data.RecaptchaToken = token;
+            $.ajax("/Account/CheckAccount", {
+                type: "POST",
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: "application/json",
+                success: function (response) {
+                    $('#btnCheck').attr('disabled', false);
+                    hideLoadingSpinner();
 
-            if (response.success) {
-                if (response.result.code == 200) {
-                    if (response.result.status == 2) {
-                        document.body.style.overflow = 'hidden';
-                        $('#message-success').html(response.result.message.replace(/\n/g, '<br>'));
-                        window.confettiful = new Confettiful(document.querySelector(".js-container"));
-                    } else if (response.result.status == 1) {
-                        ShowSuccessMsg(response.result.message);
-                        var phone = response.result.phone;
-                        var smscode = response.result.smsCode;
-                        superPhone = response.result.superPhone;
-                        var verifyCode = response.result.verifyCode
-                        $("#btnCopyContentPhone").attr("data-clipboard-text", superPhone);
-                        $("#btnCopyContent").attr("data-clipboard-text", smscode);
-                        var mobile = superPhone.substring(0, 3) + "." + superPhone.substring(3, 5) + "." + "***" + superPhone.substring(8);
-                        var phone1 = phone.substring(0, 3) + "." + "***" + phone.substring(6);
-                        $("#phone").val(phone1);
-                        $("#oldphone").val(phone);
-                        $("#content").val(smscode);
-                        $("#verifycode").val(verifyCode);
-                        $("#contentPhone").val(superPhone);
-                    }else {
-                        var phone = response.result.phone;
-                        var smscode = response.result.smsCode;
-                        superPhone = response.result.superPhone;
-                        var verifyCode = response.result.verifyCode
-                        $("#btnCopyContentPhone").attr("data-clipboard-text", superPhone);
-                        $("#btnCopyContent").attr("data-clipboard-text", smscode);
-                        var mobile = superPhone.substring(0, 3) + "." + superPhone.substring(3, 5) + "." + "***" + superPhone.substring(8);
-                        var phone1 = phone.substring(0, 3) + "." + "***" + phone.substring(6);
-                        $("#phone").val(phone1);
-                        $("#oldphone").val(phone);
-                        $("#content").val(smscode);
-                        $("#verifycode").val(verifyCode);
-                        $("#contentPhone").val(superPhone);
+                    if (response.success) {
+                        if (response.result.code == 200) {
+                            if (response.result.status == 2) {
+                                document.body.style.overflow = 'hidden';
+                                $('#message-success').html(response.result.message.replace(/\n/g, '<br>'));
+                                window.confettiful = new Confettiful(document.querySelector(".js-container"));
+                            } else if (response.result.status == 1) {
+                                ShowSuccessMsg(response.result.message);
+                                var phone = response.result.phone;
+                                var smscode = response.result.smsCode;
+                                superPhone = response.result.superPhone;
+                                var verifyCode = response.result.verifyCode
+                                $("#btnCopyContentPhone").attr("data-clipboard-text", superPhone);
+                                $("#btnCopyContent").attr("data-clipboard-text", smscode);
+                                var mobile = superPhone.substring(0, 3) + "." + superPhone.substring(3, 5) + "." + "***" + superPhone.substring(8);
+                                var phone1 = phone.substring(0, 3) + "." + "***" + phone.substring(6);
+                                $("#phone").val(phone1);
+                                $("#oldphone").val(phone);
+                                $("#content").val(smscode);
+                                $("#verifycode").val(verifyCode);
+                                $("#contentPhone").val(superPhone);
+                            } else {
+                                var phone = response.result.phone;
+                                var smscode = response.result.smsCode;
+                                superPhone = response.result.superPhone;
+                                var verifyCode = response.result.verifyCode
+                                $("#btnCopyContentPhone").attr("data-clipboard-text", superPhone);
+                                $("#btnCopyContent").attr("data-clipboard-text", smscode);
+                                var mobile = superPhone.substring(0, 3) + "." + superPhone.substring(3, 5) + "." + "***" + superPhone.substring(8);
+                                var phone1 = phone.substring(0, 3) + "." + "***" + phone.substring(6);
+                                $("#phone").val(phone1);
+                                $("#oldphone").val(phone);
+                                $("#content").val(smscode);
+                                $("#verifycode").val(verifyCode);
+                                $("#contentPhone").val(superPhone);
+                            }
+
+                        } else {
+                            ShowErrorMsg(response.result.message);
+                        }
                     }
-                    
-                } else {
-                    ShowErrorMsg(response.result.message);
+                },
+                error: function (error) {
+                    hideLoadingSpinner();
+                    $('#btnCheck').attr('disabled', false);
+                    ShowErrorMsg("Yêu cầu bất thường"); // error
                 }
-            }
-        },
-        error: function (error) {
-            hideLoadingSpinner();
-            $('#btnCheck').attr('disabled', false);
-            ShowErrorMsg("Yêu cầu bất thường"); // error
-        }
+            });
+        });
     })
 });
 $(document).on('click', '#wrap-form-send-sms', function (e) {
@@ -93,7 +100,7 @@ $(document).on('click', '#wrap-form-send-sms', function (e) {
     const regex = /^\+?[0-9]{3}-?[0-9]{7,11}$/i;
     if (!regex.test(phone)) {
         swal({
-            title: "Thành Công",
+            title: "Thất bại",
             text: `Vui lòng nhập đúng số điện thoại`,
             icon: "error",
         });
@@ -187,14 +194,14 @@ function ShowSuccessMsg(successMsg) {
 
 function Confettiful(el) {
     $("#show-congratulations").show();
-        this.el = el;
-        this.containerEl = null;
-        this.confettiFrequency = 3;
-        this.confettiColors = ["#EF2964", "#00C09D", "#2D87B0", "#48485E", "#EFFF1D"];
-        this.confettiAnimations = ["slow", "medium", "fast"];
-        this._setupElements();
-        this._renderConfetti();
-    }
+    this.el = el;
+    this.containerEl = null;
+    this.confettiFrequency = 3;
+    this.confettiColors = ["#EF2964", "#00C09D", "#2D87B0", "#48485E", "#EFFF1D"];
+    this.confettiAnimations = ["slow", "medium", "fast"];
+    this._setupElements();
+    this._renderConfetti();
+}
 Confettiful.prototype._setupElements = function () {
     const containerEl = document.createElement("div");
     const elPosition = this.el.style.position;

@@ -33,7 +33,7 @@ namespace API.KM58.Controllers
         {
             try
             {
-                List<SMSRawData> SMSList = await _db.SMSRawData.ToListAsync();
+                List<SMSRawData> SMSList = await _db.SMSRawData.OrderByDescending(sms => sms.CreatedTime).ToListAsync();
                 _response.Result = _mapper.Map<List<SMSRawDataDTO>>(SMSList);
             }
             catch (Exception ex)

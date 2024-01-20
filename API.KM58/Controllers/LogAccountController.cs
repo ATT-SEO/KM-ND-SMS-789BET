@@ -172,9 +172,10 @@ namespace API.KM58.Controllers
 		{
 			try
 			{
-                LogAccount logAccount1 = await _db.LogAccounts.FirstOrDefaultAsync(s => s.IP == logAccountDTO.IP &&  s.FP == logAccountDTO.FP && s.SiteID == logAccountDTO.SiteID);
+				LogAccount logAccount1 = await _db.LogAccounts.FirstOrDefaultAsync(s => (s.IP == logAccountDTO.IP ||  s.FP == logAccountDTO.FP ) && s.SiteID == logAccountDTO.SiteID);
+				//LogAccount logAccount1 = await _db.LogAccounts.FirstOrDefaultAsync(s => s.FP == logAccountDTO.FP && s.SiteID == logAccountDTO.SiteID);
 
-				if(logAccount1 == null)
+				if (logAccount1 == null)
 				{
                     logAccountDTO.CreatedTime = DateTime.Now;
                     LogAccount logAccount = _mapper.Map<LogAccount>(logAccountDTO);
@@ -207,7 +208,7 @@ namespace API.KM58.Controllers
 			return _response;
 		}
 		// DELETE api/<LogAccountController>/5
-		[HttpDelete("DeleteLog/{id}")]
+		[HttpDelete("DeleteLog/{Id}")]
 		public ResponseDTO Delete(int Id)
 		{
 			try

@@ -19,6 +19,12 @@
 					<th>
 						Trạng thái
 					</th>
+					<th>
+						Thiết bị
+					</th>
+					<th>
+						Project
+					</th>
 					<th>T/gian gửi</th>
 				</tr>
 			</thead>
@@ -43,6 +49,12 @@
 								{
 									<span>Chưa kiểm duyệt</span>
 								}
+							</td>
+							<td>
+								@sms.Device
+							</td>
+							<td>
+								@sms.ProjectID
 							</td>
 							<td>
 								@(sms.CreatedTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "")

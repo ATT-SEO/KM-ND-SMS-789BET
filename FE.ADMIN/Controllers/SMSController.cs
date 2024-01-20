@@ -40,6 +40,7 @@ namespace FE.ADMIN.Controllers
 						int totalCount = resultObject.GetValue("totalCount").Value<int>();
 						int totalPages = CoreBase.CalculateTotalPages(totalCount, parameters.PageSize);
 						ViewBag.TotalPages = totalPages;
+						ViewBag.totalCount = totalCount;
 						return View(smsList);
 					}
 					else
