@@ -8,7 +8,11 @@
 * {
   box-sizing: border-box;
 }
+<<<<<<< HEAD
 .grecaptcha-badge {
+=======
+.grecaptcha-badge{
+>>>>>>> cac32b5d69e48380e297999e6e72b1cb1ceda330
     display: none !important;
 }
 body {

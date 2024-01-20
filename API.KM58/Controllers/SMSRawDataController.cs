@@ -29,18 +29,78 @@ namespace API.KM58.Controllers
         }
 
         [HttpGet]
-        public async Task<ResponseDTO> Get()
+        public ResponseDTO Get([FromQuery] QueryParametersDTO parameters)
         {
             try
             {
+<<<<<<< HEAD
                 List<SMSRawData> SMSList = await _db.SMSRawData.OrderByDescending(sms => sms.CreatedTime).ToListAsync();
                 _response.Result = _mapper.Map<List<SMSRawDataDTO>>(SMSList);
+=======
+                var query = _db.SMSRawData.AsQueryable();
+                if (!string.IsNullOrEmpty(parameters.Sender))
+                {
+                    query = query.Where(w => w.Sender == parameters.Sender);
+                }
+                if (!string.IsNullOrEmpty(parameters.Content))
+                {
+                    query = query.Where(w => w.Content == parameters.Content);
+                }
+                if (parameters.SeachStatus.HasValue)
+                {
+                    if (parameters.SeachStatus == 1)
+                    {
+                        query = query.Where(w => w.Status == true);
+                    }
+                    else if (parameters.SeachStatus == 9)
+                    {
+                        query = query.Where(w => w.Status == false);
+                    }
+                }
+                if (!string.IsNullOrEmpty(parameters.ProjectCode))
+                {
+                    query = query.Where(w => w.ProjectID == parameters.ProjectCode);
+                }
+                if (!string.IsNullOrEmpty(parameters.Device))
+                {
+                    query = query.Where(w => w.Device == parameters.Device);
+                }
+                if (!string.IsNullOrEmpty(parameters.SortBy))
+                {
+                    if (string.IsNullOrEmpty(parameters.SortDirection) || parameters.SortDirection.ToLower() == "asc")
+                    {
+                        query = query.OrderBy(w => EF.Property<object>(w, parameters.SortBy));
+                    }
+                    else
+                    {
+                        query = query.OrderByDescending(w => EF.Property<object>(w, parameters.SortBy));
+                    }
+                }
+                else
+                {
+                    query = query.OrderByDescending(w => w.Id);
+                }
+                int skipCount = (parameters.Page - 1) * parameters.PageSize;
+                IEnumerable<SMSRawData> smsRawDatas = query
+                    .Skip(skipCount)
+                    .Take(parameters.PageSize)
+                    .ToList();
+                int totalCount = query.Count();
+                var result = new
+                {
+                    Data = _mapper.Map<IEnumerable<SMSRawDataDTO>>(smsRawDatas),
+                    TotalCount = totalCount
+                };
+
+                _response.Result = result;
+>>>>>>> cac32b5d69e48380e297999e6e72b1cb1ceda330
             }
-            catch (Exception ex)
+            catch (Exception Ex)
             {
                 _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                _response.Message = Ex.Message;
             }
+
             return _response;
         }
 

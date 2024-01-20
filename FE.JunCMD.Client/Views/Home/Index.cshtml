@@ -26,7 +26,7 @@
                     </div>
                     <div class="form-group">
                         <div class="input-group">
-                            <input class="layer-form_form_input" placeholder="Số điện thoại" id="phone" />
+                            <input class="layer-form_form_input" placeholder="Số điện thoại" id="phone" disabled />
                         </div>
                     </div>
 
@@ -37,7 +37,7 @@
                     </div>
                     <div class="form-group">
                         <div class="input-group">
-                            <input class="layer-form_form_input" placeholder="Nội dung gửi đi" id="content" />
+                            <input class="layer-form_form_input" placeholder="Nội dung gửi đi" id="content" disabled />
                             <span class="layer-form_form_item-btn ">
                                 <button class="btn-submit button-copy button-copy-content" id="btnCopyContent" data-clipboard-text="">Sao chép</button>
                             </span>
@@ -50,7 +50,7 @@
                     </div>
                     <div class="form-group">
                         <div class="input-group">
-                            <input class="layer-form_form_input" placeholder="Số điện thoại nhận nội dung" id="contentPhone" />
+                            <input class="layer-form_form_input" placeholder="Số điện thoại nhận nội dung" id="contentPhone" disabled />
                             <span class="layer-form_form_item-btn ">
                                 <button class="btn-submit button-copy  button-copy-content" id="btnCopyContentPhone" data-clipboard-text="">Sao chép</button>
                             </span>
@@ -66,8 +66,7 @@
             <div class="wrap-form-text">
                 <div class="form-text-1">!Lời nhắc nhở!</div>
                 <div class="form-text-2">
-                    Sau khi kiểm tra và lấy nội dung cần gửi vui lòng ấn vào NHẤN VÀO GỬI SMS XÁC
-                    MINH sau đấy dùng điện thoại của mình nhắn 1 tin vào số yêu cầu ở trên. Sau khi gửi tin cho hệ thống vui
+                    Sau khi kiểm tra và lấy nội dung cần gửi vui lòng ấn vào GỬI NHANH (nếu sử dụng điện thoại) sau đấy dùng điện thoại của mình nhắn 1 tin vào số yêu cầu ở trên. Sau khi gửi tin cho hệ thống vui
                     lòng ấn xác nhận ĐÃ GỬI TIN NHẮN ở dưới (lưu ý không làm mới giao diện trước khi thao tác xong các bước)
                 </div>
             </div>
@@ -79,7 +78,7 @@
                     <path d="M24.7462 1.03459C24.5074 0.784617 24.1935 0.64624 23.884 0.64624C23.5745 0.64624 23.2649 0.771226 23.0262 1.01673L13.2587 11.1361C12.905 11.5021 12.7944 12.1315 12.9846 12.6136C13.1747 13.0957 13.6213 13.5019 14.1165 13.5019H18.7106C19.4712 13.5019 20.0858 13.8143 20.0858 14.1982C20.0858 14.5821 19.4712 14.8946 18.7106 14.8946H1.50148C0.740955 14.8946 0.126343 15.515 0.126343 16.2828V36.4367C0.126343 37.2045 0.740955 37.8249 1.50148 37.8249H31.7899C32.5505 37.8249 33.1651 37.2045 33.1651 36.4367V16.2828C33.1651 15.515 32.5505 14.8946 31.7899 14.8946H29.0352C28.2747 14.8946 27.6601 14.5821 27.6601 14.1982C27.6601 13.8143 28.2747 13.5019 29.0352 13.5019H33.4923C33.9875 13.5019 34.4297 13.1046 34.6198 12.6225C34.8055 12.1404 34.7038 11.5289 34.3545 11.1629L24.7462 1.03459ZM20.0902 18.3629V25.2282C20.0902 25.996 19.6524 27.0583 19.1174 27.6029L17.6229 29.1117C17.0879 29.6518 16.2124 29.6518 15.6774 29.1117L4.6276 17.9567C4.08816 17.4121 4.26945 16.9747 5.02998 16.9747H18.715C19.4756 16.9747 20.0902 17.5952 20.0902 18.3629ZM3.16403 19.4298L9.04927 25.371C9.58872 25.9111 9.58872 26.795 9.04927 27.3351L3.16403 33.2764C2.62459 33.8209 2.19126 33.6379 2.19126 32.8702V19.836C2.19126 19.0682 2.62901 18.8852 3.16403 19.4298ZM4.62318 34.7539L10.5084 28.8126C11.0479 28.268 11.9189 28.268 12.454 28.8126L15.6685 32.0578C16.208 32.6023 17.079 32.6023 17.614 32.0578L19.9841 29.6652C20.5191 29.1251 21.0585 28.7278 21.1912 28.759C21.2708 28.7769 21.3548 28.7858 21.4344 28.7858H22.0667C22.416 28.7858 23.1367 29.2233 23.6762 29.7634L28.655 34.7539C29.1944 35.294 29.0175 35.7314 28.257 35.7314H5.02998C4.26945 35.7314 4.08816 35.2895 4.6276 34.7494L4.62318 34.7539ZM30.123 33.2853L26.6122 29.7634C26.0727 29.2233 25.7897 28.7858 25.9799 28.7858H26.3247C26.9968 28.7858 27.6601 28.1564 27.6601 27.4467V23.3132C27.6601 22.5455 28.0978 21.4831 28.6329 20.943L30.1274 19.4342C30.6668 18.8896 31.1001 19.0727 31.1001 19.8404V32.8791C31.1001 33.6469 30.6624 33.8299 30.123 33.2898V33.2853ZM28.6638 17.9523L28.6284 17.988C28.089 18.5325 27.6557 18.5236 27.6557 17.9701C27.6557 17.4166 28.0978 16.9702 28.6461 16.9702C29.1944 16.9702 29.1988 17.4121 28.6638 17.9523ZM24.901 12.0333V24.6122C24.901 25.38 24.4367 26.0004 23.8707 26.0004C23.3047 26.0004 22.836 25.38 22.836 24.6122V12.0333C22.836 11.3236 22.1109 10.7165 21.4344 10.7165H18.4674C17.7069 10.7165 17.5212 10.2701 18.0518 9.72107L22.9068 4.69041C23.4374 4.14137 24.2952 4.14583 24.8214 4.69934L29.5879 9.71215C30.1141 10.2657 29.924 10.7165 29.1635 10.7165H26.3159C25.6438 10.7165 24.8965 11.3236 24.8965 12.0333H24.901Z"
                           fill="white" />
                 </svg>
-                <span>NHẤN GỬI SMS XÁC MINH</span>
+                <span>GỬI NHANH</span>
             </div>
             <div class="wrap-form-sended-sms" id="wrap-form-sended-sms">
                 <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">

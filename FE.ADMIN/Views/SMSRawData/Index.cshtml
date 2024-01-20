@@ -1,12 +1,17 @@
 ﻿@using FE.ADMIN.Utility
 @model List<SMSRawDataDTO>
-
+@{
+	int currentPage = ViewBag.CurrentPage ?? 1;
+	int pageSize = ViewBag.PageSize ?? 50;
+	int totalPages = ViewBag.TotalPages ?? 1;
+}
 <div class="card mb-4">
 	<div class="card-header">
 		DANH SÁCH TIN NHẮN ĐẾN
 	</div>
 
 	<div class="card-body">
+<<<<<<< HEAD
 		<table id="datatablesSimple">
 			<thead>
 				<tr>
@@ -60,47 +65,159 @@
 								@(sms.CreatedTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "")
 							</td>
 						</tr>
+=======
+		<div class="row form-search mb-4">
+			<div class="col-12">
+				<form asp-controller="SMSRawData" asp-action="Index" method="get">
+					<div class="row mb-3">
+						<div class="col-4">
+							<label class="small mb-1" for="Device">Thiết bị nhận:</label>
+							<input class="form-control" type="text" name="Device" value="@Context.Request.Query["Device"]">
+						</div>
+						<div class="col-4">
+							<label class="small mb-1" for="Sender">SĐT gửi:</label>
+							<input class="form-control" type="text" name="Sender" value="@Context.Request.Query["Sender"]">
+						</div>
+						<div class="col-4">
+							<label class="small mb-1" for="Content">Nội dung SMS:</label>
+							<input class="form-control" type="text" name="Content" value="@Context.Request.Query["Content"]">
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-2">
+							<label class="small mb-1" for="ProjectCode">Project:</label>
+							<input class="form-control" type="text" name="ProjectCode" value="@Context.Request.Query["ProjectCode"]">
+						</div>
+						<div class="col-2">
+							<label class="small mb-1" for="SeachStatus">Trạng thái:</label>
+							<select class="form-control" id="SeachStatus" name="SeachStatus">
+								<option value=""> Tất cả</option>
+								<option value="1">Đã nhận</option>
+								<option value="9">Chưa nhận</option>
+							</select>
+						</div>
+						<div class="col-1">
+							<label class="small mb-1" for="Page">Page:</label>
+							<input class="form-control" type="number" name="Page" value="@currentPage">
+						</div>
+
+						<div class="col-1">
+							<label class="small mb-1" for="PageSize">Page Size:</label>
+							<input class="form-control" type="number" name="PageSize" value="@pageSize">
+						</div>
+
+						<div class="col-2">
+							<label class="small mb-1" for="SortBy">Lọc theo trường :</label>
+							<select class="form-control" id="SortBy" name="SortBy">
+								<option value="Id"> ID</option>
+								<option value="CreatedTime">Thời gian</option>
+							</select>
+						</div>
+						<div class="col-2">
+							<label class="small mb-1" for="SortDirection">Sắp xếp</label>
+							<select class="form-control" id="SortDirection" name="SortDirection">
+								<option value="desc">Giảm dần</option>
+								<option value="asc"> Tăng dần</option>
+							</select>
+						</div>
+						<div class="col-2 d-flex align-items-end">
+							<button class="btn btn-primary" type="submit"><span class="me-2"><i data-feather="search"></i></span> Filter</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="content-data">
+			<table class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>
+							SĐT Gửi
+						</th>
+						<th>
+							Nội dung
+						</th>
+						<th>
+							Trạng thái
+						</th>
+						<th>
+							Thiết bị
+						</th>
+						<th>
+							Project
+						</th>
+						<th>T/gian gửi</th>
+					</tr>
+				</thead>
+				<tbody>
+					@if (Model != null && Model.Count > 0)
+					{
+						@foreach (var sms in Model)
+						{
+							<tr>
+								<td>
+									@ConverPhoneShow.FormatPhoneNumber(@sms.Sender)
+								</td>
+								<td>
+									@sms.Content
+								</td>
+								<td>
+									@if (@sms.Status)
+									{
+										<span>Đã kiểm duyệt</span>
+									}
+									else
+									{
+										<span>Chưa kiểm duyệt</span>
+									}
+								</td>
+								<td>
+									@sms.Device
+								</td>
+								<td>
+									@sms.ProjectID
+								</td>
+								<td>
+									@(sms.CreatedTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "")
+								</td>
+							</tr>
+						}
+>>>>>>> cac32b5d69e48380e297999e6e72b1cb1ceda330
 					}
-				}
-			</tbody>
-		</table>
+				</tbody>
+			</table>
+			<nav aria-label="Page navigation example">
+				<ul class="pagination">
+					@if (currentPage > 1)
+					{
+						<li class="page-item"><a class="page-link" href="@Url.Action("Index", new { page = 1, pageSize = pageSize, Device = Context.Request.Query["Device"], Sender = Context.Request.Query["Sender"], Content = Context.Request.Query["Content"], ProjectCode = Context.Request.Query["ProjectCode"], SeachStatus = Context.Request.Query["SeachStatus"], SortBy = Context.Request.Query["SortBy"], SortDirection = Context.Request.Query["SortDirection"] })">1</a></li>
+						@if (currentPage > 3)
+						{
+							<li class="page-item disabled"><span class="page-link">...</span></li>
+						}
+					}
+
+					@for (int i = Math.Max(2, currentPage - 2); i <= Math.Min(currentPage + 2, totalPages); i++)
+					{
+						if (i > currentPage - 2 && i < currentPage + 2)
+						{
+							<li class="page-item"><a class="@(i == currentPage ? "active" : "") page-link" href="@Url.Action("Index", new { page = i, pageSize = pageSize, Device = Context.Request.Query["Device"], Sender = Context.Request.Query["Sender"], Content = Context.Request.Query["Content"], ProjectCode = Context.Request.Query["ProjectCode"], SeachStatus = Context.Request.Query["SeachStatus"], SortBy = Context.Request.Query["SortBy"], SortDirection = Context.Request.Query["SortDirection"] })">@i</a></li>
+						}
+					}
+
+					@if (currentPage < totalPages)
+					{
+						if (currentPage < totalPages - 2)
+						{
+							<li class="page-item disabled"><span class="page-link">...</span></li>
+						}
+						<li class="page-item"><a class="page-link" href="@Url.Action("Index", new { page = totalPages, pageSize = pageSize, Device = Context.Request.Query["Device"], Sender = Context.Request.Query["Sender"], Content = Context.Request.Query["Content"], ProjectCode = Context.Request.Query["ProjectCode"], SeachStatus = Context.Request.Query["SeachStatus"], SortBy = Context.Request.Query["SortBy"], SortDirection = Context.Request.Query["SortDirection"] })">@totalPages</a></li>
+					}
+				</ul>
+			</nav>
+		</div>
 	</div>
 </div>
 @section Scripts {
-	<script>
-		window.addEventListener('DOMContentLoaded', event => {
-			// https://github.com/fiduswriter/Simple-DataTables/wiki
-			const datatablesSimple = document.getElementById('datatablesSimple');
-			if (datatablesSimple) {
-				new simpleDatatables.DataTable(datatablesSimple);
-				// const searchInput = document.getElementById('searchInput');
-				// searchInput.addEventListener('input', () => {
-				// 	const searchTerm = searchInput.value;
 
-				// 	// Gọi API với tham số tìm kiếm
-				// 	fetch(`/api/yourApiEndpoint?searchTerm=${encodeURIComponent(searchTerm)}`)
-				// 		.then(response => response.json())
-				// 		.then(data => {
-				// 			// Xóa dữ liệu cũ
-				// 			datatablesSimple.destroy();
-				// 			const tableBody = document.querySelector('#datatablesSimple tbody');
-				// 			tableBody.innerHTML = '';
-
-				// 			// Thêm dữ liệu mới
-				// 			data.forEach(item => {
-				// 				const row = tableBody.insertRow();
-				// 				// Thêm các ô dữ liệu vào hàng tương ứng
-				// 				// ...
-				// 			});
-				// 			// Tạo lại DataTable
-				// 			datatablesSimple.init();
-				// 		})
-				// 		.catch(error => console.error('Error:', error));
-				// });
-			}
-
-
-
-		});
-	</script>
 }

@@ -11,6 +11,7 @@ using System.Net.NetworkInformation;
 
 namespace FE.CLIENT.Controllers
 {
+<<<<<<< HEAD
 	public class AccountController : Controller
 	{
 		private const string RecaptchaSecretKey = "6LdjDFYpAAAAAJsGL5I-hHeMPNaSURINvSEoM6uH";
@@ -19,6 +20,16 @@ namespace FE.CLIENT.Controllers
 		private readonly IPhoneNumberService _phoneNumber;
 		private readonly ISMSService _SMS;
 		private readonly ILogAccountService _logAccountService;
+=======
+    public class AccountController : Controller
+    {
+        private const string RecaptchaSecretKey = "6LdjDFYpAAAAAJsGL5I-hHeMPNaSURINvSEoM6uH";
+        private readonly IBOService _boService;
+        private readonly ILogger<AccountController> _logger;
+        private readonly IPhoneNumberService _phoneNumber;
+        private readonly ISMSService _SMS;
+        private readonly ILogAccountService _logAccountService;
+>>>>>>> cac32b5d69e48380e297999e6e72b1cb1ceda330
 
 		public AccountController(ILogger<AccountController> logger, IBOService boService, IPhoneNumberService phoneNumber, ISMSService SMS, ILogAccountService logAccountService)
 		{
@@ -29,6 +40,7 @@ namespace FE.CLIENT.Controllers
 			_logAccountService = logAccountService;
 		}
 
+<<<<<<< HEAD
 		public async Task<IActionResult> CheckAccount([FromBody] CheckAccountRequestDTO checkAccountRequestDTO)
 		{
 			string Username = checkAccountRequestDTO.Account;
@@ -67,6 +79,46 @@ namespace FE.CLIENT.Controllers
 				phoneNumbers = JsonConvert.DeserializeObject<List<PhoneNumberDTO>>(Convert.ToString(res.Result)!);
 				Random random = new Random();
 				PhoneNumberDTO randomPhoneNumber = phoneNumbers[random.Next(phoneNumbers.Count)];
+=======
+        public async Task<IActionResult> CheckAccount([FromBody] CheckAccountRequestDTO checkAccountRequestDTO)
+        {
+            string Username = checkAccountRequestDTO.Account;
+            Username = Username.Trim();
+            Username = Username.ToLower();
+            string recaptchaToken = checkAccountRequestDTO.RecaptchaToken;
+
+            object responseJson;
+            using (HttpClient httpClient = new HttpClient())
+            {
+                var response = await httpClient.GetStringAsync($"https://www.google.com/recaptcha/api/siteverify?secret={RecaptchaSecretKey}&response={recaptchaToken}");
+
+                var recaptchaResponse = JsonConvert.DeserializeObject<RecaptchaResponse>(response);
+                Console.WriteLine(response);
+                if (!recaptchaResponse.Success)
+                {
+                    responseJson = new
+                    {
+                        result = new
+                        {
+                            code = 250,
+                            message = "Qúy khách vui lòng kiểm tra lại điều kiện nhận thưởng hoặc vui load lại trang !!!"
+                        },
+                        success = true,
+                        error = "error",
+                        unAuthorizedRequest = false,
+                        __abp = false
+                    };
+                    return Json(responseJson);
+                }
+            }
+            List<PhoneNumberDTO>? phoneNumbers = new List<PhoneNumberDTO>();
+            ResponseDTO? res = await _phoneNumber.GetListPhoneBySiteIDAsync(1);
+            if (res != null && res.IsSuccess)
+            {
+                phoneNumbers = JsonConvert.DeserializeObject<List<PhoneNumberDTO>>(Convert.ToString(res.Result)!);
+                Random random = new Random();
+                PhoneNumberDTO randomPhoneNumber = phoneNumbers[random.Next(phoneNumbers.Count)];
+>>>>>>> cac32b5d69e48380e297999e6e72b1cb1ceda330
 
 
 				if (!string.IsNullOrWhiteSpace(Username))
