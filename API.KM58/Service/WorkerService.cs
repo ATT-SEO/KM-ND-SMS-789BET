@@ -27,20 +27,23 @@ namespace API.KM58.Service
 				{
                     //Get the new SMSRawData list
                     List<SMSRawData> _listSMSRawData = await _dbContext.SMSRawData.Where(x => x.Status == false).ToListAsync();
+					Log.Information("SMS_INCOMMING - "+_listSMSRawData.Count + " - "+DateTime.Now);
 					for (int i = 0; i < _listSMSRawData.Count; i++)
 					{
 						SMSRawData _tempSMSRawData = _listSMSRawData[i];
-						Console.WriteLine(_tempSMSRawData.Sender + "|" + _tempSMSRawData.Content + "|" + _tempSMSRawData.ProjectID + "|" + _tempSMSRawData.Device);
+						Log.Information("SMS_RAW_DATA => ["+_tempSMSRawData.Sender + "|" + _tempSMSRawData.Content + "|" + _tempSMSRawData.ProjectID + "|" + _tempSMSRawData.Device+"]");
 
                         //Maching with data in the request list
-                        SMS _targetSMS = await _dbContext.SMS.Where(x => x.Sender ==_tempSMSRawData.Sender && x.Content ==_tempSMSRawData.Content).FirstOrDefaultAsync();
+                        SMS _targetSMS = await _dbContext.SMS.Where(x => x.Sender ==_tempSMSRawData.Sender && x.Content ==_tempSMSRawData.Content && x.Status==false).FirstOrDefaultAsync();
                         if (_targetSMS!=null && _targetSMS.CreatedTime==null && _targetSMS.Status==false)
                         {
-                            //Found the request
-                            //Todo 
-                            //#1 - Prepare to update full information for Request
-                            Site site = _dbContext.Sites.First(u => u.Project==_tempSMSRawData.ProjectID && u.Status==true);
-                            if (site!=null)
+							//Found the request
+                            Log.Information(JsonConvert.SerializeObject(_targetSMS));
+							Log.Information("FOUND_REQUEST => ["+_targetSMS.Account+" - "+_targetSMS.ProjectCode+"]");
+							//Todo 
+							//#1 - Prepare to update full information for Request
+							Site site = _dbContext.Sites.Where(u => u.Project==_targetSMS.ProjectCode && u.Status==true).FirstOrDefault();
+							if (site!=null)
                             {
                                 Random rnd = new Random();
                                 int Point = rnd.Next(site.MinPoint, site.MaxPoint + 1);
@@ -49,7 +52,7 @@ namespace API.KM58.Service
                                 int Round = site.Round;
                                 string Remarks = site.Remarks;
                                 string Ecremarks = site.Ecremarks;
-
+                                Log.Information("ADD POINT => ["+ Point +"]");
                                 JObject jsonResponseData;
                                 if (mySite.Trim() == "mocbai")
                                 {
@@ -70,13 +73,11 @@ namespace API.KM58.Service
                                     _targetSMS.Point = Point;
                                     _targetSMS.Status = true;
                                     _dbContext.Entry(_targetSMS).State = EntityState.Modified;
-
-                                    
-                                    Log.Information("UPDATE_SUCCESS[" + _tempSMSRawData.Sender + "][" + _tempSMSRawData.Content + "]");
+                                    Log.Information("****DONE****");
                                 }
                                 else
                                 {
-                                    Log.Information("UPDATE_FAILED[" + _tempSMSRawData.Sender + "][" + _tempSMSRawData.Content + "]");
+                                    Log.Information("****FAILED****[" + _tempSMSRawData.Sender + "][" + _tempSMSRawData.Content + "]");
                                 }
                             }else
                             {
@@ -85,14 +86,15 @@ namespace API.KM58.Service
                         }
                         else
                         {
-                            Log.Information("CANNOT_FOUND_REQUEST["+ _tempSMSRawData.Sender + "]["+ _tempSMSRawData.Content + "]");
+                            Log.Information("=> CANNOT_FOUND_REQUEST");
                         }
 
                         _tempSMSRawData.Status = true;
                         _dbContext.Update(_tempSMSRawData);
                         await _dbContext.SaveChangesAsync();
                     }
-                    await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+					Log.Information("========================================================\n");
+					await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
 				}
 			}
 			catch (Exception ex)

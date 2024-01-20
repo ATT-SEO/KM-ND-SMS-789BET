@@ -27,7 +27,7 @@ $(document).on('click', '#btnCheck', function (e) {
     var data = {
         "Account": account,
         "Regfingerprint": $("#regfingerprint").val(),
-        "RecaptchaToken" : ""
+        "RecaptchaToken": ""
     };
     showLoadingSpinner();
     grecaptcha.ready(function () {
@@ -194,14 +194,14 @@ function ShowSuccessMsg(successMsg) {
 
 function Confettiful(el) {
     $("#show-congratulations").show();
-        this.el = el;
-        this.containerEl = null;
-        this.confettiFrequency = 3;
-        this.confettiColors = ["#EF2964", "#00C09D", "#2D87B0", "#48485E", "#EFFF1D"];
-        this.confettiAnimations = ["slow", "medium", "fast"];
-        this._setupElements();
-        this._renderConfetti();
-    }
+    this.el = el;
+    this.containerEl = null;
+    this.confettiFrequency = 3;
+    this.confettiColors = ["#EF2964", "#00C09D", "#2D87B0", "#48485E", "#EFFF1D"];
+    this.confettiAnimations = ["slow", "medium", "fast"];
+    this._setupElements();
+    this._renderConfetti();
+}
 Confettiful.prototype._setupElements = function () {
     const containerEl = document.createElement("div");
     const elPosition = this.el.style.position;

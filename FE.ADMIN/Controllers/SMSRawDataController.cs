@@ -30,11 +30,12 @@ namespace FE.ADMIN.Controllers
 				ResponseDTO? res = await _smsRawData.GetAllAsync(parameters);
 				if (res != null && res.IsSuccess)
 				{
-					var resultObject = JObject.FromObject(res.Result);
+                    ViewBag.LoginUser = _userDTO;
+                    var resultObject = JObject.FromObject(res.Result);
 					if (resultObject.TryGetValue("data", out var data) && data != null)
 					{
 
-						var smsList = JsonConvert.DeserializeObject<List<SMSDTO>>(data.ToString());
+						var smsList = JsonConvert.DeserializeObject<List<SMSRawDataDTO>>(data.ToString());
 						ViewBag.CurrentPage = parameters.Page;
 						ViewBag.PageSize = parameters.PageSize;
 						int totalCount = resultObject.GetValue("totalCount").Value<int>();

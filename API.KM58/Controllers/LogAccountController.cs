@@ -172,9 +172,9 @@ namespace API.KM58.Controllers
 		{
 			try 
 			{
-                LogAccount logAccount1 = await _db.LogAccounts.FirstOrDefaultAsync(s => s.FP == logAccountDTO.FP && s.SiteID == logAccountDTO.SiteID);
-
-				if(logAccount1 == null)
+				LogAccount logAccount1 = await _db.LogAccounts.FirstOrDefaultAsync(s => (s.IP == logAccountDTO.IP ||  s.FP == logAccountDTO.FP ) && s.SiteID == logAccountDTO.SiteID);
+				
+				if (logAccount1 == null)
 				{
                     logAccountDTO.CreatedTime = DateTime.Now;
                     LogAccount logAccount = _mapper.Map<LogAccount>(logAccountDTO);
