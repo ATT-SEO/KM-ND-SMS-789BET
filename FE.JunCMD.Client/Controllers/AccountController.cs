@@ -177,8 +177,8 @@ namespace FE.JunCMD.Client.Controllers
 											{
 												status = 2,
 												code = 200,
-												message = $"Quý khách đã nhận thưởng thành công. \n KM: Jun88. \n Số điểm: {OneSMS.Point}. \n Thời gian {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm:ss")}"
-											},
+												message = $"Quý khách đã nhận thưởng thành công! \n Khuyến mãi: KM58 \n Số điểm: {OneSMS.Point} \n Thời gian: {OneSMS.CreatedTime.Value.ToString("HH:mm:ss")} ngày {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy")}"
+                                            },
 											success = true,
 											__abp = true
 										};
@@ -284,8 +284,8 @@ namespace FE.JunCMD.Client.Controllers
 										status = 2,
 										superPhone = resultNumber,
 										code = 200,
-										message = $"Quý khách đã nhận thưởng thành công. \n KM: Jun88. \n Số điểm: {OneSMS.Point}. \n Thời gian {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm:ss")}"
-									},
+										message = $"Quý khách đã nhận thưởng thành công! \n Khuyến mãi: KM58 \n Số điểm: {OneSMS.Point} \n Thời gian: {OneSMS.CreatedTime.Value.ToString("HH:mm:ss")} ngày {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy")}"
+                                    },
 									success = true,
 									__abp = true
 								};
@@ -425,8 +425,8 @@ namespace FE.JunCMD.Client.Controllers
 							{
 								status = 2,
 								code = 200,
-								message = $"Quý khách đã nhận thưởng thành công. \n KM: Jun88. \n Số điểm: {OneSMS.Point}. \n Thời gian {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm:ss")}"
-							},
+								message = $"Quý khách đã nhận thưởng thành công! \n Khuyến mãi: KM58 \n Số điểm: {OneSMS.Point} \n Thời gian: {OneSMS.CreatedTime.Value.ToString("HH:mm:ss")} ngày {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy")}"
+                            },
 							success = true,
 							__abp = true
 						};

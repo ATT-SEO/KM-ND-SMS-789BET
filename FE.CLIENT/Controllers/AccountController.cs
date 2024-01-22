@@ -177,7 +177,7 @@ namespace FE.CLIENT.Controllers
 											{
 												status = 2,
 												code = 200,
-												message = $"Quý khách đã nhận thưởng thành công. \n KM: FREE66. \n Số điểm: {OneSMS.Point}. \n Thời gian {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm:ss")}"
+												message = $"Quý khách đã nhận thưởng thành công \n KM: FREE66. \n Số điểm: {OneSMS.Point} \n Thời gian {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm:ss")}"
 											},
 											success = true,
 											__abp = true
