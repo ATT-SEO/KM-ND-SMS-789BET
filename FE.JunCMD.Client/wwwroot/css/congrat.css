@@ -214,6 +214,9 @@
 }
 
 .congrat-submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-top: 16px;
     height: 45px;
     width: 200px;
@@ -263,7 +266,7 @@
 .congrat-main p {
     display: flex;
     font-size: 1.4em;
-    color: #000000;
+    color: #fff;
     text-align: center;
     font-weight: 600;
 }
