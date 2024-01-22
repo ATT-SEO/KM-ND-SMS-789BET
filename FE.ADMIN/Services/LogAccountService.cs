@@ -48,6 +48,16 @@ namespace FE.ADMIN.Services
 			});
 		}
 
+        public async Task<ResponseDTO?> GetLogAccountListByProjectID(QueryParametersDTO parameters)
+        {
+            string url = $"{SD.ApiKM58}/api/LogAccount/GetLogAccountListByProjectID?{ToQueryString(parameters)}";
+            return await _baseService.SendAsync(new RequestDTO()
+            {
+                APIType = SD.APIType.GET,
+                Url = url
+            });
+        }
+
         public Task<ResponseDTO> GetListLogAccountBySiteIDAsync(int? SiteID, QueryParametersDTO parameters)
         {
             throw new NotImplementedException();

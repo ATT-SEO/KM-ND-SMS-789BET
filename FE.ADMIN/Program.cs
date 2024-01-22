@@ -2,6 +2,7 @@ using FE.ADMIN.Services;
 using FE.ADMIN.Services.IService;
 using FE.ADMIN.Utility;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +37,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 SD.ApiKM58 = builder.Configuration["ServiceURLs:ApiKM58"];
 SD.AuthAPIBase = builder.Configuration["ServiceURLs:AuthAPIBase"];
+
+builder.Logging.ClearProviders();
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
 
 var app = builder.Build();
 

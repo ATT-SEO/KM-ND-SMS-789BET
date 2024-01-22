@@ -25,14 +25,14 @@
                             Cài đặt thiết bị
                         </a>
 
-                        <a class="nav-link" asp-controller="SMS" asp-action="Index">
-                            <div class="nav-link-icon"><i data-feather="mail"></i></div>
-                            Yêu cầu nhận thưởng
-                        </a>
-
                         <a class="nav-link" asp-controller="LogAccount" asp-action="Index">
                             <div class="nav-link-icon"><i data-feather="bar-chart"></i></div>
                             Danh sách IP/FP Account
+                        </a>
+                        
+                        <a class="nav-link" asp-controller="SMS" asp-action="Index">
+                            <div class="nav-link-icon"><i data-feather="mail"></i></div>
+                            Yêu cầu nhận thưởng
                         </a>
 
                         <a class="nav-link" asp-controller="SMSRawData" asp-action="Index">
@@ -42,14 +42,14 @@
                     }
                     @if (LoginUser.Role == "CUSTOMER")
                     {
-                        <a class="nav-link" asp-controller="SMS" asp-action="Index">
-                            <div class="nav-link-icon"><i data-feather="mail"></i></div>
-                            Yêu cầu nhận thưởng
-                        </a>
-
                         <a class="nav-link" asp-controller="LogAccount" asp-action="Index">
                             <div class="nav-link-icon"><i data-feather="bar-chart"></i></div>
                             Danh sách IP/FP Account
+                        </a>
+
+                        <a class="nav-link" asp-controller="SMS" asp-action="Index">
+                            <div class="nav-link-icon"><i data-feather="mail"></i></div>
+                            Yêu cầu nhận thưởng
                         </a>
 
                         <a class="nav-link" asp-controller="SMSRawData" asp-action="Index">

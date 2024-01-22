@@ -79,7 +79,7 @@
 						<th>
 							SĐT Gửi
 						</th>
-						<th>
+						<th width="350px">
 							Nội dung
 						</th>
 						<th>
@@ -88,9 +88,9 @@
 						<th>
 							Thiết bị
 						</th>
-						<th>
+						@* <th>
 							Project
-						</th>
+						</th> *@
 						<th>T/gian gửi</th>
 					</tr>
 				</thead>
@@ -119,9 +119,9 @@
 								<td>
 									@sms.Device
 								</td>
-								<td>
+								@* <td>
 									@sms.ProjectID
-								</td>
+								</td> *@
 								<td>
 									@(sms.CreatedTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "")
 								</td>

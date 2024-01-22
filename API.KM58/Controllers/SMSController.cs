@@ -35,7 +35,11 @@ namespace API.KM58.Controllers
 			try
 			{
 				var query = _db.SMS.AsQueryable();
-				if (!string.IsNullOrEmpty(parameters.Account))
+                if (!string.IsNullOrEmpty(parameters.ProjectCode))
+                {
+                    query = query.Where(w => w.ProjectCode == parameters.ProjectCode);
+                }
+                if (!string.IsNullOrEmpty(parameters.Account))
 				{
 					query = query.Where(w => w.Account == parameters.Account);
 				}
@@ -47,13 +51,13 @@ namespace API.KM58.Controllers
 				{
 					query = query.Where(w => w.Content == parameters.Content);
 				}
-				if (parameters.SeachStatus.HasValue)
+				if (parameters.SearchStatus.HasValue)
 				{
-                    if(parameters.SeachStatus == 1)
+                    if(parameters.SearchStatus == 1)
                     {
 						query = query.Where(w => w.Status == true);
                     }
-                    else if(parameters.SeachStatus == 9)
+                    else if(parameters.SearchStatus == 9)
 					{
 						query = query.Where(w => w.Status == false);
 					}

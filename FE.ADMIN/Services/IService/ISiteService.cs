@@ -11,5 +11,6 @@ namespace FE.ADMIN.Services.IService
         Task<ResponseDTO?> CreateAsync(SiteDTO siteDTO);
         Task<ResponseDTO?> EditAsync(SiteDTO siteDTO);
         Task<ResponseDTO?> DeleteAsync(int id);
+        Task<ResponseDTO?> GetByProjectID(String ProjectID);
     }
 }

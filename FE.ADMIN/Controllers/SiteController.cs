@@ -1,5 +1,6 @@
 ﻿using FE.ADMIN.Models;
 using FE.ADMIN.Services.IService;
+using FE.ADMIN.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.ComponentModel;
@@ -25,16 +26,14 @@ namespace FE.ADMIN.Controllers
             try
             {
                 ViewBag.LoginUser = _userDTO;
-                List<SiteDTO>? siteList = new List<SiteDTO>();
-                ResponseDTO? res = await _site.GetAllAsync();
-                if (res != null && res.IsSuccess)
+                ResponseDTO _siteRes = await _site.GetByProjectID(_userDTO.ProjectCode);
+                if (_siteRes!=null && _siteRes.IsSuccess)
                 {
-                    siteList = JsonConvert.DeserializeObject<List<SiteDTO>>(Convert.ToString(res.Result)!);
-                    return View(siteList);
+                    return View(JsonConvert.DeserializeObject<List<SiteDTO>>(Convert.ToString(_siteRes.Result)));
                 }
                 else
                 {
-                    TempData["error"] = res?.Message;
+                    TempData["error"] = _siteRes?.Message;
                 }
             }
             catch (Exception ex)
@@ -58,6 +57,8 @@ namespace FE.ADMIN.Controllers
                 if (ModelState.IsValid)
                 {
                     ViewBag.LoginUser = _userDTO;
+                    //Link to ProjectCode Automatically
+                    siteDTO.Project = _userDTO.ProjectCode;
                     ResponseDTO? res = await _site.CreateAsync(siteDTO);
                     if (res != null && res.IsSuccess)
                     {

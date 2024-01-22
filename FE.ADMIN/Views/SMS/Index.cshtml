@@ -103,9 +103,9 @@
 						</th>
 						<th>T/gian yêu cầu</th>
 						<th>T/gian nhận thưởng</th>
-						<th style="width:215px">
+						@* <th style="width:215px">
 							Thao tác
-						</th>
+						</th> *@
 					</tr>
 				</thead>
 				<tbody>
@@ -154,12 +154,12 @@
 								<td>
 									@(sms.CreatedTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "Null")
 								</td>
-								<td>
+								@* <td>
 									<a href="#" type="button" class="btn btn-primary btn-sm me-2 views-detail" data-id="@sms.Id">
 										<i data-feather="file-text"></i>
 										View
 									</a>
-								</td>
+								</td> *@
 							</tr>
 						}
 					}

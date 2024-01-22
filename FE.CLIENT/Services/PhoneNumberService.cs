@@ -12,6 +12,8 @@ namespace FE.CLIENT.Services
         {
             _baseService = baseService;
         }
+
+
         public async Task<ResponseDTO?> GetAllAsync()
         {
             return await _baseService.SendAsync(new RequestDTO()

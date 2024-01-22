@@ -26,7 +26,9 @@ namespace FE.ADMIN.Controllers
 			Console.WriteLine(JsonConvert.SerializeObject(parameters, Formatting.Indented));
 			try
 			{
-				ResponseDTO? res = await _sms.GetAllAsync(parameters);
+                ViewBag.LoginUser = _userDTO;
+                parameters.ProjectCode = _userDTO.ProjectCode;
+                ResponseDTO? res = await _sms.GetAllAsync(parameters);
 				if (res != null && res.IsSuccess)
 				{
                     ViewBag.LoginUser = _userDTO;
