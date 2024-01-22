@@ -7,7 +7,6 @@
         public string? Device { get; set; }
         public bool? Status { get; set; }
         public int SiteID { get; set; }
-        public SiteDTO? Site { get; set; }
         public DateTime? CreatedTime { get; set; }
         public DateTime? UpdatedTime { get; set; }
     }
