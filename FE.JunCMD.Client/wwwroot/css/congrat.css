@@ -27,7 +27,11 @@
         transform: translate3d(-50px, 105vh, 0) rotateX(10deg) rotateY(250deg);
     }
 }
-
+.hp-ss {
+    overflow: hidden;
+    width: 100%;
+    position: absolute;
+}
 .congrat-container {
     width: 100vw;
     height: 100vh;
