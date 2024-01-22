@@ -3,6 +3,7 @@ using API.KM58.Model;
 using API.KM58.Model.DTO;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -56,13 +57,13 @@ namespace API.KM58.Controllers
             return _response;
         }
         [HttpGet]
-        [Route("GetBySite/{Name}")]
-        public ResponseDTO GetSeteByName(string Name)
+        [Route("GetByProjectID/{ProjectID}")]
+        public async Task<ResponseDTO> GetByProjectID(string ProjectID)
         {
             try
             {
-                Site site = _db.Sites.First(u => u.Name == Name);
-                _response.Result = _mapper.Map<Site>(site);
+                List<Site> site = await _db.Sites.Where(u => u.Project == ProjectID).ToListAsync();
+                _response.Result = _mapper.Map<List<Site>>(site);
             }
             catch (Exception Ex)
             {
@@ -71,6 +72,7 @@ namespace API.KM58.Controllers
             }
             return _response;
         }
+
         // POST api/<SiteController>
         [HttpPost]
         public ResponseDTO Post([FromBody] Site siteDTO)
@@ -80,6 +82,7 @@ namespace API.KM58.Controllers
                 siteDTO.CreatedTime = DateTime.Now;
                 siteDTO.UpdatedTime = DateTime.Now;
                 Site site = _mapper.Map<Site>(siteDTO);
+
                 _db.Sites.Add(site);
                 _db.SaveChanges();
                 _response.Result = _mapper.Map<Site>(site);
@@ -91,6 +94,7 @@ namespace API.KM58.Controllers
             }
             return _response;
         }
+
         [HttpPut]
         public ResponseDTO Put([FromBody] Site siteDTO)
         {

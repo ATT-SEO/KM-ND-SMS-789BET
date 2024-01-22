@@ -11,7 +11,7 @@
         public string? Sender { get; set; }
         public string? Content { get; set; }
         public string? Device { get; set; }
-        public int? SeachStatus {get; set; } 
+        public int? SearchStatus {get; set; } 
         public string? ProjectCode { get; set;}
         public string? SortBy { get; set; }
         public string? SortDirection { get; set; }

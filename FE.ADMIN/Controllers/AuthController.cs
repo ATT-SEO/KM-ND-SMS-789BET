@@ -39,7 +39,6 @@ namespace FE.ADMIN.Controllers
         public async Task<IActionResult> Login(LoginRequestDTO obj)
         {
             ResponseDTO responseDTO = await _AuthService.LoginAsync(obj);
-            Console.WriteLine("LOGIN RES - " + JsonConvert.SerializeObject(responseDTO));
             if (responseDTO != null && responseDTO.IsSuccess)
             {
                 LoginResponseDTO loginResponseDTO = JsonConvert.DeserializeObject<LoginResponseDTO>(Convert.ToString(responseDTO.Result));

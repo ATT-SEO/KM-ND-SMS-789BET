@@ -26,18 +26,17 @@ namespace FE.ADMIN.Controllers
 
         public async Task<IActionResult> Index(QueryParametersDTO parameters)
         {
-
 			Console.WriteLine(JsonConvert.SerializeObject(parameters, Formatting.Indented));
 			try
             {
-                ResponseDTO? res = await _logAccount.GetAllLogAccountAsync(parameters);
+                ViewBag.LoginUser = _userDTO;
+                parameters.ProjectCode = _userDTO.ProjectCode;
+                ResponseDTO? res = await _logAccount.GetLogAccountListByProjectID(parameters);
                 if (res != null && res.IsSuccess)
                 {
-                    ViewBag.LoginUser = _userDTO;
                     var resultObject = JObject.FromObject(res.Result);
 					if (resultObject.TryGetValue("data", out var data) && data != null)
 					{
-
 						var logAccountDTOs = JsonConvert.DeserializeObject<List<LogAccountDTO>>(data.ToString());
 						ViewBag.CurrentPage = parameters.Page;
 						ViewBag.PageSize = parameters.PageSize;

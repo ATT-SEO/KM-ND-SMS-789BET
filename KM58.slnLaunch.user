@@ -11,6 +11,10 @@
         "Name": "FE.ADMIN\\FE.ADMIN.csproj",
         "Action": "Start",
         "DebugTarget": "https"
+      },
+      {
+        "Name": "FE.CLIENT\\FE.CLIENT.csproj",
+        "Action": "Start"
       }
     ]
   }

@@ -27,14 +27,14 @@ namespace FE.ADMIN.Controllers
 			Console.WriteLine(JsonConvert.SerializeObject(parameters, Formatting.Indented));
 			try
 			{
-				ResponseDTO? res = await _smsRawData.GetAllAsync(parameters);
+                ViewBag.LoginUser = _userDTO;
+				parameters.ProjectCode = _userDTO.ProjectCode;
+                ResponseDTO? res = await _smsRawData.GetAllAsync(parameters);
 				if (res != null && res.IsSuccess)
 				{
-                    ViewBag.LoginUser = _userDTO;
                     var resultObject = JObject.FromObject(res.Result);
 					if (resultObject.TryGetValue("data", out var data) && data != null)
 					{
-
 						var smsList = JsonConvert.DeserializeObject<List<SMSRawDataDTO>>(data.ToString());
 						ViewBag.CurrentPage = parameters.Page;
 						ViewBag.PageSize = parameters.PageSize;

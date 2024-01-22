@@ -8,9 +8,9 @@ namespace FE.ADMIN.Services.IService
         Task<ResponseDTO?> GetByIDAsync(int ID);
         Task<ResponseDTO?> GetByNumberAsync(string Number);
         Task<ResponseDTO?> GetListPhoneBySiteIDAsync(int SiteID);
-        Task<ResponseDTO?> GetlistPhoneBySiteName(string SiteName);
-        Task<ResponseDTO?> CreateAsync(PhoneNumberDTO phoneNumberDTO);
-        Task<ResponseDTO?> EditAsync(PhoneNumberDTO phoneNumberDTO);
-        Task<ResponseDTO?> DeleteAsync(int id);
+        Task<ResponseDTO?> GetListPhoneByProjectID(string SiteName);
+        Task<ResponseDTO?> Post(PhoneNumberDTO phoneNumberDTO);
+        Task<ResponseDTO?> Delete(int id);
+        Task<ResponseDTO?> Edit(PhoneNumberDTO phoneNumberDTO);
     }
 }

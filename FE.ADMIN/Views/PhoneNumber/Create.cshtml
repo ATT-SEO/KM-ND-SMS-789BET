@@ -19,13 +19,13 @@
                                 <input class="form-control" asp-for="Device" placeholder="Mã điện thoại">
                             </div>
                         </div>
-                        <div class="col-6 mb-2">
+                        @* <div class="col-6 mb-2">
                             <label for="SiteID" class="mb-1">Chọn Site</label>
                                 <select asp-for="SiteID" asp-items="@ViewBag.SelectSite" class="form-select">
                                 <option value="" selected>-- Chọn site project --</option>
                             </select>
                                 <span asp-validation-for="SiteID" class="text-danger" />
-                        </div>
+                        </div> *@
                         <div class="col-2 mb-2">
                             <div class="form-group">
                                 <label for="top" class="mb-1">Trạng thái</label>

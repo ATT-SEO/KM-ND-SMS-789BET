@@ -27,7 +27,6 @@ namespace FE.ADMIN.Services
         public async Task<ResponseDTO?> LoginAsync(LoginRequestDTO requestDTO)
         {
             String jsonString = JsonConvert.SerializeObject(requestDTO);
-            Console.WriteLine($" >>>>> {jsonString}");
             return await _baseService.SendAsync(new RequestDTO()
             {
                 APIType = SD.APIType.POST,

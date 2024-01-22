@@ -1,4 +1,7 @@
-﻿namespace FE.ADMIN.Utility
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+namespace FE.ADMIN.Utility
 {
     public class SD
     {
@@ -23,8 +26,12 @@
             MultiPartFormData
         }
 
-        public static string[] Project_Code = { "MB66_FREE66", "JUN88_CMD_K58" };
+        public static string[] Project_Code = { "FREE66", "K58" };
 
-        public static string SystemProject = "";
+        //public static Dictionary<string, string> ProjectID = new Dictionary<string, string>
+        //{
+        //    { "MB66_FREE66", "FREE66" },
+        //    { "JUN88_CMD_K58", "KM58_Jun88_CMD" }
+        //};
     }
 }

@@ -8,5 +8,6 @@ namespace FE.CLIENT.Services.IService
         Task<ResponseDTO?> GetSiteBytitleAsync(string Name);
        // Task<ResponseDTO?> GetUserSiteBySiteAsync(string Site, string userId);
         Task<ResponseDTO?> GetSiteByIDAsync(int ID);
+        Task<ResponseDTO?> GetByProjectCode(string ProjectCode);
     }
 }

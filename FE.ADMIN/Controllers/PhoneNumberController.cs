@@ -1,5 +1,6 @@
 ﻿using FE.ADMIN.Models;
 using FE.ADMIN.Services.IService;
+using FE.ADMIN.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -21,12 +22,13 @@ namespace FE.ADMIN.Controllers
             _phoneNumber = phoneNumber;
             _site = siteService;
         }
+
         public async Task<IActionResult> Index()
         {
             ViewBag.LoginUser = _userDTO;
             List<PhoneNumberDTO>? phoneNumbers = new List<PhoneNumberDTO>();
-            //var SiteID = HttpContext.Session.GetInt32("SITEID");
-            ResponseDTO? res = await _phoneNumber.GetAllAsync();
+            ResponseDTO? res = await _phoneNumber.GetListPhoneByProjectID(_userDTO.ProjectCode);
+            Console.WriteLine("HERE => "+JsonConvert.SerializeObject(res));
             if (res != null && res.IsSuccess)
             {
                 phoneNumbers = JsonConvert.DeserializeObject<List<PhoneNumberDTO>>(Convert.ToString(res.Result)!);
@@ -38,33 +40,11 @@ namespace FE.ADMIN.Controllers
             }
             return View();
         }
+
         // GET: PhoneNumberController/Create
         public async Task<IActionResult> Create()
         {
-            try
-            {
-                ViewBag.LoginUser = _userDTO;
-                List<SiteDTO>? siteList = new List<SiteDTO>();
-                ResponseDTO? res = await _site.GetAllAsync();
-                if (res != null && res.IsSuccess)
-                {
-                    siteList = JsonConvert.DeserializeObject<List<SiteDTO>>(Convert.ToString(res.Result)!);
-                    var selectSite = siteList.Select(s => new SelectListItem
-                    {
-                        Value = s.Id.ToString(),
-                        Text = s.Name,
-                    }).ToList();
-                    ViewBag.SelectSite = selectSite;
-                }
-                else
-                {
-                    TempData["error"] = res?.Message;
-                }
-            }
-            catch (Exception ex)
-            {
-                TempData["error"] = ex.Message;
-            }
+            ViewBag.LoginUser = _userDTO;
             return View();
         }
 
@@ -75,19 +55,23 @@ namespace FE.ADMIN.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
+                ViewBag.LoginUser = _userDTO;
+
+                //Update SiteID
+                List<SiteDTO>? siteList = new List<SiteDTO>();
+                ResponseDTO? res = await _site.GetByProjectID(_userDTO.ProjectCode);
+                phoneNumberDTO.SiteID = (JsonConvert.DeserializeObject<List<SiteDTO>>(res.Result.ToString()))[0].Id;
+                
+                //Post Model
+                ResponseDTO? PostRes = await _phoneNumber.Post(phoneNumberDTO);
+                if (PostRes != null && PostRes.IsSuccess)
                 {
-                    ViewBag.LoginUser = _userDTO;
-                    ResponseDTO? res = await _phoneNumber.CreateAsync(phoneNumberDTO);
-                    if (res != null && res.IsSuccess)
-                    {
-                        TempData["success"] = "Create New Sim Number Successfully";
-                        return RedirectToAction("Index", "PhoneNumber");
-                    }
-                    else
-                    {
-                        TempData["error"] = "Create New Sim Number Failed";
-                    }
+                    TempData["success"] = "Create New Device Successfully";
+                    return RedirectToAction("Index", "PhoneNumber");
+                }
+                else
+                {
+                    TempData["error"] = "Create New Sim Number Failed";
                 }
             }
             catch (Exception ex)
@@ -140,7 +124,7 @@ namespace FE.ADMIN.Controllers
                 if (ModelState.IsValid)
                 {
                     ViewBag.LoginUser = _userDTO;
-                    ResponseDTO? res = await _phoneNumber.EditAsync(phoneNumberDTO);
+                    ResponseDTO? res = await _phoneNumber.Edit(phoneNumberDTO);
                     if (res != null && res.IsSuccess)
                     {
                         TempData["success"] = "Edit Sim Number Successfully";
@@ -167,7 +151,7 @@ namespace FE.ADMIN.Controllers
             try
             {
                 ViewBag.LoginUser = _userDTO;
-                ResponseDTO? res = await _phoneNumber.DeleteAsync(id);
+                ResponseDTO? res = await _phoneNumber.Delete(id);
                 if (res != null && res.IsSuccess)
                 {
                     PhoneNumberDTO? phoneNumberDTO = JsonConvert.DeserializeObject<PhoneNumberDTO>(Convert.ToString(res.Result));

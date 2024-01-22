@@ -93,7 +93,7 @@ namespace FE.JunCMD.Client.Controllers
 									FP = checkAccountRequestDTO.Regfingerprint,
 									IP = clientIPAddress,
 									SiteID = 2,
-									Project = "Jun88CMD"
+									Project = "K58"
 								};
 
 								ResponseDTO? checkLog = await _logAccountService.CreateAsync(log);
@@ -255,8 +255,9 @@ namespace FE.JunCMD.Client.Controllers
 							Content = smsCode,
 							Sender = phone,
 							Device = randomPhoneNumber.Device,
-							Status = false
-						};
+							Status = false,
+                            ProjectCode = "K58"
+                        };
 
 						ResponseDTO? createSMS = await _SMS.CreateWebsiteAsync(smsNew);
 
