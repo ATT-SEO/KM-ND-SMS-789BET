@@ -47,5 +47,14 @@ namespace FE.JunCMD.Client.Services
                 Url = SD.ApiKM58 + "/api/Site/GetByProjectID/" + ProjectID
             });
         }
+
+        public async Task<ResponseDTO?> GetByProjectCode(string ProjectCode)
+        {
+            return await _baseService.SendAsync(new RequestDTO()
+            {
+                APIType = SD.APIType.GET,
+                Url = SD.ApiKM58 + "/api/Site/GetByProjectID/" + ProjectCode
+            });
+        }
     }
 }
