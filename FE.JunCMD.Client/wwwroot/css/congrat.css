@@ -31,9 +31,9 @@
 .congrat-container {
     width: 100vw;
     height: 100vh;
-    background: rgb(165 165 165 / 70%);
+    background: rgb(162 224 255);
     border: 1px solid white;
-    display: fixed;
+    display: flex;
     top: 0;
     left: 0;
 }
