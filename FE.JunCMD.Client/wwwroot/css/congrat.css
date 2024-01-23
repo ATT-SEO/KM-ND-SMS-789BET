@@ -27,7 +27,11 @@
         transform: translate3d(-50px, 105vh, 0) rotateX(10deg) rotateY(250deg);
     }
 }
-
+.hp-ss {
+    overflow: hidden;
+    width: 100%;
+    position: absolute;
+}
 .congrat-container {
     width: 100vw;
     height: 100vh;
@@ -278,7 +282,79 @@
 }
 
 .headerlogo{
-    width:500px;
+    max-width:60%;
+    width:400px;
     height:auto;
     margin-bottom:100px;
+}
+
+@media screen and (max-width: 380px) {
+    .headerlogo {
+        margin-bottom: 20px;
+    }
+
+    /* Checkmark */
+    .checkmark-circle {
+        width: 100px;
+        height: 100px;
+        position: relative;
+        display: inline-block;
+        vertical-align: top;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 10px;
+    }
+
+        .checkmark-circle .background {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #00c09d;
+            position: absolute;
+        }
+
+        .checkmark-circle .checkmark {
+            border-radius: 5px;
+        }
+
+            .checkmark-circle .checkmark.draw:after {
+                -webkit-animation-delay: 100ms;
+                -moz-animation-delay: 100ms;
+                animation-delay: 100ms;
+                -webkit-animation-duration: 3s;
+                -moz-animation-duration: 3s;
+                animation-duration: 3s;
+                -webkit-animation-timing-function: ease;
+                -moz-animation-timing-function: ease;
+                animation-timing-function: ease;
+                -webkit-animation-name: checkmark;
+                -moz-animation-name: checkmark;
+                animation-name: checkmark;
+                -webkit-transform: scaleX(-1) rotate(135deg);
+                -moz-transform: scaleX(-1) rotate(135deg);
+                -ms-transform: scaleX(-1) rotate(135deg);
+                -o-transform: scaleX(-1) rotate(135deg);
+                transform: scaleX(-1) rotate(135deg);
+                -webkit-animation-fill-mode: forwards;
+                -moz-animation-fill-mode: forwards;
+                animation-fill-mode: forwards;
+            }
+
+            .checkmark-circle .checkmark:after {
+                opacity: 1;
+                height: 50px;
+                width: 37.5px;
+                -webkit-transform-origin: left top;
+                -moz-transform-origin: left top;
+                -ms-transform-origin: left top;
+                -o-transform-origin: left top;
+                transform-origin: left top;
+                border-right: 15px solid white;
+                border-top: 15px solid white;
+                border-radius: 2.5px !important;
+                content: '';
+                left: 15px;
+                top: 60px;
+                position: absolute;
+            }
 }
