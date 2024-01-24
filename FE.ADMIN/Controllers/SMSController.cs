@@ -13,11 +13,13 @@ namespace FE.ADMIN.Controllers
         private readonly ISMSService _sms;
         private readonly ITokenProvider _tokenProvider;
         private UserDTO _userDTO;
-        public SMSController(ISMSService sms, ITokenProvider TokenProvider)
+        private readonly IPhoneNumberService _phoneNumberService;
+        public SMSController(ISMSService sms, ITokenProvider TokenProvider, IPhoneNumberService phoneNumberService)
         {
             _sms = sms;
             _tokenProvider = TokenProvider;
             _userDTO = _tokenProvider.ReadTokenClearInformation();
+            _phoneNumberService = phoneNumberService;
         }
         // GET: SMSController
 		public async Task<IActionResult> Index(QueryParametersDTO parameters)
@@ -28,6 +30,7 @@ namespace FE.ADMIN.Controllers
 			{
                 ViewBag.LoginUser = _userDTO;
                 parameters.ProjectCode = _userDTO.ProjectCode;
+
                 ResponseDTO? res = await _sms.GetAllAsync(parameters);
 				if (res != null && res.IsSuccess)
 				{
@@ -35,7 +38,6 @@ namespace FE.ADMIN.Controllers
                     var resultObject = JObject.FromObject(res.Result);
 					if (resultObject.TryGetValue("data", out var data) && data != null)
 					{
-
 						var smsList = JsonConvert.DeserializeObject<List<SMSDTO>>(data.ToString());
 						ViewBag.CurrentPage = parameters.Page;
 						ViewBag.PageSize = parameters.PageSize;
@@ -43,7 +45,17 @@ namespace FE.ADMIN.Controllers
 						int totalPages = CoreBase.CalculateTotalPages(totalCount, parameters.PageSize);
 						ViewBag.TotalPages = totalPages;
 						ViewBag.totalCount = totalCount;
-						return View(smsList);
+
+                        List<PhoneNumberDTO>? phoneNumbers = new List<PhoneNumberDTO>();
+                        ResponseDTO? phoneDTO = await _phoneNumberService.GetListPhoneByProjectID(_userDTO.ProjectCode);
+                        if (phoneDTO != null && phoneDTO.IsSuccess)
+                        {
+                            phoneNumbers = JsonConvert.DeserializeObject<List<PhoneNumberDTO>>(Convert.ToString(phoneDTO.Result)!);
+                            ViewBag.phoneNumbers = phoneNumbers;
+                        }
+
+
+                        return View(smsList);
 					}
 					else
 					{
