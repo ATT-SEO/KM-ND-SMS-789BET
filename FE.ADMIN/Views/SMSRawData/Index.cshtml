@@ -88,9 +88,9 @@
 						<th>
 							Thiết bị
 						</th>
-						@* <th>
-							Project
-						</th> *@
+						<th>
+							SĐT nhận
+						</th> 
 						<th>T/gian gửi</th>
 					</tr>
 				</thead>
@@ -119,9 +119,13 @@
 								<td>
 									@sms.Device
 								</td>
-								@* <td>
-									@sms.ProjectID
-								</td> *@
+								<td>
+									@{
+										List<PhoneNumberDTO>? phoneNumbers = ViewBag.phoneNumbers as List<PhoneNumberDTO>;
+										PhoneNumberDTO matchingPhoneNumber = phoneNumbers.FirstOrDefault(p => p.Device == sms.Device);
+									}
+									@((matchingPhoneNumber != null) ? matchingPhoneNumber.Number : sms.Device)
+								</td>
 								<td>
 									@(sms.CreatedTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "")
 								</td>

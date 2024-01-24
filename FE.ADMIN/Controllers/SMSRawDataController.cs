@@ -13,11 +13,13 @@ namespace FE.ADMIN.Controllers
         private readonly ITokenProvider _tokenProvider;
         private readonly ISMSRawDataService _smsRawData;
         private UserDTO _userDTO;
+        private readonly IPhoneNumberService _phoneNumberService;
 
-        public SMSRawDataController(ISMSRawDataService sms, ITokenProvider TokenProvider)
+        public SMSRawDataController(ISMSRawDataService sms, ITokenProvider TokenProvider, IPhoneNumberService phoneNumberService)
         {
             _smsRawData = sms;
             _userDTO = TokenProvider.ReadTokenClearInformation();
+            _phoneNumberService = phoneNumberService;
         }
 
         [HttpGet]
@@ -42,7 +44,15 @@ namespace FE.ADMIN.Controllers
 						int totalPages = CoreBase.CalculateTotalPages(totalCount, parameters.PageSize);
 						ViewBag.TotalPages = totalPages;
 						ViewBag.totalCount = totalCount;
-						return View(smsList);
+
+                        List<PhoneNumberDTO>? phoneNumbers = new List<PhoneNumberDTO>();
+                        ResponseDTO? phoneDTO = await _phoneNumberService.GetListPhoneByProjectID(_userDTO.ProjectCode);
+                        if (phoneDTO != null && phoneDTO.IsSuccess)
+                        {
+                            phoneNumbers = JsonConvert.DeserializeObject<List<PhoneNumberDTO>>(Convert.ToString(phoneDTO.Result)!);
+                            ViewBag.phoneNumbers = phoneNumbers;
+                        }
+                        return View(smsList);
 					}
 					else
 					{
