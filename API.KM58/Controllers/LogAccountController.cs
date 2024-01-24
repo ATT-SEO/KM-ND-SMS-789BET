@@ -189,7 +189,7 @@ namespace API.KM58.Controllers
                 {
                     if (logAccount1.Account == logAccountDTO.Account)
                     {
-                        _response.Result = _mapper.Map<SMSDTO>(logAccount1);
+                        _response.Result = _mapper.Map<LogAccount>(logAccount1);
                         _response.IsSuccess = true;
                         _response.Message = "Đã có SMS ở hệ thống.";
                     }
