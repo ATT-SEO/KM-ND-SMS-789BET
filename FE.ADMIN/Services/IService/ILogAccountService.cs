@@ -10,7 +10,7 @@ namespace FE.ADMIN.Services.IService
         Task<ResponseDTO> CreateAsync(LogAccountDTO logAccountDTO);
 		Task<ResponseDTO> EditAsync(LogAccountDTO logAccountDTO);
 		Task<ResponseDTO> DeleteAsync(int id);
-        Task<ResponseDTO> GetLogAccountListByProjectID(QueryParametersDTO parameters);
+        Task<ResponseDTO> GetLogAccountListByProjectCode(QueryParametersDTO parameters);
 
 	}
 }

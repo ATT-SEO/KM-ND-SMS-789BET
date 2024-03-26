@@ -13,7 +13,7 @@ namespace API.KM58.Model
         [Required]
         public string Device { get; set; }
         [Required]
-        public string ProjectID { get; set; }
+        public string ProjectCode { get; set; }
         [Required]
         public bool Status { get; set; }
         public DateTime? CreatedTime { get; set; }

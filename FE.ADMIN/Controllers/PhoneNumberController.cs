@@ -27,7 +27,7 @@ namespace FE.ADMIN.Controllers
         {
             ViewBag.LoginUser = _userDTO;
             List<PhoneNumberDTO>? phoneNumbers = new List<PhoneNumberDTO>();
-            ResponseDTO? res = await _phoneNumber.GetListPhoneByProjectID(_userDTO.ProjectCode);
+            ResponseDTO? res = await _phoneNumber.GetListPhoneByProjectCode(_userDTO.ProjectCode);
             Console.WriteLine("HERE => "+JsonConvert.SerializeObject(res));
             if (res != null && res.IsSuccess)
             {
@@ -59,7 +59,7 @@ namespace FE.ADMIN.Controllers
 
                 //Update SiteID
                 List<SiteDTO>? siteList = new List<SiteDTO>();
-                ResponseDTO? res = await _site.GetByProjectID(_userDTO.ProjectCode);
+                ResponseDTO? res = await _site.GetByProjectCode(_userDTO.ProjectCode);
                 phoneNumberDTO.SiteID = (JsonConvert.DeserializeObject<List<SiteDTO>>(res.Result.ToString()))[0].Id;
                 
                 //Post Model

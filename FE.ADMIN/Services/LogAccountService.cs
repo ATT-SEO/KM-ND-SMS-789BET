@@ -48,9 +48,9 @@ namespace FE.ADMIN.Services
 			});
 		}
 
-        public async Task<ResponseDTO?> GetLogAccountListByProjectID(QueryParametersDTO parameters)
+        public async Task<ResponseDTO?> GetLogAccountListByProjectCode(QueryParametersDTO parameters)
         {
-            string url = $"{SD.ApiKM58}/api/LogAccount/GetLogAccountListByProjectID?{ToQueryString(parameters)}";
+            string url = $"{SD.ApiKM58}/api/LogAccount/GetLogAccountListByProjectCode?{ToQueryString(parameters)}";
             return await _baseService.SendAsync(new RequestDTO()
             {
                 APIType = SD.APIType.GET,

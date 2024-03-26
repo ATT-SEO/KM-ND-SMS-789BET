@@ -35,7 +35,7 @@
 .congrat-container {
     width: 100vw;
     height: 100vh;
-    background: #ffcdcc;
+    background: #171717;
     border: 1px solid white;
     display: fixed;
     top: 0;
@@ -91,7 +91,7 @@
         width: 150px;
         height: 150px;
         border-radius: 50%;
-        background: #00c09d;
+        background: #ff521a;
         position: absolute;
     }
 
@@ -223,8 +223,8 @@
     height: 45px;
     width: 200px;
     font-size: 22px !important;
-    background-color: #00c09d;
-    border: 1px solid #00ab8c;
+    background-color: #ff8900;
+    border: 1px solid #ff521a;
     color: #fff;
     border-radius: 5px;
     box-shadow: 0 2px 4px 0 rgba(87, 71, 81, .2);
@@ -234,7 +234,7 @@
 }
 
     .congrat-submit-btn:hover {
-        background-color: #2ca893;
+        background-color: #ff521a;
         transition: all 0.2s ease-out;
     }
 
@@ -256,7 +256,7 @@
 
 .congrat-main h1 {
     font-size: 2em;
-    color: #ff0505;
+    color: #f79a04;
     font-weight: 700;
 }
 
@@ -268,7 +268,7 @@
 .congrat-main p {
     display: flex;
     font-size: 1.4em;
-    color: #000;
+    color: #fff;
     text-align: center;
     font-weight: 600;
 }

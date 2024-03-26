@@ -11,9 +11,12 @@ namespace API.KM58
             var mappingConfig = new MapperConfiguration(config =>
             {
                 config.CreateMap<Site, SiteDTO>().ReverseMap();
+                config.CreateMap<LogAccount, LogAccountDTO>().ReverseMap();
                 config.CreateMap<PhoneNumber, PhoneNumberDTO>().ReverseMap();
                 config.CreateMap<SMS, SMSDTO>().ReverseMap();
                 config.CreateMap<SMSRawData, SMSRawDataDTO>().ReverseMap();
+                config.CreateMap<AccountRegisters, AccountRegistersDTO>().ReverseMap();
+
             });
             return mappingConfig;
         }

@@ -36,7 +36,7 @@ namespace API.KM58.Controllers
                 var query = _db.SMSRawData.AsQueryable();
                 if (!string.IsNullOrEmpty(parameters.ProjectCode))
                 {
-                    query = query.Where(w => w.ProjectID == parameters.ProjectCode);
+                    query = query.Where(w => w.ProjectCode == parameters.ProjectCode);
                 }
                 if (!string.IsNullOrEmpty(parameters.Sender))
                 {
@@ -59,7 +59,7 @@ namespace API.KM58.Controllers
                 }
                 if (!string.IsNullOrEmpty(parameters.ProjectCode))
                 {
-                    query = query.Where(w => w.ProjectID == parameters.ProjectCode);
+                    query = query.Where(w => w.ProjectCode == parameters.ProjectCode);
                 }
                 if (!string.IsNullOrEmpty(parameters.Device))
                 {

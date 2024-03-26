@@ -31,10 +31,6 @@ namespace API.KM58.Controllers
             try
             {
                 var query = _db.LogAccounts.AsQueryable();
-                if (parameters.SiteID.HasValue)
-                {
-                    query = query.Where(w => w.SiteID == parameters.SiteID.Value);
-                }
                 if (!string.IsNullOrEmpty(parameters.IP))
                 {
                     query = query.Where(w => w.IP == parameters.IP);
@@ -49,7 +45,6 @@ namespace API.KM58.Controllers
                 }
                 int skipCount = (parameters.Page - 1) * parameters.PageSize;
                 IEnumerable<LogAccount> LogAccountList = query
-                    .Include(u => u.Site)
                     .OrderByDescending(w => w.Id)
                     .Skip(skipCount)
                     .Take(parameters.PageSize)
@@ -74,8 +69,8 @@ namespace API.KM58.Controllers
 
 
         [HttpGet]
-        [Route("GetLogAccountListByProjectID")]
-        public async Task<ResponseDTO> GetLogAccountListByProjectID([FromQuery] QueryParametersDTO parameters)
+        [Route("GetLogAccountListByProjectCode")]
+        public async Task<ResponseDTO> GetLogAccountListByProjectCode([FromQuery] QueryParametersDTO parameters)
         {
             try
             {
@@ -98,7 +93,6 @@ namespace API.KM58.Controllers
                 }
                 int skipCount = (parameters.Page - 1) * parameters.PageSize;
                 List<LogAccount> LogAccountList = query
-                    .Include(u => u.Site)
                     .OrderByDescending(w => w.Id)
                     .Skip(skipCount)
                     .Take(parameters.PageSize)
@@ -175,7 +169,7 @@ namespace API.KM58.Controllers
         {
             try
             {
-                LogAccount logAccount1 = await _db.LogAccounts.FirstOrDefaultAsync(s => (s.IP == logAccountDTO.IP || s.FP == logAccountDTO.FP) && s.SiteID == logAccountDTO.SiteID);
+                LogAccount logAccount1 = await _db.LogAccounts.FirstOrDefaultAsync(s => (s.IP == logAccountDTO.IP || s.FP == logAccountDTO.FP) && s.Project == logAccountDTO.Project);
 
                 if (logAccount1 == null)
                 {

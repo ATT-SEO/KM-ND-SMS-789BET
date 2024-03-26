@@ -28,7 +28,7 @@ namespace FE.ADMIN.Utility
 
         public static string[] Project_Code = { "FREE66", "K58" };
 
-        //public static Dictionary<string, string> ProjectID = new Dictionary<string, string>
+        //public static Dictionary<string, string> ProjectCode = new Dictionary<string, string>
         //{
         //    { "MB66_FREE66", "FREE66" },
         //    { "JUN88_CMD_K58", "KM58_Jun88_CMD" }

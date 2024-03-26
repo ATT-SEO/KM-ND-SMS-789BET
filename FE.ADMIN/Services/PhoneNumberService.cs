@@ -46,12 +46,12 @@ namespace FE.ADMIN.Services
                 Url = SD.ApiKM58 + "/api/PhoneNumber/GetListPhoneBySiteID/" + SiteID
             });
         }
-        public async Task<ResponseDTO?> GetListPhoneByProjectID(string SiteName)
+        public async Task<ResponseDTO?> GetListPhoneByProjectCode(string SiteName)
         {
             return await _baseService.SendAsync(new RequestDTO()
             {
                 APIType = SD.APIType.GET,
-                Url = SD.ApiKM58 + "/api/PhoneNumber/GetListPhoneByProjectID/" + SiteName
+                Url = SD.ApiKM58 + "/api/PhoneNumber/GetListPhoneByProjectCode/" + SiteName
             });
         }
 

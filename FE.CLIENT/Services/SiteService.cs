@@ -25,7 +25,7 @@ namespace FE.CLIENT.Services
             return await _baseService.SendAsync(new RequestDTO()
             {
                 APIType = SD.APIType.GET,
-                Url = SD.ApiKM58 + "/api/Site/" + ID
+                Url = SD.ApiKM58 + "/api/settingSite/" + ID
             });
         }
 
@@ -34,7 +34,7 @@ namespace FE.CLIENT.Services
             return await _baseService.SendAsync(new RequestDTO()
             {
                 APIType = SD.APIType.GET,
-                Url = SD.ApiKM58 + "/api/Site/GetBySite/" + Name
+                Url = SD.ApiKM58 + "/api/settingSite/GetBySite/" + Name
             });
         }
 
@@ -43,7 +43,7 @@ namespace FE.CLIENT.Services
             return await _baseService.SendAsync(new RequestDTO()
             {
                 APIType = SD.APIType.GET,
-                Url = SD.ApiKM58 + "/api/Site/GetByProjectID/" + ProjectCode
+                Url = SD.ApiKM58 + "/api/settingSite/GetByProjectCode/" + ProjectCode
             });
         }
     }

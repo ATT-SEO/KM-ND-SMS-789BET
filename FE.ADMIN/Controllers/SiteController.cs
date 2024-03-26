@@ -26,7 +26,7 @@ namespace FE.ADMIN.Controllers
             try
             {
                 ViewBag.LoginUser = _userDTO;
-                ResponseDTO _siteRes = await _site.GetByProjectID(_userDTO.ProjectCode);
+                ResponseDTO _siteRes = await _site.GetByProjectCode(_userDTO.ProjectCode);
                 if (_siteRes!=null && _siteRes.IsSuccess)
                 {
                     return View(JsonConvert.DeserializeObject<List<SiteDTO>>(Convert.ToString(_siteRes.Result)));

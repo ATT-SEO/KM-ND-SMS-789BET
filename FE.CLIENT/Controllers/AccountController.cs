@@ -8,41 +8,52 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using FE.CLIENT.Utility;
 using System.Numerics;
 using System.Net.NetworkInformation;
+using System.Reflection;
+using FE.ADMIN.Utility;
 
 namespace FE.CLIENT.Controllers
 {
 	public class AccountController : Controller
     {
-        private const string RecaptchaSecretKey = "6LdjDFYpAAAAAJsGL5I-hHeMPNaSURINvSEoM6uH";
+        private const string RecaptchaSecretKey = "6Lfrm6MpAAAAABXxe8r7X5Byy6V6LN3S4Yf44BqV";
         private readonly IBOService _boService;
         private readonly ILogger<AccountController> _logger;
         private readonly IPhoneNumberService _phoneNumber;
         private readonly ISMSService _SMS;
         private readonly ILogAccountService _logAccountService;
-
-		public AccountController(ILogger<AccountController> logger, IBOService boService, IPhoneNumberService phoneNumber, ISMSService SMS, ILogAccountService logAccountService)
+		private readonly IHttpContextAccessor _contextAccessor;
+		private readonly ResponseDTO _response;
+		public AccountController(ILogger<AccountController> logger, IBOService boService, IPhoneNumberService phoneNumber, ISMSService SMS, ILogAccountService logAccountService, IHttpContextAccessor httpContextAccessor)
 		{
 			_logger = logger;
 			_boService = boService;
 			_phoneNumber = phoneNumber;
 			_SMS = SMS;
 			_logAccountService = logAccountService;
-		}
+			_contextAccessor = httpContextAccessor;
+            _response = new ResponseDTO();
+
+        }
 
         public async Task<IActionResult> CheckAccount([FromBody] CheckAccountRequestDTO checkAccountRequestDTO)
         {
-            string Username = checkAccountRequestDTO.Account;
-            Username = Username.Trim();
-            Username = Username.ToLower();
+            string Account = checkAccountRequestDTO.Account;
+            Account = Account.Trim();
+            Account = Account.ToLower();
             string recaptchaToken = checkAccountRequestDTO.RecaptchaToken;
+			checkAccountRequestDTO.Token = recaptchaToken;
+            checkAccountRequestDTO.IP = _contextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
+            checkAccountRequestDTO.FP = checkAccountRequestDTO.Regfingerprint;
 
+            checkAccountRequestDTO.Project = "bo_789bet"; 
+
+            Console.WriteLine("Data IP : " + checkAccountRequestDTO.IP);
             object responseJson;
             using (HttpClient httpClient = new HttpClient())
             {
                 var response = await httpClient.GetStringAsync($"https://www.google.com/recaptcha/api/siteverify?secret={RecaptchaSecretKey}&response={recaptchaToken}");
 
                 var recaptchaResponse = JsonConvert.DeserializeObject<RecaptchaResponse>(response);
-                Console.WriteLine(response);
                 if (!recaptchaResponse.Success)
                 {
                     responseJson = new
@@ -60,346 +71,68 @@ namespace FE.CLIENT.Controllers
                     return Json(responseJson);
                 }
             }
-            List<PhoneNumberDTO>? phoneNumbers = new List<PhoneNumberDTO>();
-            ResponseDTO? res = await _phoneNumber.GetListPhoneBySiteIDAsync(1);
-            if (res != null && res.IsSuccess)
-            {
-                phoneNumbers = JsonConvert.DeserializeObject<List<PhoneNumberDTO>>(Convert.ToString(res.Result)!);
-                Random random = new Random();
-                PhoneNumberDTO randomPhoneNumber = phoneNumbers[random.Next(phoneNumbers.Count)];
 
-				if (!string.IsNullOrWhiteSpace(Username))
-				{
-					ResponseDTO userAccountInfo = await _boService.BoCheckUserAccount(Username);
-					Console.WriteLine(userAccountInfo);
-					ResponseAccountDTO responseJsonData = JsonConvert.DeserializeObject<ResponseAccountDTO>(Convert.ToString(userAccountInfo.Result));
-					if (responseJsonData != null)
-					{
+			if (!string.IsNullOrWhiteSpace(Account))
+			{
+                var userAccountInfo = await _boService.BoCheckUserAccount(checkAccountRequestDTO);
+                Console.WriteLine(JsonConvert.SerializeObject(userAccountInfo));
+				if (userAccountInfo.IsSuccess == true)
+                {
 
-						string phone = ConvertPhoneNumber.ConvertPhone(responseJsonData.Mobile);
-						long createDateTicks = responseJsonData.CreateDate;
-						DateTimeOffset createDate = DateTimeOffset.FromUnixTimeMilliseconds(createDateTicks);
-						DateTimeOffset currentUtcTime = DateTimeOffset.UtcNow;
-						if (Username != "kawaitcn")
+                    dynamic jsonData = JsonConvert.DeserializeObject(userAccountInfo.Result.ToString());
+
+                    Console.WriteLine("Data : " + jsonData);
+
+                    if (jsonData != null && jsonData.ContainsKey("isSMS")) /// tồn tại là đã trả về tk đã đăng ký được rồi
+                    {
+						if(jsonData.status == 1)
 						{
-							try
-							{
-
-								//// check log
-								string clientIPAddress = HttpContext.Request.Headers["X-Forwarded-For"];
-								var log = new LogAccountDTO
-								{
-									Account = Username,
-									FP = checkAccountRequestDTO.Regfingerprint,
-									IP = clientIPAddress,
-									SiteID = 1,
-									Project = "FREE66"
-								};
-
-								ResponseDTO? checkLog = await _logAccountService.CreateAsync(log);
-
-								if (checkLog.IsSuccess == false)
-								{
-									responseJson = new
-									{
-										result = new
-										{
-											code = 250,
-											message = "Tài khoản của quý khách không đủ điều kiện nhận thưởng. Vui lòng xem lại quy tắc nhận thưởng !!!"
-										},
-										success = true,
-										error = "error",
-										unAuthorizedRequest = false,
-										__abp = false
-									};
-									return Json(responseJson);
-								}
-							}
-							catch (Exception ex)
-							{
-								Console.WriteLine(ex);
-							}
-							if (responseJsonData.BanksNameAccount == null)
-							{
-								responseJson = new
-								{
-									result = new
-									{
-										code = 250,
-										message = "Tài khoản của quý khách không đủ điều kiện nhận thưởng. Vui lòng xem lại quy tắc nhận thưởng !!!"
-									},
-									success = true,
-									error = "error",
-									unAuthorizedRequest = false,
-									__abp = false
-								};
-								return Json(responseJson);
-							}
-
-							if (responseJsonData.TotalDepositCount > 1)
-							{
-								responseJson = new
-								{
-									result = new
-									{
-										code = 250,
-										message = "Tài khoản của quý khách không đủ điều kiện nhận thưởng. Vui lòng xem lại quy tắc nhận thưởng !!!"
-									},
-									success = true,
-									error = "error",
-									unAuthorizedRequest = false,
-									__abp = false
-								};
-								return Json(responseJson);
-							}
-
-							if (createDate < DateTime.Now.AddHours(-24))
-							{
-								var smsCheck = new SMSDTO
-								{
-									Account = Username,
-									Sender = phone
-								};
-								ResponseDTO? checkSMS = await _SMS.CheckSMSWebsite(smsCheck);
-
-								if (checkSMS.Result != null && checkSMS.IsSuccess)
-								{
-									SMSDTO? OneSMS = JsonConvert.DeserializeObject<SMSDTO>(Convert.ToString(checkSMS.Result));
-									PhoneNumberDTO matchingPhoneNumber = phoneNumbers.FirstOrDefault(p => p.Device == OneSMS.Device);
-
-									string resultNumber = matchingPhoneNumber?.Number;
-
-									if (OneSMS.Status)
-									{
-										responseJson = new
-										{
-											result = new
-											{
-												status = 2,
-												code = 200,
-												message = $"Quý khách đã nhận thưởng thành công \n KM: FREE66. \n Số điểm: {OneSMS.Point} \n Thời gian {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm:ss")}"
-											},
-											success = true,
-											__abp = true
-										};
-										return Json(responseJson);
-									}
-									else
-									{
-										if (OneSMS.CreatedTime != null)
-										{
-											responseJson = new
-											{
-												result = new
-												{
-													phone = phone,
-													smsCode = OneSMS.Content,
-													verifyCode = "",
-													voiceSum = 0,
-													superPhone = resultNumber,
-													status = 1,
-													code = 200,
-													message = "Hệ thống đang kiểm tra tin nhắn khuyến mãi của quý khách. Hệ thống sẽ xử lý và cộng điểm trong giây lát"
-												},
-												success = true,
-												unAuthorizedRequest = false,
-												__abp = true
-											};
-											return Json(responseJson);
-										}
-										else
-										{
-											responseJson = new
-											{
-												result = new
-												{
-													phone = phone,
-													smsCode = OneSMS.Content,
-													verifyCode = "",
-													voiceSum = 0,
-													superPhone = resultNumber,
-													status = 1,
-													code = 200,
-													message = "Hệ thống đang kiểm tra tin nhắn khuyến mãi của quý khách. Chúng tôi sẽ cập nhật trong giây lát"
-												},
-												success = true,
-												unAuthorizedRequest = false,
-												__abp = true
-											};
-											return Json(responseJson);
-										}
-									}
-								}
-								else
-								{
-									responseJson = new
-									{
-										result = new
-										{
-											code = 250,
-											message = "Không thể yêu cầu nhận thưởng. Tài khoản của quý khách đã đăng ký quá 24h"
-										},
-										success = true,
-										error = "error",
-										unAuthorizedRequest = false,
-										__abp = false
-									};
-									return Json(responseJson);
-								}
-							}
-						}
-						string smsCode = RandomString.GenerateString(9, 3, 3, 3);
-						var smsNew = new SMSDTO
+                            _response.IsSuccess = true;
+                            _response.Code = 200;
+							_response.Message = $"Quý khách đã nhận thưởng thành công! \n Khuyến mãi: 789BET \n Số điểm: {jsonData.point} \n Thời gian: {jsonData.createdTime.Value.ToString("HH:mm:ss")} ngày {jsonData.createdTime.Value.ToString("dd/MM/yyyy")}";
+                            //_response.Result = jsonData;
+							 return Json(_response);
+                        }else if(jsonData.status == 0)
 						{
-							Account = Username,
-							Content = smsCode,
-							Sender = phone,
-							Device = randomPhoneNumber.Device,
-							Status = false,
-							ProjectCode = "FREE66"
-						};
-
-						ResponseDTO? createSMS = await _SMS.CreateWebsiteAsync(smsNew);
-
-						if (createSMS.Result != null && createSMS.IsSuccess)
-						{
-
-							SMSDTO? OneSMS = JsonConvert.DeserializeObject<SMSDTO>(Convert.ToString(createSMS.Result));
-
-							PhoneNumberDTO matchingPhoneNumber = phoneNumbers.FirstOrDefault(p => p.Device == OneSMS.Device);
-
-							string resultNumber = matchingPhoneNumber?.Number;
-
-
-							if (OneSMS.Status == true)
-							{
-								responseJson = new
-								{
-									result = new
-									{
-										phone = phone,
-										smsCode = smsCode,
-										verifyCode = "",
-										voiceSum = 0,
-										status = 2,
-										superPhone = resultNumber,
-										code = 200,
-										message = $"Quý khách đã nhận thưởng thành công. \n KM: FREE66. \n Số điểm: {OneSMS.Point}. \n Thời gian {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm:ss")}"
-									},
-									success = true,
-									__abp = true
-								};
-								return Json(responseJson);
-							}
-							else
-							{
-								if (OneSMS.CreatedTime != null)
-								{
-									responseJson = new
-									{
-										result = new
-										{
-											phone = phone,
-											smsCode = OneSMS.Content,
-											verifyCode = "",
-											voiceSum = 0,
-											superPhone = resultNumber,
-											code = 200,
-											message = "Hệ thống đã nhận được tin nhắn khuyến mãi của quý khách trước đó. Chúng tôi sẽ cập nhật trong giây lát"
-										},
-										success = true,
-										unAuthorizedRequest = false,
-										__abp = true
-									};
-									return Json(responseJson);
-								}
-								else
-								{
-									responseJson = new
-									{
-										result = new
-										{
-											phone = phone,
-											smsCode = OneSMS.Content,
-											verifyCode = 1,
-											voiceSum = 0,
-											status = 0,
-											superPhone = resultNumber,
-											code = 200,
-											///message = ""
-										},
-										success = true,
-										unAuthorizedRequest = false,
-										__abp = true
-									};
-									return Json(responseJson);
-								}
-							}
-						}
+                            _response.IsSuccess = true;
+                            _response.Code = 202;
+                            _response.Message = "Hệ thống đang cộng điểm thưởng. Quý khách đợi thêm giây lát !!!";
+                            return Json(_response);
+                        }
 						else
 						{
-							responseJson = new
-							{
-								result = new
-								{
-									code = 404,
-									message = "Lỗi hệ thống"
-								},
-								success = true,
-								error = "error",
-							};
-							return Json(responseJson);
-						}
-					}
-					else
-					{
-						responseJson = new
+                            _response.IsSuccess = true;
+                            _response.Code = 250;
+                            _response.Message = "Tài khoản của quý khách không nhận được điểm thưởng. Vui lòng liên hệ bộ phận chăm sóc để được hỗ trợ !";
+                            return Json(_response);
+                        }
+                    }
+                    else
+                    {
+						// tài khoản chưa nhận đăng ký sms hoặc sao đó
+						if(jsonData.status == false)
 						{
-							result = new
-							{
-								code = 250,
-								message = "Tài khoản của quý khách không tồn tại"
-							},
-							success = true,
-							error = "error",
-							unAuthorizedRequest = false,
-							__abp = false
-						};
-						return Json(responseJson);
-					}
+                            _response.IsSuccess = true;
+                            _response.Code = 200;
+                            _response.Result = JsonConvert.SerializeObject(jsonData);
+                            Console.WriteLine(jsonData.account + jsonData.projectCode + jsonData.content + jsonData.sender);
 
+                            jsonData.VerifyCode = CalculateMD5(Convert.ToString(jsonData.account + jsonData.projectCode + jsonData.content + jsonData.sender));
+                            jsonData.sender = ConverPhoneShow.FormatPhoneNumber(Convert.ToString(jsonData.sender));
 
-				}
-				responseJson = new
-				{
-					result = new
-					{
-						code = 250,
-						message = "Kiểm tra lại tài khoản của quý khách"
-					},
-					success = true,
-					error = "error",
-					unAuthorizedRequest = false,
-					__abp = false
-				};
-				return Json(responseJson);
-			}
-			else
-			{
-				responseJson = new
-				{
-					result = new
-					{
-						code = 250,
-						message = "Lỗi hệ thống"
-					},
-					success = true,
-					error = "error",
-					unAuthorizedRequest = false,
-					__abp = false
-				};
-				return Json(responseJson);
-			}
+                            ViewBag.DataSMS = JsonConvert.DeserializeObject<SMSDTO>(JsonConvert.SerializeObject(jsonData));  
+							//JsonConvert.SerializeObject(jsonData);
+                            return PartialView("_ShowSMS");
+                            return Json(_response);
+                        }
+                    }
+                }
+
+            }
+            _response.IsSuccess = false;
+            _response.Code = 403;
+            _response.Message = "Tài khoản của quý khách không đúng. Vui lòng kiểm tra lại !";
+            return Json(_response);
 		}
 		public async Task<IActionResult> SubmitBouns([FromBody] AccountDTO accountDTO)
 		{
@@ -409,83 +142,95 @@ namespace FE.CLIENT.Controllers
 				var smsCheck = new SMSDTO
 				{
 					Account = accountDTO.Account,
-					Sender = accountDTO.Phone,
+                    VerifyCode = accountDTO.VerifyCode,
 				};
-				ResponseDTO? checkSMS = await _SMS.CheckSMSWebsite(smsCheck);
-				if (checkSMS != null && checkSMS.IsSuccess)
+				var checkSMS = await _SMS.CheckSMSWebsite(smsCheck);
+
+                Console.WriteLine(JsonConvert.SerializeObject(checkSMS));
+                if (checkSMS != null && checkSMS.IsSuccess)
 				{
 					SMSDTO? OneSMS = JsonConvert.DeserializeObject<SMSDTO>(Convert.ToString(checkSMS.Result));
 					Console.WriteLine(OneSMS);
 
 					if (OneSMS.Status == true)
 					{
+                        responseJson = new
+                        {
+                            result = new
+                            {
+                                status = 1,
+                                code = 200,
+                                message = "Hệ thống đã nhận được tin nhắn khuyến mãi của quý khách. Hệ thống sẽ xử lý và cộng điểm trong giây lát"
+                            },
+                            success = true,
+                            unAuthorizedRequest = false,
+                            __abp = true
+                        };
+                        return Json(responseJson);
+                    }
+					else
+					{
 						responseJson = new
 						{
 							result = new
 							{
-								status = 2,
-								code = 200,
-								message = $"Quý khách đã nhận thưởng thành công. \n KM: FREE66. \n Số điểm: {OneSMS.Point}. \n Thời gian {OneSMS.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm:ss")}"
+								status = 1,
+								code = 250,
+								message = "Hệ thống chưa nhận được tin nhắn SMS của quý khách. Vui lòng gửi đúng nội dung"
 							},
 							success = true,
+							unAuthorizedRequest = false,
 							__abp = true
 						};
 						return Json(responseJson);
-					}
-					else
-					{
-						if (OneSMS.CreatedTime != null)
-						{
-							responseJson = new
-							{
-								result = new
-								{
-									status = 1,
-									code = 200,
-									message = "Hệ thống đã nhận được tin nhắn khuyến mãi của quý khách. Hệ thống sẽ xử lý và cộng điểm trong giây lát"
-								},
-								success = true,
-								unAuthorizedRequest = false,
-								__abp = true
-							};
-							return Json(responseJson);
-						}
-						else
-						{
-							responseJson = new
-							{
-								result = new
-								{
-									status = 1,
-									code = 250,
-									message = "Hệ thống chưa nhận được tin nhắn SMS của quý khách. Vui lòng gửi đúng nội dung"
-								},
-								success = true,
-								unAuthorizedRequest = false,
-								__abp = true
-							};
-							return Json(responseJson);
-						}
+						
 					}
 				}
+                object responseJson2 = new
+                {
+                    result = new
+                    {
+                        code = 250,
+                        message = "Vui lòng khiểm tra lại quy trình 1"
+                    },
+                    error = "error",
+                    unAuthorizedRequest = false,
+                    __abp = false
+                };
+                return Json(responseJson2);
 
-			}
+            }
 			catch (Exception ex)
 			{
 				Console.WriteLine(ex);
-			}
-			object responseJson2 = new
-			{
-				result = new
-				{
-					code = 250,
-					message = "Vui lòng khiểm tra lại quy trình"
-				},
-				error = "error",
-				unAuthorizedRequest = false,
-				__abp = false
-			};
-			return Json(responseJson2);
+                object responseJson2 = new
+                {
+                    result = new
+                    {
+                        code = 250,
+                        message = "Vui lòng khiểm tra lại quy trình"
+                    },
+                    error = "error",
+                    unAuthorizedRequest = false,
+                    __abp = false
+                };
+                return Json(responseJson2);
+            }
+			
 		}
-	}
+        private string CalculateMD5(string input)
+        {
+            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+            {
+                byte[] inputBytes = System.Text.Encoding.UTF8.GetBytes(input);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("x2"));
+                }
+                return sb.ToString();
+            }
+        }
+    }
 }
