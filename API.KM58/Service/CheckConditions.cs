@@ -78,6 +78,7 @@ namespace API.KM58.Service
                             }else {
                                 Log.Information($"CỘNG TỰ ĐỘNG THÀNH CÔNG || {accountRegistersDTO.Account} || {accountRegistersDTO.Point} ĐIỂM || {accountRegistersDTO.ProjectCode}");
                                 createRegisters.Status = 1;
+                                createRegisters.UserPoint = "System";
                                 _response.Code = 200;
                                 _response.Message = "Nhận thưởng thành công.";
                             }
