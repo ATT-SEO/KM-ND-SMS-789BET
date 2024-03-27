@@ -41,7 +41,7 @@ namespace FE.CLIENT.Controllers
             Account = Account.Trim();
             Account = Account.ToLower();
             string recaptchaToken = checkAccountRequestDTO.RecaptchaToken;
-			checkAccountRequestDTO.Token = recaptchaToken;
+			checkAccountRequestDTO.Token = CalculateMD5(recaptchaToken);
             checkAccountRequestDTO.IP = _contextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
             checkAccountRequestDTO.FP = checkAccountRequestDTO.Regfingerprint;
 
@@ -125,6 +125,16 @@ namespace FE.CLIENT.Controllers
                             return PartialView("_ShowSMS");
                             return Json(_response);
                         }
+                    }
+                }
+                else
+                {
+                    if(userAccountInfo.Code > 9000)
+                    {
+                        _response.Message = userAccountInfo.Message;
+                        _response.IsSuccess = false;
+                        _response.Code = 403;
+                        return Json(_response);
                     }
                 }
 

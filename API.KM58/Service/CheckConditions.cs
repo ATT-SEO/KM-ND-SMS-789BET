@@ -149,7 +149,7 @@ namespace API.KM58.Service
                 ///check token với captcha gg -> md5(token) để làm ít lại data.
 
 
-                LogAccount logAccount1 = await _db.LogAccounts.FirstOrDefaultAsync(s => (s.IP == logAccountDTO.IP || s.FP == logAccountDTO.FP) && s.Project == logAccountDTO.Project);
+                LogAccount logAccount1 = await _db.LogAccounts.FirstOrDefaultAsync(s => (s.IP == logAccountDTO.IP && s.FP == logAccountDTO.FP) && s.Project == logAccountDTO.Project);
                 if (logAccount1 == null)
                 {
                     logAccountDTO.CreatedTime = DateTime.Now;

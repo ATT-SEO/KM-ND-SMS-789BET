@@ -44,7 +44,7 @@ namespace API.KM58.Controllers
                 string _project = logAccountDTO.Project.ToString();
                 if (_project == "")
                 {
-                    _response.Result = "Hệ thông đang dừng hoạt động bảo trì. Quý khách vui lòng quay lại sau !!!";
+                    _response.Message = "Hệ thông đang dừng hoạt động bảo trì. Quý khách vui lòng quay lại sau !!!";
                     _response.IsSuccess = false;
                     return _response;
                 }
@@ -52,7 +52,7 @@ namespace API.KM58.Controllers
                 Site oneSite = await _db.Sites.Where(s => s.Project == _project).FirstOrDefaultAsync();
                 if (oneSite == null)
                 {
-                    _response.Result = "Hệ thông đang dừng hoạt động bảo trì. Quý khách vui lòng quay lại sau !!!";
+                    _response.Message = "Hệ thông đang dừng hoạt động bảo trì. Quý khách vui lòng quay lại sau !!!";
                     _response.IsSuccess = false;
                     return _response;
                 }
@@ -62,18 +62,18 @@ namespace API.KM58.Controllers
                 var checkLogAccount = await _checkConditions.CheckLogAccount(logAccountDTO);
                 if (checkLogAccount.Code == 404 || checkLogAccount.IsSuccess == false)
                 {
-                    _response.Result = "Dấu hiệu bất thường. Vui lòng xem lại hoặc liên hệ chúng tôi !!!";
+                    _response.Message = "Dấu hiệu bất thường.Bạn đã thực hiện nhiều tài khoản trong 1 thiết bị. Vui lòng xem lại hoặc liên hệ chúng tôi !!!";
                     _response.IsSuccess = false;
+                    _response.Code = 9034;
                     return _response;
                 }
-
                 var jsonAll = await _boService.BOGetCheckAccount(_account);
                 //JObject jsonResponseData = (JObject)JsonConvert.DeserializeObject(jsonAll.Result.ToString());
                 dynamic jsonResponseData = JsonConvert.DeserializeObject(jsonAll.Result.ToString());
                 //string accountNumber = jsonResponseData.result.bankAccount.Accounts[0].Account;
                 if ((int)jsonResponseData.status_code != 200)
                 {
-                    _response.Result = "Thông tin tài khoản không đúng";
+                    _response.Message = "Thông tin tài khoản không đúng";
                     _response.IsSuccess = false;
                     return _response;
                 }
@@ -82,7 +82,7 @@ namespace API.KM58.Controllers
                     if (jsonResponseData.result == null)
                     {
                         Log.Information($"KIEM TRA TAI KHOAN || {_account} || {_project} || KHÔNG TỒN TẠI");
-                        _response.Result = "Thông tin tài khoản không đúng";
+                        _response.Message = "Thông tin tài khoản không đúng";
                         _response.IsSuccess = false;
                         return _response;
                     }
@@ -92,7 +92,7 @@ namespace API.KM58.Controllers
                         if (bankAccounts == null || bankAccounts.Count <= 0)
                         {
                             Log.Information($"KIEM TRA TAI KHOAN || {_account} || {_project} || KHÔNG CHƯA CẬP NHẬT NGÂN HÀNG");
-                            _response.Result = "Tài khoản của bạn chưa đủ điều kiện nhận thưởng. Vui lòng cập nhật thông tin ngân hàng để được nhận thưởng !!!";
+                            _response.Message = "Tài khoản của bạn chưa đủ điều kiện nhận thưởng. Vui lòng cập nhật thông tin ngân hàng để được nhận thưởng !!!";
                             _response.IsSuccess = false;
                             _response.Code = 9032;
                             return _response;
@@ -103,7 +103,7 @@ namespace API.KM58.Controllers
                         if (jsonResponseData.result.detail?.Member?.Mobile == null)
                         {
                             Log.Information($"KIEM TRA TAI KHOAN || {_account} || {_project} || KHÔNG CHƯA CẬP NHẬT SỐ ĐIỆN THOẠI");
-                            _response.Result = "Tài khoản của bạn chưa đủ điều kiện nhận thưởng. Vui lòng cập nhật thêm thông tin liên hệ ( số điện thoại )";
+                            _response.Message = "Tài khoản của bạn chưa đủ điều kiện nhận thưởng. Vui lòng cập nhật thêm thông tin liên hệ ( số điện thoại )";
                             _response.IsSuccess = false;
                             _response.Code = 9033;
                             return _response;
@@ -139,6 +139,7 @@ namespace API.KM58.Controllers
                             {
                                 _response.Message = "Hệ thống nhận khuyến mãi qua SMS chưa sẵn sàng !!!";
                                 _response.IsSuccess = false;
+                                _response.Code = 9035;
                                 return _response;
                             }
                             Random random2 = new Random();
