@@ -8,70 +8,70 @@
     <meta name="description" content="@ViewData["Description"]">
     <meta name="keywords" content="@ViewData["Keywords"]">
     <link rel="icon" href="~/favicon.ico">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.10/clipboard.min.js" type="text/javascript"></script>
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css?v=@(DateTime.Now.Ticks)">
     <link rel="stylesheet" href="css/congrat.css?v=@(DateTime.Now.Ticks)">
     <link rel="stylesheet" href="css/StarAnimation.css?v=@(DateTime.Now.Ticks)">
-    <script src="https://www.google.com/recaptcha/api.js?render=6LdjDFYpAAAAAPXMRR9_yYBOfBLq5Ikjw0yM8G48"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.10/clipboard.min.js" type="text/javascript"></script>
+
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lfrm6MpAAAAAPPoX7zioJPgJqCgqObe1Usqfgko"></script>
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G8G2QV90M3"></script>
+    @* <script async src="https://www.googletagmanager.com/gtag/js?id=G-G8G2QV90M3"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'G-G8G2QV90M3');
-    </script>
+    </script>  *@
 </head>
 <body>
-    <div class="wrap-auth">
-        <div class="wrap-auth_content">
-            <img class="wrap-auth_header_logo" src="./images/logo-mb.png" alt="logo-MB66">
+    <div class="main">
+        <div class="wrap-auth">
+            <div class="wrap-auth_content">
+                <div class="logo-thumb">
+                    <img class="wrap-auth_header_logo" src="./images/logo.png" alt="Logo 789BET">
+                </div>
+                @{
+                    @RenderBody()
+                }
 
-            <div class="title">
-                <span>📣</span>
-                <marquee direction="left">
-                    Thông báo các chương trình khuyến
-                    mãi của MB66 dành cho hội viên MB66
-                </marquee>
             </div>
-            @{
-                @RenderBody()
-            }
 
-        </div>
-
-        <div class="rule">
-            <div class="form-text-3" id="btnRule">Quy tắc khuyến mãi</div>
-            <div class="rule-text">
-                ※ Tiền thưởng chỉ được tham gia NỔ HŨ-BẮN CÁ nếu vi phạm điều kiện khuyến mãi hệ thống khấu trừ toàn bộ tiền khuyến mãi và tiền thắng phát sinh. <br>
-                ※ Tiền thưởng cần trải qua 5 vòng cược, tương đương 330 điểm cược hợp lệ trước khi rút tiền. <br>
-                ※ Khuyến mãi chỉ được rút tiền 1 lần duy nhất , số tiền còn lại sẽ được hệ thống khấu trừ toàn bộ . <br>
-                ※ Số tiền rút hợp lệ đối với khuyến mãi này từ 50 điểm đến 350 điểm, sau khi rút tiền hệ thống sẽ tự động thu hồi số tiền vượt quá quy định. Mọi hành vi cố tình gian lận số tiền vượt quá giới hạn rút tiền của khuyến mãi sẽ không hợp lệ. <br />
-                ※ Doanh thu cược hợp lệ phải được hoàn thành trong vòng 24 giờ (tính từ thời điểm yêu cầu nhận thưởng) sau khi
-                nhận tiền thưởng. Tiền thưởng sẽ được hệ thống tự động thu hồi nếu không phát sinh cá cược sau thời gian quy
-                định. <br>
-                ※ Mỗi tài khoản, mỗi thông tin cá nhân, mỗi thiết bị / IP / số điện thoại chỉ được nhận thưởng 1 lần, hệ thống
-                sẽ tự động từ chối các tài khoản trùng lặp. <br>
-                ※ Bất cứ thành viên sử dụng các chương trình ảo, phần mềm thay đổi IP/FP để đăng ký tài khoản hàng loạt và nhận
-                tiền thưởng, tất cả IP/thiết bị/tên/số điện thoại di động sẽ được thêm vào danh sách đen và từ chối vĩnh viễn
-                tất cả các chương trình khuyến mãi tại MB66. <br>
-                ※ MB66 có quyền sửa đổi và chấm dứt sự kiện bất cứ lúc nào. <br>
-                ※ Thành viên đăng ký khuyến mãi này không được sửa đổi bất kỳ thông tin thành viên nào trước khi rút tiền hoặc
-                khi số dư của tài khoản còn trên 5 nghìn đồng. Nếu muốn sửa đổi thông tin thành viên sẽ phải chịu khấu trừ tiền
-                thưởng và lợi nhuận. <br>
+            <div class="rule d-none">
+                <div class="form-text-3" id="btnRule">Quy tắc khuyến mãi</div>
+                <div class="rule-text">
+                    ※ Tiền thưởng chỉ được tham gia NỔ HŨ-BẮN CÁ nếu vi phạm điều kiện khuyến mãi hệ thống khấu trừ toàn bộ tiền khuyến mãi và tiền thắng phát sinh. <br>
+                    ※ Tiền thưởng cần trải qua 5 vòng cược, tương đương 330 điểm cược hợp lệ trước khi rút tiền. <br>
+                    ※ Khuyến mãi chỉ được rút tiền 1 lần duy nhất , số tiền còn lại sẽ được hệ thống khấu trừ toàn bộ . <br>
+                    ※ Số tiền rút hợp lệ đối với khuyến mãi này từ 50 điểm đến 350 điểm, sau khi rút tiền hệ thống sẽ tự động thu hồi số tiền vượt quá quy định. Mọi hành vi cố tình gian lận số tiền vượt quá giới hạn rút tiền của khuyến mãi sẽ không hợp lệ. <br />
+                    ※ Doanh thu cược hợp lệ phải được hoàn thành trong vòng 24 giờ (tính từ thời điểm yêu cầu nhận thưởng) sau khi
+                    nhận tiền thưởng. Tiền thưởng sẽ được hệ thống tự động thu hồi nếu không phát sinh cá cược sau thời gian quy
+                    định. <br>
+                    ※ Mỗi tài khoản, mỗi thông tin cá nhân, mỗi thiết bị / IP / số điện thoại chỉ được nhận thưởng 1 lần, hệ thống
+                    sẽ tự động từ chối các tài khoản trùng lặp. <br>
+                    ※ Bất cứ thành viên sử dụng các chương trình ảo, phần mềm thay đổi IP/FP để đăng ký tài khoản hàng loạt và nhận
+                    tiền thưởng, tất cả IP/thiết bị/tên/số điện thoại di động sẽ được thêm vào danh sách đen và từ chối vĩnh viễn
+                    tất cả các chương trình khuyến mãi tại MB66. <br>
+                    ※ MB66 có quyền sửa đổi và chấm dứt sự kiện bất cứ lúc nào. <br>
+                    ※ Thành viên đăng ký khuyến mãi này không được sửa đổi bất kỳ thông tin thành viên nào trước khi rút tiền hoặc
+                    khi số dư của tài khoản còn trên 5 nghìn đồng. Nếu muốn sửa đổi thông tin thành viên sẽ phải chịu khấu trừ tiền
+                    thưởng và lợi nhuận. <br>
+                </div>
             </div>
         </div>
+
     </div>
-    <footer>
+    @* <footer>
         <div class="image-footer">
             <img class="image-footer-pc" src="./images/Footer.png?v=1" alt="MB66 - khuyến mãi" />
             <img class="image-footer-mobi" src="./images/Footer-Mobi.png" alt="MB66 - khuyến mãi" />
         </div>
-    </footer>
+    </footer> *@
     <div class="hp-ss" style="display: none" id="show-congratulations">
         <div class="congrat-wrapper congrat-margin">
             <div class="js-container congrat-container"></div>
@@ -112,6 +112,8 @@
     </script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="js/main1582.js?v=@(DateTime.Now.Ticks)"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 
 </html>

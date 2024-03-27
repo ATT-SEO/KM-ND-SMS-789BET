@@ -13,12 +13,13 @@ namespace FE.CLIENT.Services
             _baseService = baseService;
         }
 
-        public async Task<ResponseDTO?> BoCheckUserAccount(string UserAccount)
+        public async Task<ResponseDTO?> BoCheckUserAccount(CheckAccountRequestDTO accountRequestDTO)
         {
             return await _baseService.SendAsync(new RequestDTO()
             {
-                APIType = SD.APIType.GET,
-                Url = SD.ApiKM58 + "/api/BOAPI/CheckAccountUserName/" + UserAccount
+                APIType = SD.APIType.POST,
+                Data = accountRequestDTO,
+                Url = SD.ApiKM58 + "/api/BOAPI/CheckAccountUserName/"
             });
         }
     }

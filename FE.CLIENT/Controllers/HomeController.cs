@@ -17,23 +17,24 @@ namespace FE.CLIENT.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ResponseDTO _res = await _siteService.GetByProjectCode("FREE66");
+            ResponseDTO _res = await _siteService.GetByProjectCode("bo_789bet");
             Console.WriteLine(JsonConvert.SerializeObject(_res));
             if (_res != null && _res.IsSuccess)
             {
-                List<SiteDTO> _siteService = JsonConvert.DeserializeObject<List<SiteDTO>>(_res.Result.ToString());
-                for (int i = 0; i < _siteService.Count; i++)
+                SiteDTO _siteService = JsonConvert.DeserializeObject<SiteDTO>(_res.Result.ToString());
+                if (_siteService.Status==false)
                 {
-                    if (_siteService[i].Status==false)
-                    {
-                        return Redirect("https://att-maintenance.web.app/");
-                    }
+                    return Redirect("https://att-maintenance.web.app/");
                 }
+                ViewData["Title"] = _siteService.Name;
+                ViewData["Description"] = "Chương trình khuyến mãi của 789BET dành cho thành viên 789BET - Khuyến mãi 789BET ";
+                ViewData["Keywords"] = "789BET, khuyến mãi, khuyến mãi 789BET, đăng ký, hội viên ...";
+                return View();
             }
 
-            ViewData["Title"] = "MB66 - Khuyến mãi MB66";
-            ViewData["Description"] = "Chương trình khuyến mãi của MB66 dành cho thành viên MB66 - Khuyến mãi MB66 ";
-            ViewData["Keywords"] = "MB66, khuyến mãi, khuyến mãi MB66, đăng ký, hội viên ...";
+            ViewData["Title"] = "789BET - Khuyến mãi 789BET";
+            ViewData["Description"] = "Chương trình khuyến mãi của 789BET dành cho thành viên 789BET - Khuyến mãi 789BET ";
+            ViewData["Keywords"] = "789BET, khuyến mãi, khuyến mãi 789BET, đăng ký, hội viên ...";
             return View();
         }
         

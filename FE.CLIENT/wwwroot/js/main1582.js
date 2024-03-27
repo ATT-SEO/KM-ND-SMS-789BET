@@ -18,7 +18,7 @@ function hideLoadingSpinner() {
     document.getElementById("loadingOverlay").style.display = "none";
 }
 $(document).on('click', '#btnCheck', function (e) {
-    var account = $("#userName").val()
+    var account = $("#account").val()
     if (account == "") {
         ShowErrorMsg("Tài khoản không được để trống") //account not null
         return;
@@ -31,59 +31,43 @@ $(document).on('click', '#btnCheck', function (e) {
     };
     showLoadingSpinner();
     grecaptcha.ready(function () {
-        grecaptcha.execute('6LdjDFYpAAAAAPXMRR9_yYBOfBLq5Ikjw0yM8G48', {
+        grecaptcha.execute('6Lfrm6MpAAAAAPPoX7zioJPgJqCgqObe1Usqfgko', {
             action: 'submit_form'
         }).then(function (token) {
             data.RecaptchaToken = token;
             $.ajax("/Account/CheckAccount", {
                 type: "POST",
                 data: JSON.stringify(data),
-                dataType: 'json',
+                //dataType: 'json',
                 contentType: "application/json",
                 success: function (response) {
                     $('#btnCheck').attr('disabled', false);
                     hideLoadingSpinner();
-
-                    if (response.success) {
-                        if (response.result.code == 200) {
-                            if (response.result.status == 2) {
+                    if (response?.isSuccess ) {
+                        console.log(response);
+                        if (response.code == 200) {
+                            if (response.isSuccess == true) {
                                 document.body.style.overflow = 'hidden';
-                                $('#message-success').html(response.result.message.replace(/\n/g, '<br>'));
+                                $('#message-success').html(response.message.replace(/\n/g, '<br>'));
                                 window.confettiful = new Confettiful(document.querySelector(".js-container"));
-                            } else if (response.result.status == 1) {
-                                ShowSuccessMsg(response.result.message);
-                                var phone = response.result.phone;
-                                var smscode = response.result.smsCode;
-                                superPhone = response.result.superPhone;
-                                var verifyCode = response.result.verifyCode
-                                $("#btnCopyContentPhone").attr("data-clipboard-text", superPhone);
-                                $("#btnCopyContent").attr("data-clipboard-text", smscode);
-                                var mobile = superPhone.substring(0, 3) + "." + superPhone.substring(3, 5) + "." + "***" + superPhone.substring(8);
-                                var phone1 = phone.substring(0, 3) + "." + "***" + phone.substring(6);
-                                $("#phone").val(phone1);
-                                $("#oldphone").val(phone);
-                                $("#content").val(smscode);
-                                $("#verifycode").val(verifyCode);
-                                $("#contentPhone").val(superPhone);
-                            } else {
-                                var phone = response.result.phone;
-                                var smscode = response.result.smsCode;
-                                superPhone = response.result.superPhone;
-                                var verifyCode = response.result.verifyCode
-                                $("#btnCopyContentPhone").attr("data-clipboard-text", superPhone);
-                                $("#btnCopyContent").attr("data-clipboard-text", smscode);
-                                var mobile = superPhone.substring(0, 3) + "." + superPhone.substring(3, 5) + "." + "***" + superPhone.substring(8);
-                                var phone1 = phone.substring(0, 3) + "." + "***" + phone.substring(6);
-                                $("#phone").val(phone1);
-                                $("#oldphone").val(phone);
-                                $("#content").val(smscode);
-                                $("#verifycode").val(verifyCode);
-                                $("#contentPhone").val(superPhone);
+                                return;
                             }
-
-                        } else {
-                            ShowErrorMsg(response.result.message);
                         }
+                        if (response.code == 202) {
+                            ShowSuccessMsg(response.message, "Kiểm tra thành công");
+                            return;
+                        }
+                        if (response.code == 250) {
+                            ShowErrorMsg(response.message);
+                            return;
+                        }
+                    } else if (response?.isSuccess == false) {
+                        ShowErrorMsg(response.message); // error
+                        return;
+                    }else {
+                        $("#step-1").removeClass('pt-page-current');
+                        $("#step-2").html(response);
+                        $("#step-2").addClass('pt-page-current pt-page-moveFromTop');
                     }
                 },
                 error: function (error) {
@@ -96,43 +80,47 @@ $(document).on('click', '#btnCheck', function (e) {
     })
 });
 $(document).on('click', '#wrap-form-send-sms', function (e) {
-    const phone = document.getElementById('oldphone').value;
-    const regex = /^\+?[0-9]{3}-?[0-9]{7,11}$/i;
-    if (!regex.test(phone)) {
-        swal({
-            title: "Thất bại",
-            text: `Vui lòng nhập đúng số điện thoại`,
-            icon: "error",
-        });
-
+    superPhone = $("#contentPhone").val();
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+        window.location = "sms://" + superPhone;
     } else {
-        if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
-            window.location = "sms://" + superPhone;
-        } else {
-            window.location = 'sms:' + superPhone + '?body=' + $("#content").val();
-        }
+        window.location = 'sms:' + superPhone + '?body=' + $("#content").val();
     }
+    //const phone = document.getElementById('oldphone').value;
+    //const regex = /^\+?[0-9]{3}-?[0-9]{7,11}$/i;
+    //if (!regex.test(phone)) {
+    //    swal({
+    //        title: "Thất bại",
+    //        text: `Vui lòng nhập đúng số điện thoại`,
+    //        icon: "error",
+    //    });
+
+    //} else {
+    //    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+    //        window.location = "sms://" + superPhone;
+    //    } else {
+    //        window.location = 'sms:' + superPhone + '?body=' + $("#content").val();
+    //    }
+    //}
 });
 $(document).on('click', '#wrap-form-sended-sms', function (e) {
-    var account = $("#userName").val()
-    var phone = $("#oldphone").val()
-    var smscode = $("#content").val()
-
+    var account = $("#account").val();
+    var smscode = $("#content").val();
     var verifycode = $("#verifycode").val()
-    if (account == "" || phone == "") {
+    if (account == "") {
         ShowErrorMsg("Tài khoản không được để trống") //account not null
         return;
     }
     $("#wrap-form-sended-sms").attr('disabled', true);
     var data = {
-        "account": account,
-        "phone": phone,
-        "smsCode": smscode,
+        "Account": account,
+        "SmsCode": smscode,
         "VerifyCode": verifycode,
         "Regfingerprint": $("#regfingerprint").val()
     }
     showLoadingSpinner();
     var countdown = 30;
+
     var countdownInterval = setInterval(function () {
         if (countdown <= 0) {
             clearInterval(countdownInterval);
@@ -144,7 +132,7 @@ $(document).on('click', '#wrap-form-sended-sms', function (e) {
                 success: function (response) {
                     $('#wrap-form-sended-sms').attr('disabled', false);
                     hideLoadingSpinner();
-
+                    console.log(response);
                     if (response.success) {
                         if (response.result.code == 200) {
                             if (response.result.status == 2) {
@@ -184,9 +172,9 @@ function ShowErrorMsg(errormsg) {
     });
 };
 
-function ShowSuccessMsg(successMsg) {
+function ShowSuccessMsg(successMsg, title = "Thành Công") {
     swal({
-        title: "Thành Công",
+        title: title,
         text: successMsg,
         icon: "success",
     });

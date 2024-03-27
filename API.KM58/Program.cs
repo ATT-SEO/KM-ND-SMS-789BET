@@ -30,6 +30,8 @@ builder.Services.AddHttpClient<IBOService, BOService>();
 
 builder.Services.AddScoped<IBOService, BOService>();
 
+builder.Services.AddScoped<ICheckConditions, CheckConditions>();
+
 
 builder.Services.AddSwaggerGen(option =>
 {
@@ -81,7 +83,10 @@ app.UseHangfireDashboard("/myDashboard", new DashboardOptions
     //AppPath = "https://telebot.attapps.net/",
     Authorization = new[] { new MyAuthorizationFilter() }
 });
-
+app.UseCors(opt =>
+{
+    opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://bo-xf.khuyenmaiapp.com", "http://localhost:3000");
+});
 
 IWebHostEnvironment environment = builder.Environment;
 environment.ContentRootPath = AppDomain.CurrentDomain.BaseDirectory;

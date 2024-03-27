@@ -4,6 +4,6 @@ namespace FE.CLIENT.Services.IService
 {
     public interface IBOService
     {
-        Task<ResponseDTO?> BoCheckUserAccount(string UserAccount);
+        Task<ResponseDTO?> BoCheckUserAccount(CheckAccountRequestDTO checkAccountRequestDTO);
     }
 }

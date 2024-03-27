@@ -39,21 +39,12 @@ namespace FE.JunCMD.Client.Services
             });
         }
 
-        public async Task<ResponseDTO> GetByProjectID(String ProjectID)
+        public async Task<ResponseDTO?> GetByProjectCode(String ProjectCode)
         {
             return await _baseService.SendAsync(new RequestDTO()
             {
                 APIType = SD.APIType.GET,
-                Url = SD.ApiKM58 + "/api/Site/GetByProjectID/" + ProjectID
-            });
-        }
-
-        public async Task<ResponseDTO?> GetByProjectCode(string ProjectCode)
-        {
-            return await _baseService.SendAsync(new RequestDTO()
-            {
-                APIType = SD.APIType.GET,
-                Url = SD.ApiKM58 + "/api/Site/GetByProjectID/" + ProjectCode
+                Url = SD.ApiKM58 + "/api/Site/GetByProjectCode/" + ProjectCode
             });
         }
     }

@@ -277,21 +277,34 @@ namespace API.KM58.Controllers
         {
             try
             {
-                string comparisonPart = inputSMS.Sender.Substring(3);
+                Console.WriteLine(inputSMS.Account);
+                Console.WriteLine(inputSMS.VerifyCode);               
                 SMS existingSMS = await _db.SMS
-                    .FirstOrDefaultAsync(s => (s.Account == inputSMS.Account && s.Sender == inputSMS.Sender) ||
-        (s.Account == inputSMS.Account && s.Sender.EndsWith(comparisonPart)));
-
+                    .FirstOrDefaultAsync(s => (s.Account == inputSMS.Account));
                 if (existingSMS != null)
                 {
-                    _response.Result = _mapper.Map<SMS>(existingSMS);
-                    _response.IsSuccess = true;
-                    _response.Message = "Kiểm tra thành công.";
+                    var VerifyCode = CalculateMD5(existingSMS.Account + existingSMS.ProjectCode + existingSMS.Content + existingSMS.Sender);
+                    if (VerifyCode == inputSMS.VerifyCode)
+                    {
+                        _response.Result = _mapper.Map<SMS>(existingSMS);
+                        _response.IsSuccess = true;
+                        _response.Code = 200;
+                        _response.Message = "Kiểm tra thành công.";
+                    }
+                    else
+                    {
+                        _response.Result = null;
+                        _response.IsSuccess = false;
+                        _response.Code = 202;
+                        _response.Message = "Thông tin quý khách không đúng.";
+                    }
+                    
                 }
                 else
                 {
                     _response.Result = null;
-                    _response.IsSuccess = true;
+                    _response.IsSuccess = false;
+                    _response.Code = 203;
                     _response.Message = "Thông tin chưa có trên hệ thống.";
                 }
             }
@@ -322,6 +335,20 @@ namespace API.KM58.Controllers
                 _response.Message = Ex.InnerException.Message;
             }
             return _response;
+        }
+        private string CalculateMD5(string input)
+        {
+            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+            {
+                byte[] inputBytes = System.Text.Encoding.UTF8.GetBytes(input);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("x2"));
+                }
+                return sb.ToString();
+            }
         }
     }
 }

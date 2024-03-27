@@ -22,6 +22,56 @@ namespace API.KM58.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("API.KM58.Model.AccountRegisters", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Account")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("AutoPoint")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Device")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Point")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProjectCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Sender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserPoint")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isSMS")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AccountRegisters");
+                });
+
             modelBuilder.Entity("API.KM58.Model.LogAccount", b =>
                 {
                     b.Property<int>("Id")
@@ -45,12 +95,10 @@ namespace API.KM58.Migrations
                     b.Property<string>("Project")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SiteID")
-                        .HasColumnType("int");
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SiteID");
 
                     b.ToTable("LogAccounts");
                 });
@@ -99,6 +147,9 @@ namespace API.KM58.Migrations
                     b.Property<string>("Account")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("AutoPoint")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -107,6 +158,9 @@ namespace API.KM58.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Device")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneReceive")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Point")
@@ -124,6 +178,9 @@ namespace API.KM58.Migrations
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdatedTime")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -149,7 +206,7 @@ namespace API.KM58.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProjectID")
+                    b.Property<string>("ProjectCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -173,13 +230,31 @@ namespace API.KM58.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("AutoPoint")
+                        .HasColumnType("bit");
+
                     b.Property<string>("CheckAccountAPI")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("CheckBank")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CheckFP")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CheckIP")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CheckSMS")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("CreatedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Ecremarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Label")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MaxPoint")
@@ -206,7 +281,7 @@ namespace API.KM58.Migrations
                     b.Property<int>("Round")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("Status")
+                    b.Property<bool>("Status")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("UpdatedTime")
@@ -215,17 +290,6 @@ namespace API.KM58.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sites");
-                });
-
-            modelBuilder.Entity("API.KM58.Model.LogAccount", b =>
-                {
-                    b.HasOne("API.KM58.Model.Site", "Site")
-                        .WithMany()
-                        .HasForeignKey("SiteID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Site");
                 });
 
             modelBuilder.Entity("API.KM58.Model.PhoneNumber", b =>

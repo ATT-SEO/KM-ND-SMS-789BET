@@ -31,6 +31,8 @@ namespace API.KM58.Controllers
             {
                 List<PhoneNumber> phoneNumbers = await _db.PhoneNumbers.Include(u => u.Site).ToListAsync();
                 _response.Result = _mapper.Map<List<PhoneNumberDTO>>(phoneNumbers);
+                _response.Code = 200;
+                _response.TotalCount = phoneNumbers.Count;
             }
             catch (Exception ex)
             {
@@ -48,6 +50,8 @@ namespace API.KM58.Controllers
             {
                 PhoneNumber phoneNumber = await _db.PhoneNumbers.Include(u => u.Site).Where(s => s.Id == id).FirstOrDefaultAsync();
                 _response.Result = _mapper.Map<PhoneNumberDTO>(phoneNumber);
+                _response.Code = 200;
+                _response.TotalCount = 1;
             }
             catch (Exception Ex)
             {
@@ -65,6 +69,8 @@ namespace API.KM58.Controllers
             {
                 PhoneNumber phoneNumber = await _db.PhoneNumbers.Include(u => u.Site).Where(s => s.Status == true && s.Number == Number).FirstOrDefaultAsync();
                 _response.Result = _mapper.Map<PhoneNumberDTO>(phoneNumber);
+                _response.Code = 200;
+                _response.TotalCount = 1;
             }
             catch (Exception ex)
             {
@@ -80,8 +86,10 @@ namespace API.KM58.Controllers
         {
             try
             {
-                List<PhoneNumber> phoneNumbers = await _db.PhoneNumbers.Include(u => u.Site).Where(u => u.SiteID == SiteID && u.Status==true).ToListAsync();
+                List<PhoneNumber> phoneNumbers = await _db.PhoneNumbers.Include(u => u.Site).Where(u => u.SiteID == SiteID).ToListAsync();
                 _response.Result = _mapper.Map<List<PhoneNumberDTO>>(phoneNumbers);
+                _response.Code = 200;
+                _response.TotalCount = phoneNumbers.Count;
             }
             catch (Exception Ex)
             {
@@ -92,14 +100,16 @@ namespace API.KM58.Controllers
         }
 
         [HttpGet]
-        [Route("GetListPhoneByProjectID/{ProjectID}")]
-        public async Task<ResponseDTO> GetListPhoneByProjectID(string ProjectID)
+        [Route("GetListPhoneByProjectCode/{ProjectCode}")]
+        public async Task<ResponseDTO> GetListPhoneByProjectCode(string ProjectCode)
         {
             try
             {
-                Console.WriteLine(ProjectID + "*****************");
-                List<PhoneNumber> phoneNumbers = await _db.PhoneNumbers.Include(u => u.Site).Where(u => u.Site.Project == ProjectID).ToListAsync();
+                Console.WriteLine(ProjectCode + "*****************");
+                List<PhoneNumber> phoneNumbers = await _db.PhoneNumbers.Include(u => u.Site).Where(u => u.Site.Project == ProjectCode).ToListAsync();
                 _response.Result = _mapper.Map<List<PhoneNumberDTO>>(phoneNumbers);
+                _response.Code = 200;
+                _response.TotalCount = phoneNumbers.Count;
             }
             catch (Exception Ex)
             {
@@ -120,6 +130,7 @@ namespace API.KM58.Controllers
                 _db.PhoneNumbers.Add(phoneNumberDTO);
                 _db.SaveChanges();
                 _response.Result = _mapper.Map<PhoneNumber>(phoneNumber);
+                _response.Code = 200;
             }
             catch (Exception ex)
             {
@@ -130,15 +141,20 @@ namespace API.KM58.Controllers
         }
 
         [HttpPut]
-        public ResponseDTO Put([FromBody] PhoneNumber phoneNumberDTO)
+        public async Task<ResponseDTO> Put([FromBody] PhoneNumber phoneNumberDTO)
         {
             try
             {
-                phoneNumberDTO.UpdatedTime = DateTime.Now;
+
+                Site existingSite = await _db.Sites.FirstOrDefaultAsync(s => s.Id == phoneNumberDTO.Id);
+                phoneNumberDTO.CreatedTime = existingSite.CreatedTime;
+                phoneNumberDTO.UpdatedTime = DateTime.Now; 
                 PhoneNumber phoneNumber = _mapper.Map<PhoneNumber>(phoneNumberDTO);
                 _db.PhoneNumbers.Update(phoneNumber);
                 _db.SaveChanges();
                 _response.Result = _mapper.Map<PhoneNumber>(phoneNumber);
+                _response.Code = 200;
+
             }
             catch (Exception ex)
             {
@@ -157,6 +173,8 @@ namespace API.KM58.Controllers
                 PhoneNumber phoneNumber = _db.PhoneNumbers.First(u => u.Id == Id);
                 _db.PhoneNumbers.Remove(phoneNumber);
                 _db.SaveChanges();
+                _response.Code = 200;
+                _response.IsSuccess = true;
             }
             catch (Exception ex)
             {

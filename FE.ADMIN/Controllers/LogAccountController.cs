@@ -31,7 +31,7 @@ namespace FE.ADMIN.Controllers
             {
                 ViewBag.LoginUser = _userDTO;
                 parameters.ProjectCode = _userDTO.ProjectCode;
-                ResponseDTO? res = await _logAccount.GetLogAccountListByProjectID(parameters);
+                ResponseDTO? res = await _logAccount.GetLogAccountListByProjectCode(parameters);
                 if (res != null && res.IsSuccess)
                 {
                     var resultObject = JObject.FromObject(res.Result);
