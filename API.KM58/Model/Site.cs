@@ -9,6 +9,7 @@ namespace API.KM58.Model
         public string? Name { get; set; }
         public string? Project { get; set; }
         public int Point { get; set; }
+        public int Audit { get; set; }
         public int MinPoint { get; set; }
         public int MaxPoint { get; set; }
         public int Round { get; set; }

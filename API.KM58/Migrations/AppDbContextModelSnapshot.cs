@@ -34,6 +34,9 @@ namespace API.KM58.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Audit")
+                        .HasColumnType("int");
+
                     b.Property<bool>("AutoPoint")
                         .HasColumnType("bit");
 
@@ -70,8 +73,14 @@ namespace API.KM58.Migrations
                     b.Property<string>("UserPoint")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("handler")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("isSMS")
                         .HasColumnType("bit");
+
+                    b.Property<string>("reason_deny")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -241,6 +250,9 @@ namespace API.KM58.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Audit")
+                        .HasColumnType("int");
 
                     b.Property<bool>("AutoPoint")
                         .HasColumnType("bit");

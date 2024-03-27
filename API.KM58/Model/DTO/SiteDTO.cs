@@ -9,6 +9,7 @@
         public int MinPoint { get; set; }
         public int MaxPoint { get; set; }
         public int Round { get; set; }
+        public int Audit { get; set; }
         public string? Label { get; set; }
         public string? Remarks { get; set; }
         public bool AutoPoint { get; set; } = false;
