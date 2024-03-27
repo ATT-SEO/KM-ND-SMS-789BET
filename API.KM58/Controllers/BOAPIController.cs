@@ -166,8 +166,6 @@ namespace API.KM58.Controllers
                     accountRegistersDTO.Point = Point;
                     accountRegistersDTO.AutoPoint = oneSite.AutoPoint;
                     accountRegistersDTO.ProjectCode = oneSite.Project;
-                    accountRegistersDTO.JsonSite = oneSite.ToString();
-
                     var CheckAccountRegisters = await _checkConditions.CheckAccountRegisters(accountRegistersDTO, oneSite); // vừa check vừa tạo mới Account đăng ký KM
                     Console.WriteLine("logggg account add - " + JsonConvert.SerializeObject(CheckAccountRegisters));
                     return CheckAccountRegisters;
