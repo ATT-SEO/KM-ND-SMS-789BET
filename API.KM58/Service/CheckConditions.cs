@@ -163,13 +163,18 @@ namespace API.KM58.Service
                 }
                 else
                 {
-                    if (logAccount1.Account != logAccountDTO.Account)
+                    AccountRegisters logAccount2 = await _db.AccountRegisters.FirstOrDefaultAsync(s => (s.IP == logAccountDTO.IP && s.FP == logAccountDTO.FP) && s.Status == 1 && s.ProjectCode == logAccountDTO.Project);
+                    if(logAccount2 != null)
                     {
-                        Log.Information($"ERROR SEVICE CheckLogAccount LẠM DỤNG || {logAccountDTO.Account} || {logAccountDTO.Project} || IP:{logAccountDTO.IP} || FP:{logAccountDTO.FP}");
-                        _response.IsSuccess = false;
-                        _response.Message = "Dấu hiệu bất thường.";
-                        return _response;
+                        if (logAccount2.Account != logAccountDTO.Account)
+                        {
+                            Log.Information($"ERROR SEVICE CheckLogAccount LẠM DỤNG || {logAccountDTO.Account} || {logAccountDTO.Project} || IP:{logAccountDTO.IP} || FP:{logAccountDTO.FP}");
+                            _response.IsSuccess = false;
+                            _response.Message = "Dấu hiệu bất thường.";
+                            return _response;
+                        }
                     }
+                   
                     Log.Information($"SUCCESS SEVICE CheckLogAccount CHECK N || {logAccountDTO.Account} || {logAccountDTO.Project} || IP:{logAccountDTO.IP} || FP:{logAccountDTO.FP}");
                     _response.IsSuccess = true;
                     _response.Code = 200;
