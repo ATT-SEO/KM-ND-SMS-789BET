@@ -15,6 +15,8 @@ namespace API.KM58.Model.DTO
         public bool AutoPoint { get; set; } = false;
         public string? Account { get; set; }
         public int Point { get; set; }
+        public string? IP { get; set; }
+        public string? FP { get; set; }
         public DateTime? CreatedTime { get; set; }
         public DateTime? SiteTime { get; set; }
         public DateTime? UpdatedTime { get; set; }

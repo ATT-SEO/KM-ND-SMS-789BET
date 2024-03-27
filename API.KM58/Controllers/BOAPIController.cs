@@ -155,6 +155,8 @@ namespace API.KM58.Controllers
                                 PhoneReceive = randomPhoneNumber.Number,
                                 AutoPoint = oneSite.AutoPoint,
                                 Status = false,
+                                FP = logAccountDTO.FP,
+                                IP = logAccountDTO.IP,
                                 CreatedTime = DateTime.Now,
                                 UpdatedTime = DateTime.Now,
                             };
@@ -169,6 +171,9 @@ namespace API.KM58.Controllers
                     accountRegistersDTO.Point = Point;
                     accountRegistersDTO.AutoPoint = oneSite.AutoPoint;
                     accountRegistersDTO.ProjectCode = oneSite.Project;
+                    accountRegistersDTO.FP = logAccountDTO.FP;
+                    accountRegistersDTO.IP = logAccountDTO.IP;
+
                     var CheckAccountRegisters = await _checkConditions.CheckAccountRegisters(accountRegistersDTO, oneSite); // vừa check vừa tạo mới Account đăng ký KM
                     Console.WriteLine("logggg account add - " + JsonConvert.SerializeObject(CheckAccountRegisters));
                     return CheckAccountRegisters;

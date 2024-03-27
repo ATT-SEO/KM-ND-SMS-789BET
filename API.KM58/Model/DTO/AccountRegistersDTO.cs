@@ -13,6 +13,8 @@
         public string Account { get; set; }
         public int Point { get; set; }
         public string? UserPoint { get; set; }
+        public string? IP { get; set; }
+        public string? FP { get; set; }
         public DateTime? CreatedTime { get; set; }
         public DateTime? UpdatedTime { get; set; }
     }

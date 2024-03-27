@@ -46,6 +46,12 @@ namespace API.KM58.Migrations
                     b.Property<string>("Device")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IP")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Point")
                         .HasColumnType("int");
 
@@ -158,6 +164,12 @@ namespace API.KM58.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Device")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IP")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneReceive")

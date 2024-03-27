@@ -80,6 +80,8 @@ namespace API.KM58.Service
                                     Sender = _targetSMS.Sender,
                                     Content = _targetSMS.Content,
                                     Device = _targetSMS.Device,
+                                    IP = _targetSMS.IP,
+                                    FP = _targetSMS.FP,
                                 };
                                 if (site.AutoPoint == true)
                                 {
