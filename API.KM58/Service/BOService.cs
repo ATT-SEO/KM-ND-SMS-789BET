@@ -1,6 +1,7 @@
 ﻿using API.KM58.Model.DTO;
 using API.KM58.Service.IService;
 using Newtonsoft.Json;
+using Serilog;
 namespace API.KM58.Service
 {
     public class BOService : IBOService
@@ -78,7 +79,9 @@ namespace API.KM58.Service
                 });
 
                 var apiResponse = await client.SendAsync(message);
+
                 Console.WriteLine(JsonConvert.SerializeObject(apiResponse));
+
                 switch (apiResponse.StatusCode)
                 {
                     case System.Net.HttpStatusCode.NotFound:
@@ -91,6 +94,8 @@ namespace API.KM58.Service
                         return new() { IsSuccess = false, Message = "Internal Server Error" };
                     default:
                         _responseDTO.Result = await apiResponse.Content.ReadAsStringAsync();
+                        _responseDTO.Code = 200;
+                        _responseDTO.Result = true;
                         return _responseDTO;
                 }
             }

@@ -58,14 +58,14 @@ namespace API.KM58.Controllers
                 }
                 Random rnd = new Random();
                 int Point = rnd.Next(oneSite.MinPoint, oneSite.MaxPoint + 1); /// điểm random
-                /// check trùng FP và IP
-                //var checkLogAccount = await _checkConditions.CheckLogAccount(logAccountDTO);
-                //if(checkLogAccount.Code == 404 || checkLogAccount.IsSuccess == false )
-                //{
-                //    _response.Result = "Dấu hiệu bất thường. Vui lòng xem lại hoặc liên hệ chúng tôi !!!";
-                //    _response.IsSuccess = false;
-                //    return _response;
-                //}
+                                                                              /// check trùng FP và IP
+                var checkLogAccount = await _checkConditions.CheckLogAccount(logAccountDTO);
+                if (checkLogAccount.Code == 404 || checkLogAccount.IsSuccess == false)
+                {
+                    _response.Result = "Dấu hiệu bất thường. Vui lòng xem lại hoặc liên hệ chúng tôi !!!";
+                    _response.IsSuccess = false;
+                    return _response;
+                }
 
                 var jsonAll = await _boService.BOGetCheckAccount(_account);
                 //JObject jsonResponseData = (JObject)JsonConvert.DeserializeObject(jsonAll.Result.ToString());
@@ -92,8 +92,9 @@ namespace API.KM58.Controllers
                         if (bankAccounts == null || bankAccounts.Count <= 0)
                         {
                             Log.Information($"KIEM TRA TAI KHOAN || {_account} || {_project} || KHÔNG CHƯA CẬP NHẬT NGÂN HÀNG");
-                            _response.Result = "Tài khoản của bạn chưa đủ điều kiện nhận thưởng";
+                            _response.Result = "Tài khoản của bạn chưa đủ điều kiện nhận thưởng. Vui lòng cập nhật thông tin ngân hàng để được nhận thưởng !!!";
                             _response.IsSuccess = false;
+                            _response.Code = 9032;
                             return _response;
                         }
                     }
@@ -102,8 +103,9 @@ namespace API.KM58.Controllers
                         if (jsonResponseData.result.detail?.Member?.Mobile == null)
                         {
                             Log.Information($"KIEM TRA TAI KHOAN || {_account} || {_project} || KHÔNG CHƯA CẬP NHẬT SỐ ĐIỆN THOẠI");
-                            _response.Result = "Tài khoản của bạn chưa đủ điều kiện nhận thưởng";
+                            _response.Result = "Tài khoản của bạn chưa đủ điều kiện nhận thưởng. Vui lòng cập nhật thêm thông tin liên hệ ( số điện thoại )";
                             _response.IsSuccess = false;
+                            _response.Code = 9033;
                             return _response;
                         }
                         else

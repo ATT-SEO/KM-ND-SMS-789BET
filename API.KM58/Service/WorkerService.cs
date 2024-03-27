@@ -38,14 +38,20 @@ namespace API.KM58.Service
                     {
                         SMSRawData _tempSMSRawData = _listSMSRawData[i];
                         Log.Information("SMS_RAW_DATA => [" + _tempSMSRawData.Sender + "|" + _tempSMSRawData.Content + "|" + _tempSMSRawData.ProjectCode + "|" + _tempSMSRawData.Device + "]");
-
+                        //ConvertPhoneNumber.ConvertPhone _tempSMSRawData.Sender
                         //Maching with data in the request list
+                        string comparisonPart = _tempSMSRawData.Sender.Substring(3);
+                        Log.Information("FOUND_REQUEST SMSSSS DDEN 1 => " + comparisonPart);
+
+                        //x => x.Sender == _tempSMSRawData.Sender
                         SMS _targetSMS = await _dbContext.SMS.Where(
-                                                            x => x.Sender == _tempSMSRawData.Sender &&
+                                                           x => x.Sender.EndsWith(comparisonPart) &&
                                                             x.Content == _tempSMSRawData.Content &&
                                                             x.ProjectCode == _tempSMSRawData.ProjectCode &&
                                                             x.Status == false).FirstOrDefaultAsync();
-                        if (_targetSMS != null && _targetSMS.CreatedTime == null && _targetSMS.Status == false)
+                        //Log.Information("FOUND_REQUEST 1 => " + _targetSMS.Account);
+
+                        if (_targetSMS != null && _targetSMS.Status == false)
                         {
                             //Found the request
                             //Log.Information(JsonConvert.SerializeObject(_targetSMS));
@@ -66,19 +72,25 @@ namespace API.KM58.Service
 
                                 AccountRegistersDTO accountRegistersDTO = new AccountRegistersDTO
                                 {
-                                   Account = _targetSMS.Account,
-                                   Status = 0,
-                                   isSMS = true,
-                                   Point = Point,
-                                   ProjectCode = site.Project,
-                                   Sender = _targetSMS.Sender,
-                                   Content = _targetSMS.Content,
-                                   Device = _targetSMS.Device,
+                                    Account = _targetSMS.Account,
+                                    Status = 0,
+                                    isSMS = true,
+                                    Point = Point,
+                                    ProjectCode = site.Project,
+                                    Sender = _targetSMS.Sender,
+                                    Content = _targetSMS.Content,
+                                    Device = _targetSMS.Device,
                                 };
-                                var CheckAccountRegisters = await _checkConditions.CheckAccountRegisters(accountRegistersDTO, site);
-                                Log.Information(" KTRA CheckAccountRegisters AUTO CHECK SMS  ||   [" + @CheckAccountRegisters?.ToString() + "]");
                                 if (site.AutoPoint == true)
-                                { 
+                                {
+                                    accountRegistersDTO.AutoPoint = true;
+
+                                }
+
+                                 var CheckAccountRegisters = await _checkConditions.CheckAccountRegisters(accountRegistersDTO, site);
+                                 Log.Information(" KTRA CheckAccountRegisters AUTO CHECK SMS  ||   [" + JsonConvert.SerializeObject(@CheckAccountRegisters) + "]");
+                                //if (site.AutoPoint == true)
+                                //{ 
                                     /// cộng điểm auto
                                     JObject jsonResponseData = null;
 
@@ -94,10 +106,10 @@ namespace API.KM58.Service
                                     //    jsonResponseData = (JObject)JsonConvert.DeserializeObject(jsonAllJiLiFishTickets.Result.ToString());
                                     //}
                                     
-                                }
+                                //}
                                     
 
-                                if (CheckAccountRegisters.IsSuccess == true && CheckAccountRegisters.Code == 201) // cập nhật trạng thái của SMS chuyển vào Account Register
+                                if (CheckAccountRegisters.IsSuccess == true) // cập nhật trạng thái của SMS chuyển vào Account Register
                                 {
                                     //Update Request To Done
                                     _targetSMS.ProjectCode = _tempSMSRawData.ProjectCode;

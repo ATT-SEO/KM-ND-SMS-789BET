@@ -59,28 +59,26 @@ namespace API.KM58.Service
                     accountRegistersDTO.CreatedTime = DateTime.Now;
                     accountRegistersDTO.UpdatedTime = DateTime.Now;
                     AccountRegisters createRegisters = _mapper.Map<AccountRegisters>(accountRegistersDTO);
-                    if (accountRegistersDTO.AutoPoint == true)
+                    if (oneSite.AutoPoint == true)
                     {
+                        createRegisters.AutoPoint = true;
                         // cộng điểm thẳng lên BO Nếu đang là cộng điểm tự động
                         if (oneSite.Project == "bo_789bet")
                         {
                             var addPointBO = await _boService.addPointBo789BET(oneSite.Project, accountRegistersDTO.Account, accountRegistersDTO.Point, oneSite.Round , oneSite.Remarks, oneSite.Ecremarks);
-                            dynamic jsonResponseData = JsonConvert.DeserializeObject(addPointBO.ToString());
-                            Console.WriteLine("ssss điểm  : " + jsonResponseData);
-                            if(jsonResponseData != null && jsonResponseData.valid == false)
+                            Log.Information($"CONG TU DONG LEN BO " + addPointBO.IsSuccess);
+
+                            if (addPointBO.IsSuccess == false)
                             {
-                                Log.Information($"ERROR SEVICE CheckAccountRegisters || {accountRegistersDTO.Account} || {accountRegistersDTO.ProjectCode} || {jsonResponseData.mess}");
+                                Log.Information($"ERROR SEVICE CheckAccountRegisters BO || {accountRegistersDTO?.Account} || {accountRegistersDTO?.ProjectCode} || LOI CONG TU DONG LEN BO");
                                 _response.IsSuccess = false;
-                                _response.Code = jsonResponseData.status_code;
+                                _response.Code = 404;
                                 _response.Message = "Đăng ký Nhận điểm thưởng không thành công. Vui lòng liên hệ bộ phận chăm sóc để được giải đáp.";
                                 return _response;
-
-                            }
-                            if (jsonResponseData != null && jsonResponseData.Count > 0)
-                            {
-                                createRegisters.Status = 1;
+                            }else {
                                 Log.Information($"CỘNG TỰ ĐỘNG THÀNH CÔNG || {accountRegistersDTO.Account} || {accountRegistersDTO.Point} ĐIỂM || {accountRegistersDTO.ProjectCode}");
-                                _response.Code = 201;
+                                createRegisters.Status = 1;
+                                _response.Code = 200;
                                 _response.Message = "Nhận thưởng thành công.";
                             }
                         }
@@ -92,7 +90,7 @@ namespace API.KM58.Service
                     }
                     await _db.AccountRegisters.AddAsync(createRegisters);
                     await _db.SaveChangesAsync();
-                    _response.Result = _mapper.Map<AccountRegistersDTO>(createRegisters);
+                    _response.Result = _mapper.Map<AccountRegisters>(createRegisters);
                     _response.IsSuccess = true;
                     Log.Information($"SEVICE CheckAccountRegisters TẠO MỚI || {accountRegistersDTO.Account} || {accountRegistersDTO.ProjectCode}");
                     return _response;
@@ -101,7 +99,7 @@ namespace API.KM58.Service
             }
             catch (Exception ex)
             {
-                Log.Information($"ERROR SEVICE CheckAccountRegisters || {accountRegistersDTO.Account} || {accountRegistersDTO.ProjectCode} || {ex.Message}");
+                Log.Information($"ERROR SEVICE CheckAccountRegisters || {accountRegistersDTO.Account} || {accountRegistersDTO.ProjectCode} ||  aaa");
                 _response.IsSuccess = false;
                 _response.Message =  ex.Message;
                 _response.Code = 500;
