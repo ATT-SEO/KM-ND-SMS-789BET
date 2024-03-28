@@ -46,7 +46,7 @@ namespace API.KM58.Service
                     }
                     else if(registers.Status == 0){
                         _response.IsSuccess = true;
-                        _response.Message = "Tài khoản đang trong trạng thái chờ cộng điểm.";
+                        _response.Message = "Tài khoản đang trong trạng thái chờ xử lý.";
                         _response.Code = 200;
                         Log.Information($"SEVICE CheckAccountRegisters CHỜ CỘNG ĐIỂM || {registers.Account} || {registers.ProjectCode}");
                    }else
@@ -102,7 +102,7 @@ namespace API.KM58.Service
                         }
                         Log.Information($"SUCCESS SEVICE GỬI DUYỆT TAY THÀNH CÔNG || {accountRegistersDTO.Account} || {accountRegistersDTO.ProjectCode}");
                         createRegisters.Status = 0;
-                        _response.Message = "Đăng ký Nhận điểm thành công. Vui lòng chờ hệ thống cộng điểm.";
+                        _response.Message = "Đăng ký nhận khuyến mãi thành công. Vui lòng chờ hệ thống xử lý.";
                         _response.Code = 201;
                     }
                     await _db.AccountRegisters.AddAsync(createRegisters);
@@ -226,7 +226,7 @@ namespace API.KM58.Service
                 else if (registers.Status == 0)
                 {
                     _response.IsSuccess = true;
-                    _response.Message = "Tài khoản đang trong trạng thái chờ cộng điểm.";
+                    _response.Message = "Tài khoản đang trong trạng thái chờ xử lý.";
                     _response.Code = 200;
                     Log.Information($"SEVICE CheckOneAccountRegisters CHỜ CỘNG ĐIỂM || {registers.Account} || {registers.ProjectCode}");
                 }
