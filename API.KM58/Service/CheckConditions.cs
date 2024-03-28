@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using System.Reflection;
+using System.Security.Cryptography;
 
 namespace API.KM58.Service
 {
@@ -58,6 +59,8 @@ namespace API.KM58.Service
                 {
                     accountRegistersDTO.CreatedTime = DateTime.Now;
                     accountRegistersDTO.UpdatedTime = DateTime.Now;
+                    accountRegistersDTO.Token = SHA1.Create(accountRegistersDTO.Account + (accountRegistersDTO.CreatedTime).ToString).ToString();
+
                     AccountRegisters createRegisters = _mapper.Map<AccountRegisters>(accountRegistersDTO);
                     if (oneSite.AutoPoint == true)
                     {
@@ -85,6 +88,16 @@ namespace API.KM58.Service
                         }
                     }else
                     {
+                        var addHandApprove = await _boService.handApproveAccount(accountRegistersDTO, oneSite);
+                        if(addHandApprove.IsSuccess == false)
+                        {
+                            Log.Information($"ERROR SEVICE GỬI DUYỆT TAY THẤT BẠI || {accountRegistersDTO.Account} || {accountRegistersDTO.ProjectCode}");
+                            _response.IsSuccess = false;
+                            _response.Message = addHandApprove.Message;
+                            _response.Code = 500;
+                            return _response;
+                        }
+                        Log.Information($"SUCCESS SEVICE GỬI DUYỆT TAY THÀNH CÔNG || {accountRegistersDTO.Account} || {accountRegistersDTO.ProjectCode}");
                         createRegisters.Status = 0;
                         _response.Message = "Đăng ký Nhận điểm thành công. Vui lòng chờ hệ thống cộng điểm.";
                         _response.Code = 201;

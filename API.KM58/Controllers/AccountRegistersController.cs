@@ -181,6 +181,7 @@ namespace API.KM58.Controllers
                 _response.IsSuccess = false;
                 _response.Message = ex.Message; // Xử lý lỗi nếu có
             }
+            _response.TotalCount = 1;
             return _response;
         }
         // DELETE api/<AccountRegistersController>/5
