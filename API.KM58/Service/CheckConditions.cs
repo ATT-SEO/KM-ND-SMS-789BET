@@ -146,6 +146,7 @@ namespace API.KM58.Service
                     _response.Result = _mapper.Map<SMSDTO>(existingSMS);
                     _response.IsSuccess = true;
                     _response.Message = "Đã có SMS ở hệ CheckAccountSMS.";
+                    _response.Code = 200;
                     Log.Information($"SEVICE CheckAccountSMS TỒN TẠI || {smsDTO.Account} || {smsDTO.Sender}");
                 }
             }
