@@ -60,7 +60,9 @@ namespace API.KM58.Controllers
                 int Point = rnd.Next(oneSite.MinPoint, oneSite.MaxPoint + 1); /// điểm random
                                                                               /// check trùng FP và IP
                 var checkLogAccount = await _checkConditions.CheckLogAccount(logAccountDTO);
-                if (checkLogAccount.Code == 404 || checkLogAccount.IsSuccess == false)
+                Log.Information($"KIEM TRA TAI KHOAN 2 ||  {checkLogAccount.IsSuccess} || {checkLogAccount.Code}");
+
+                if (checkLogAccount.IsSuccess == false)
                 {
                     _response.Message = "Dấu hiệu bất thường.Bạn đã thực hiện nhiều tài khoản trong 1 thiết bị. Vui lòng xem lại hoặc liên hệ chúng tôi !!!";
                     _response.IsSuccess = false;

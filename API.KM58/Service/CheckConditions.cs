@@ -177,6 +177,7 @@ namespace API.KM58.Service
                     _response.IsSuccess = true;
                     _response.Code = 201;
                     Log.Information($"SUCCESS SEVICE CheckLogAccount || {logAccountDTO.Account} || {logAccountDTO.Project} || IP:{logAccountDTO.IP} || FP:{logAccountDTO.FP}");
+                    return _response;
                 }
                 else
                 {
@@ -205,6 +206,7 @@ namespace API.KM58.Service
                 Log.Information($"ERROR SEVICE CheckLogAccount || {logAccountDTO.Account} || {logAccountDTO.Project} || {ex.Message}");
                 _response.IsSuccess = false;
                 _response.Message = ex.Message;
+                return _response;
             }
             
             return _response;
