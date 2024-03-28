@@ -155,6 +155,9 @@ namespace API.KM58.Controllers
                 if (accountToUpdate != null)
                 {
                     accountToUpdate.Status = (int)accountRegistersDTO.Status;
+                    accountToUpdate.reason_deny = (accountRegistersDTO.reason_deny).ToString();
+                    accountToUpdate.handler = (accountRegistersDTO.handler).ToString();
+
                     _db.SaveChanges();
                     _response.IsSuccess = true;
                     _response.Code = 200;

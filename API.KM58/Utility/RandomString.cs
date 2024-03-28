@@ -1,5 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using System.Text;
+using API.KM58.Model.DTO;
+using System.Security.Cryptography;
 
 namespace API.KM58.Utility
 {
@@ -37,6 +39,20 @@ namespace API.KM58.Utility
             string numbers = "0123456789";
             return new string(Enumerable.Repeat(numbers, count)
               .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+        public static string ComputeSHA1Hash(string combinedString)
+        {
+            using (SHA1 sha1 = SHA1.Create())
+            {
+                byte[] hashBytes = sha1.ComputeHash(Encoding.UTF8.GetBytes(combinedString));
+
+                StringBuilder sb = new StringBuilder();
+                foreach (byte b in hashBytes)
+                {
+                    sb.Append(b.ToString("x2"));
+                }
+                return sb.ToString();
+            }
         }
     }
 }

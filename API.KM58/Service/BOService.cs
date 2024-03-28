@@ -142,7 +142,7 @@ namespace API.KM58.Service
                 });
 
                 var apiResponse = await client.SendAsync(message);
-                Log.Information($"SUCCESS SEVICE BOAPI SEND DATA TTKM || {accountRegisters.Account} || {accountRegisters.ProjectCode} || {JsonConvert.SerializeObject(apiResponse)}");
+                Log.Information($"SUCCESS SEVICE BOAPI SEND DATA TTKM || {accountRegisters.Account} || {accountRegisters.ProjectCode}");
                 switch (apiResponse.StatusCode)
                 {
                     case System.Net.HttpStatusCode.NotFound:

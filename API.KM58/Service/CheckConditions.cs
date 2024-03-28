@@ -2,6 +2,7 @@
 using API.KM58.Model;
 using API.KM58.Model.DTO;
 using API.KM58.Service.IService;
+using API.KM58.Utility;
 using AutoMapper;
 using Azure;
 using Microsoft.EntityFrameworkCore;
@@ -59,10 +60,11 @@ namespace API.KM58.Service
                 {
                     accountRegistersDTO.CreatedTime = DateTime.Now;
                     accountRegistersDTO.UpdatedTime = DateTime.Now;
-                    accountRegistersDTO.Token = SHA1.Create(accountRegistersDTO.Account + (accountRegistersDTO.CreatedTime).ToString).ToString();
-
+                    accountRegistersDTO.Audit = oneSite.Audit;
+                    string createdTimeAsString = accountRegistersDTO.CreatedTime.ToString();
+                    accountRegistersDTO.Token = RandomString.ComputeSHA1Hash(accountRegistersDTO.Account + createdTimeAsString);
                     AccountRegisters createRegisters = _mapper.Map<AccountRegisters>(accountRegistersDTO);
-                    if (oneSite.AutoPoint == true)
+                    if (accountRegistersDTO.AutoPoint == true)
                     {
                         createRegisters.AutoPoint = true;
                         // cộng điểm thẳng lên BO Nếu đang là cộng điểm tự động
