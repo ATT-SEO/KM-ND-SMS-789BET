@@ -3,11 +3,11 @@
 var clipboard = new ClipboardJS('.button-copy-content');
 clipboard.on('success', function (e) {
     e.clearSelection();
-    swal({
-        title: "Thành Công",
-        text: `Sao chép nội dung gửi đi: ${e.text} thành công!`,
-        icon: "success",
-    });
+    var showsText = e.trigger.querySelector('.shows-text');
+    showsText.style.display = 'inline';
+    setTimeout(function () {
+        showsText.style.display = 'none';
+    }, 3000);
 });
 
 function showLoadingSpinner() {

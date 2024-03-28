@@ -11,6 +11,7 @@ namespace API.KM58.Service.IService
         Task<ResponseDTO?> addPointClient(String Site, String Account, int Point, int Round, String Remarks, String Ecremarks);
         Task<ResponseDTO?> addPointBo789BET(String Site, String Account, int Point, int Round, String Remarks, String Ecremarks);
         Task<ResponseDTO?> handApproveAccount(AccountRegistersDTO accountRegisters, Site siteDTO);
+        Task<ResponseDTO?> savePointBoAuto789BET(AccountRegistersDTO accountRegisters, Site siteDTO, bool status = true);
         Task<ResponseDTO?> addPointClientCMD(String Site, String Account, int Point, int Round, String Remarks, String Ecremarks);
     }
 }

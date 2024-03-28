@@ -105,6 +105,7 @@ img{
     border-radius: 24px;
     background: #ffffff00;
     width: 100%;
+    position: relative;
 }
 .form_item-btn {
     max-width: 96px;
@@ -324,11 +325,15 @@ img{
         -webkit-transform: translateY(100%);
         transform: translateY(100%);
     }
-}   
-
-
-
-
+}
+.shows-text {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: -25px;
+    color: #17ff76;
+    display: none;
+}
 
 .overlay {
     position: fixed;

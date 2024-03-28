@@ -76,13 +76,14 @@ namespace API.KM58.Service
                             if (addPointBO.IsSuccess == false)
                             {
                                 Log.Information($"ERROR SEVICE CheckAccountRegisters BO || {accountRegistersDTO?.Account} || {accountRegistersDTO?.ProjectCode} || LOI CONG TU DONG LEN BO");
+                                var saveAddPointBO = await _boService.savePointBoAuto789BET(accountRegistersDTO, oneSite, false);
                                 _response.IsSuccess = false;
                                 _response.Code = 404;
                                 _response.Message = "Đăng ký Nhận điểm thưởng không thành công. Vui lòng liên hệ bộ phận chăm sóc để được giải đáp.";
                                 return _response;
                             }else {
                                 Log.Information($"CỘNG TỰ ĐỘNG THÀNH CÔNG || {accountRegistersDTO.Account} || {accountRegistersDTO.Point} ĐIỂM || {accountRegistersDTO.ProjectCode}");
-                                createRegisters.Status = 1;
+                                var saveAddPointBO = await _boService.savePointBoAuto789BET(accountRegistersDTO, oneSite);
                                 createRegisters.UserPoint = "System";
                                 _response.Code = 200;
                                 _response.Message = "Nhận thưởng thành công.";

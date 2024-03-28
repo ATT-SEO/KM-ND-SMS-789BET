@@ -172,6 +172,70 @@ namespace API.KM58.Service
             }
 
         }
+        public async Task<ResponseDTO?> savePointBoAuto789BET(AccountRegistersDTO accountRegisters, Site siteDTO, bool status)
+        {
+            try
+            {
+                DateTimeOffset timeOffset = new DateTimeOffset(DateTime.UtcNow);
+                long timeStamp = timeOffset.ToUnixTimeMilliseconds();
+
+                Console.WriteLine("addPointClient");
+                HttpClient client = _httpclientFactory.CreateClient();
+                HttpRequestMessage message = new HttpRequestMessage();
+                message.Method = HttpMethod.Post;
+                message.Headers.Add("Accept", "application/json");
+                message.RequestUri = new Uri($"https://api-bokm.789237.com/autoApproveList/extends");
+                message.Content = JsonContent.Create(new Dictionary<string, object>
+                {
+                    ["site"] = siteDTO.Project,
+                    ["accountATT"] = accountRegisters.Account,
+                    ["point"] = accountRegisters.Point,
+                    ["audit"] = accountRegisters.Audit,
+                    ["round"] = siteDTO.Round,
+                    ["phone"] = accountRegisters.Sender,
+                    ["portal_memo"] = siteDTO.Ecremarks,
+                    ["promo_id"] = siteDTO.Remarks,
+                    ["promo_name"] = siteDTO.Label,
+                    ["ip"] = accountRegisters.IP,
+                    ["fp"] = accountRegisters.FP,
+                    ["deviceType"] = "mobile",
+                    ["status"] = status ? "accept" : "error", //  ["accept", "deny", "error"],
+                    ["ticket_id"] = null,
+                    ["reason_deny"] = "Tự dộng thành công"
+                });
+
+                var apiResponse = await client.SendAsync(message);
+
+                Console.WriteLine(JsonConvert.SerializeObject(apiResponse));
+
+                switch (apiResponse.StatusCode)
+                {
+                    case System.Net.HttpStatusCode.NotFound:
+                        return new() { IsSuccess = false, Message = "Not Found" };
+                    case System.Net.HttpStatusCode.Forbidden:
+                        return new() { IsSuccess = false, Message = "Access Denied" };
+                    case System.Net.HttpStatusCode.Unauthorized:
+                        return new() { IsSuccess = false, Message = "Unauthorized" };
+                    case System.Net.HttpStatusCode.InternalServerError:
+                        return new() { IsSuccess = false, Message = "Internal Server Error" };
+                    default:
+                        _responseDTO.Result = await apiResponse.Content.ReadAsStringAsync();
+                        _responseDTO.Code = 200;
+                        _responseDTO.Result = true;
+                        return _responseDTO;
+                }
+            }
+            catch (Exception ex)
+            {
+                var dto = new ResponseDTO
+                {
+                    Message = ex.Message.ToString(),
+                    IsSuccess = false
+                };
+                return dto;
+            }
+
+        }
 
         public async Task<ResponseDTO?> addPointClient(String Site, String Account, int Point, int Round, String Remarks, String Ecremarks)
         {

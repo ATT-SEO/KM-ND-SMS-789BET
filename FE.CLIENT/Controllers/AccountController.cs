@@ -43,6 +43,7 @@ namespace FE.CLIENT.Controllers
             string recaptchaToken = checkAccountRequestDTO.RecaptchaToken;
 			checkAccountRequestDTO.Token = CalculateMD5(recaptchaToken);
             checkAccountRequestDTO.IP = _contextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
+
             checkAccountRequestDTO.FP = checkAccountRequestDTO.Regfingerprint;
 
             checkAccountRequestDTO.Project = "bo_789bet"; 

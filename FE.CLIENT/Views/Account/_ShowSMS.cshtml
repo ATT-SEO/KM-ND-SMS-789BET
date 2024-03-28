@@ -1,4 +1,5 @@
-﻿@model SMSDTO;
+﻿@using FE.CLIENT.Utility
+@model SMSDTO;
 @{
     SMSDTO smsInfo = ViewBag.DataSMS as SMSDTO;
 }
@@ -48,7 +49,8 @@
                                 </svg>
                             </span>
                             <span class="text">Copy</span>
-                        </button>
+                            <span class="shows-text">Đã Copy</span>
+                        </button> 
                     </div>
                 </div>
             </div>
@@ -66,6 +68,7 @@
                                 </svg>
                             </span>
                             <span class="text">Copy</span>
+                            <span class="shows-text">Đã Copy</span>
                         </button>
                     </div>
                 </div>
