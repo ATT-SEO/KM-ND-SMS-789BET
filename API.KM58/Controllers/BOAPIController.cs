@@ -132,6 +132,7 @@ namespace API.KM58.Controllers
                                 {
                                     _response.IsSuccess = false;
                                     _response.Message = "Tài khoản bị từ chối .";
+                                    _response.Code = 9035;
                                 }
                                 return _response;
                             }

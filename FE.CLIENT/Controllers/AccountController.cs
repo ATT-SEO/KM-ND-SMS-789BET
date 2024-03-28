@@ -148,7 +148,7 @@ namespace FE.CLIENT.Controllers
             }
             _response.IsSuccess = false;
             _response.Code = 403;
-            _response.Message = "Tài khoản của quý khách không đúng. Vui lòng kiểm tra lại !";
+            _response.Message = "Tài khoản của quý khách không đủ điều kiện nhận thưởng!";
             return Json(_response);
 		}
 		public async Task<IActionResult> SubmitBouns([FromBody] AccountDTO accountDTO)
