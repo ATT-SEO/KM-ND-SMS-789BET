@@ -79,7 +79,13 @@ namespace FE.CLIENT.Controllers
                 Console.WriteLine(JsonConvert.SerializeObject(userAccountInfo));
 				if (userAccountInfo.IsSuccess == true)
                 {
-
+                    if(userAccountInfo.Result == null)
+                    {
+                        _response.IsSuccess = true;
+                        _response.Code = 202;
+                        _response.Message = userAccountInfo.Message;
+                        return Json(_response);
+                    }
                     dynamic jsonData = JsonConvert.DeserializeObject(userAccountInfo.Result.ToString());
 
                     Console.WriteLine("Data : " + jsonData);

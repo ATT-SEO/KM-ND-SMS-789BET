@@ -118,14 +118,14 @@ namespace API.KM58.Controllers
                                 if (oneCheckAccount.Status == 1)
                                 {
                                     _response.IsSuccess = true;
-                                    _response.Message = "Tài khoản đã được cộng điểm thành công.";
+                                    _response.Message = "Tài khoản đã nhận thành công khuyến mãi này.";
                                     _response.Code = 200;
                                     _response.Result = _mapper.Map<AccountRegisters>(oneCheckAccount);
                                 }
                                 else if (oneCheckAccount.Status == 0)
                                 {
                                     _response.IsSuccess = true;
-                                    _response.Message = "Tài khoản đang trong trạng thái chờ cộng điểm.";
+                                    _response.Message = "Tài khoản đang trong trạng thái chờ xử lý.";
                                     _response.Code = 200;
                                 }
                                 else
@@ -181,7 +181,7 @@ namespace API.KM58.Controllers
                     return CheckAccountRegisters;
                     //_response.Result = resultObject;
                     _response.IsSuccess = true;
-                    _response.Message = "Hệ thống sẽ xét duyệt và tiến hành cộng điểm. Vui lòng theo dõi hòm thư nội bộ hoặc kiểm tra lại sau ít phút ";
+                    _response.Message = "Hệ thống sẽ xét duyệt và tiến hành xử lý. Vui lòng theo dõi hòm thư nội bộ hoặc kiểm tra lại sau ít phút ";
                     _response.Code = 200;
                 }
         }
