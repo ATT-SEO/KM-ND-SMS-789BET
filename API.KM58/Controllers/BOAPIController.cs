@@ -60,9 +60,11 @@ namespace API.KM58.Controllers
                 int Point = rnd.Next(oneSite.MinPoint, oneSite.MaxPoint + 1); /// điểm random
                                                                               /// check trùng FP và IP
                 var checkLogAccount = await _checkConditions.CheckLogAccount(logAccountDTO);
-                if (checkLogAccount.Code == 404 || checkLogAccount.IsSuccess == false)
+                Log.Information($"KIEM TRA TAI KHOAN 2 ||  {checkLogAccount.IsSuccess} || {checkLogAccount.Code}");
+
+                if (checkLogAccount.IsSuccess == false)
                 {
-                    _response.Message = "Dấu hiệu bất thường.Bạn đã thực hiện nhiều tài khoản trong 1 thiết bị. Vui lòng xem lại hoặc liên hệ chúng tôi !!!";
+                    _response.Message = "Dấu hiệu bất thường.Quý khách đã thực hiện nhiều tài khoản trong 1 thiết bị. Vui lòng xem lại hoặc liên hệ chúng tôi !!!";
                     _response.IsSuccess = false;
                     _response.Code = 9034;
                     return _response;
@@ -73,7 +75,7 @@ namespace API.KM58.Controllers
                 //string accountNumber = jsonResponseData.result.bankAccount.Accounts[0].Account;
                 if ((int)jsonResponseData.status_code != 200)
                 {
-                    _response.Message = "Thông tin tài khoản không đúng";
+                    _response.Message = "Thông tin tài khoản quý khách không đúng";
                     _response.IsSuccess = false;
                     return _response;
                 }
@@ -82,7 +84,7 @@ namespace API.KM58.Controllers
                     if (jsonResponseData.result == null)
                     {
                         Log.Information($"KIEM TRA TAI KHOAN || {_account} || {_project} || KHÔNG TỒN TẠI");
-                        _response.Message = "Thông tin tài khoản không đúng";
+                        _response.Message = "Thông tin tài khoản quý khách không đúng";
                         _response.IsSuccess = false;
                         return _response;
                     }
@@ -92,7 +94,7 @@ namespace API.KM58.Controllers
                         if (bankAccounts == null || bankAccounts.Count <= 0)
                         {
                             Log.Information($"KIEM TRA TAI KHOAN || {_account} || {_project} || KHÔNG CHƯA CẬP NHẬT NGÂN HÀNG");
-                            _response.Message = "Tài khoản của bạn chưa đủ điều kiện nhận thưởng. Vui lòng cập nhật thông tin ngân hàng để được nhận thưởng !!!";
+                            _response.Message = "Tài khoản của quý khách chưa đủ điều kiện nhận thưởng. Vui lòng cập nhật thông tin ngân hàng để được nhận thưởng !!!";
                             _response.IsSuccess = false;
                             _response.Code = 9032;
                             return _response;
@@ -103,7 +105,7 @@ namespace API.KM58.Controllers
                         if (jsonResponseData.result.detail?.Member?.Mobile == null)
                         {
                             Log.Information($"KIEM TRA TAI KHOAN || {_account} || {_project} || KHÔNG CHƯA CẬP NHẬT SỐ ĐIỆN THOẠI");
-                            _response.Message = "Tài khoản của bạn chưa đủ điều kiện nhận thưởng. Vui lòng cập nhật thêm thông tin liên hệ ( số điện thoại )";
+                            _response.Message = "Tài khoản của quý khách chưa đủ điều kiện nhận thưởng. Vui lòng cập nhật thêm thông tin liên hệ ( số điện thoại )";
                             _response.IsSuccess = false;
                             _response.Code = 9033;
                             return _response;
@@ -116,22 +118,21 @@ namespace API.KM58.Controllers
                                 if (oneCheckAccount.Status == 1)
                                 {
                                     _response.IsSuccess = true;
-                                    _response.Message = "Tài khoản đã nhận thành công khuyến mãi này.";
+                                    _response.Message = "Tài khoản của quý khách đã nhận thành công khuyến mãi này.";
                                     _response.Code = 200;
                                     _response.Result = _mapper.Map<AccountRegisters>(oneCheckAccount);
                                 }
                                 else if (oneCheckAccount.Status == 0)
                                 {
                                     _response.IsSuccess = true;
-                                    _response.Message = "Tài khoản đang trong trạng thái chờ xử lý.";
+                                    _response.Message = "Tài khoản của quý khách đang trong trạng thái chờ xử lý.";
                                     _response.Code = 200;
                                 }
                                 else
                                 {
                                     _response.IsSuccess = false;
-                                    _response.Message = "Tài khoản bị từ chối .";
+                                    _response.Message = "Tài khoản của quý khách không đủ điều kiện nhận khuyến mãi này. Vui lòng tham khảo các khuyến mãi khác.";
                                     _response.Code = 9035;
-
                                 }
                                 return _response;
                             }

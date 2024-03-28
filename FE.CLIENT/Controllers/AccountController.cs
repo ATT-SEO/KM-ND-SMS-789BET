@@ -148,7 +148,7 @@ namespace FE.CLIENT.Controllers
             }
             _response.IsSuccess = false;
             _response.Code = 403;
-            _response.Message = "Tài khoản của quý khách không đúng. Vui lòng kiểm tra lại !";
+            _response.Message = "Tài khoản của quý khách không đủ điều kiện nhận thưởng!";
             return Json(_response);
 		}
 		public async Task<IActionResult> SubmitBouns([FromBody] AccountDTO accountDTO)
@@ -208,7 +208,7 @@ namespace FE.CLIENT.Controllers
                     result = new
                     {
                         code = 250,
-                        message = "Vui lòng khiểm tra lại quy trình 1"
+                        message = "Quý khách vui lòng khiểm tra lại quy trình"
                     },
                     error = "error",
                     unAuthorizedRequest = false,
@@ -225,7 +225,7 @@ namespace FE.CLIENT.Controllers
                     result = new
                     {
                         code = 250,
-                        message = "Vui lòng khiểm tra lại quy trình"
+                        message = "Quý khách vui lòng khiểm tra lại quy trình"
                     },
                     error = "error",
                     unAuthorizedRequest = false,

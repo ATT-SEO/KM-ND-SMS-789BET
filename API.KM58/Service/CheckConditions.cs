@@ -39,20 +39,20 @@ namespace API.KM58.Service
                     if (registers.Status == 1)
                     {
                         _response.IsSuccess = true;
-                        _response.Message = "Tài khoản đã được cộng điểm thành công.";
+                        _response.Message = "Tài khoản của quý khách đã được cộng điểm thành công.";
                         _response.Code = 200;
                         _response.Result = _mapper.Map<AccountRegisters>(registers);
                         Log.Information($"SUCCESS SEVICE CheckAccountRegisters CỘNG ĐIỂM || {registers.Account} || Điểm: {registers.Point} || USER : {registers.UserPoint} || {registers.ProjectCode}");
                     }
                     else if(registers.Status == 0){
                         _response.IsSuccess = true;
-                        _response.Message = "Tài khoản đang trong trạng thái chờ xử lý.";
+                        _response.Message = "Tài khoản của quý khách đang trong trạng thái chờ xử lý.";
                         _response.Code = 200;
                         Log.Information($"SEVICE CheckAccountRegisters CHỜ CỘNG ĐIỂM || {registers.Account} || {registers.ProjectCode}");
                    }else
                    {
                         _response.IsSuccess = false;
-                        _response.Message = "Tài khoản bị từ chối .";
+                        _response.Message = "Tài khoản của quý khách không đủ điều kiện nhận khuyến mãi này. Vui lòng tham khảo các khuyến mãi khác.";
                         Log.Information($"SEVICE CheckAccountRegisters TỪ CHỐI CỘNG ĐIỂM || {registers.Account} || {registers.ProjectCode}");
                     }
                 }
@@ -177,6 +177,7 @@ namespace API.KM58.Service
                     _response.IsSuccess = true;
                     _response.Code = 201;
                     Log.Information($"SUCCESS SEVICE CheckLogAccount || {logAccountDTO.Account} || {logAccountDTO.Project} || IP:{logAccountDTO.IP} || FP:{logAccountDTO.FP}");
+                    return _response;
                 }
                 else
                 {
@@ -205,6 +206,7 @@ namespace API.KM58.Service
                 Log.Information($"ERROR SEVICE CheckLogAccount || {logAccountDTO.Account} || {logAccountDTO.Project} || {ex.Message}");
                 _response.IsSuccess = false;
                 _response.Message = ex.Message;
+                return _response;
             }
             
             return _response;

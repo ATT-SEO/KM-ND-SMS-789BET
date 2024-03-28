@@ -145,6 +145,7 @@ $(document).on('click', '#wrap-form-sended-sms', function (e) {
                         } else {
                             ShowErrorMsg(response.result.message);
                         }
+                        $("#back-homeme").css('display', 'inline');
                     }
                 },
                 error: function (error) {
@@ -158,6 +159,11 @@ $(document).on('click', '#wrap-form-sended-sms', function (e) {
         }
         countdown--;
     }, 1000);
+});
+$(document).on('click', '#back-homeme', function (e) {
+    $("#step-2").removeClass('pt-page-current pt-page-moveFromTop');
+    $("#step-2").html();
+    $("#step-1").addClass('pt-page-current');
 });
 
 $(document).on('click', '#wrap-from-instruct', function (e) {

@@ -144,8 +144,23 @@ img{
     align-items: center;
     justify-content: center;
 }
-.animation-step-1{
-
+.back-home-ss {
+    cursor: pointer;
+    max-height: 46px;
+    display: none;
+}
+.icon-home-back {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+.icon-home-back svg{
+    max-height: 100%;
+    width: 100%;
+}
+.icon-home-back img{
+    max-height: 100%;
+    width: auto;
 }
 .animation-step {
     height: 0;
