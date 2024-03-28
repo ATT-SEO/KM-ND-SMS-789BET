@@ -149,7 +149,9 @@ namespace API.KM58.Controllers
         {
             try
             {
-                var accountToUpdate = await _db.AccountRegisters.Where(a => a.Id == accountRegistersDTO.Id && a.Account == accountRegistersDTO.Account).FirstOrDefaultAsync();
+                //var accountToUpdate = await _db.AccountRegisters.Where(a => a.Token == accountRegistersDTO.Token && a.Account == accountRegistersDTO.Account).FirstOrDefaultAsync();
+                var accountToUpdate = await _db.AccountRegisters.Where(a => a.Token == accountRegistersDTO.Token).FirstOrDefaultAsync();
+
                 if (accountToUpdate != null)
                 {
                     accountToUpdate.Status = (int)accountRegistersDTO.Status;
@@ -178,6 +180,8 @@ namespace API.KM58.Controllers
             }
             catch (Exception ex)
             {
+                Log.Information($"ERROR TAI KHOAN || {ex.Message} || {accountRegistersDTO.Point} ĐIỂM || CỘNG DIỂM THẤT BẠI");
+
                 _response.IsSuccess = false;
                 _response.Message = ex.Message; // Xử lý lỗi nếu có
             }
