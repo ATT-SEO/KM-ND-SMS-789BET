@@ -133,8 +133,8 @@ namespace API.KM58.Service
                     ["round"] = siteDTO.Round,
                     ["phone"] = accountRegisters.Sender,
                     ["portal_memo"] = siteDTO.Ecremarks,
-                    ["promo_id"] = siteDTO.Remarks,
-                    ["promo_name"] = siteDTO.Label,
+                    ["promo_id"] = siteDTO.Remarks,   ///Mã khuyến mãi
+                    ["promo_name"] = siteDTO.Label, ///Tên khuyến mãi
                     ["ip"] = accountRegisters.IP,
                     ["fp"] = accountRegisters.FP,
                     ["deviceType"] = "mobile",
