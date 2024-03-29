@@ -48,18 +48,12 @@ namespace FE.CLIENT.Controllers
             checkAccountRequestDTO.FP = checkAccountRequestDTO.Regfingerprint;
 
             checkAccountRequestDTO.Project = "bo_789bet";
-            string clientIPAddress = HttpContext.Request.Headers["X-Forwarded-For"];
             if (clientIPAddress != null)
             {
                 checkAccountRequestDTO.IP = clientIPAddress;
             } 
 
             Console.WriteLine("Data IP : " + clientIPAddress);
-
-
-
-
-
             object responseJson;
             using (HttpClient httpClient = new HttpClient())
             {
