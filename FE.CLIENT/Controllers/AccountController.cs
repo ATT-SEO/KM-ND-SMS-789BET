@@ -41,12 +41,17 @@ namespace FE.CLIENT.Controllers
             Account = Account.Trim();
             Account = Account.ToLower();
             string recaptchaToken = checkAccountRequestDTO.RecaptchaToken;
-			checkAccountRequestDTO.Token = CalculateMD5(recaptchaToken);
+            checkAccountRequestDTO.Token = CalculateMD5(recaptchaToken);
             checkAccountRequestDTO.IP = _contextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
 
             checkAccountRequestDTO.FP = checkAccountRequestDTO.Regfingerprint;
 
-            checkAccountRequestDTO.Project = "bo_789bet"; 
+            checkAccountRequestDTO.Project = "bo_789bet";
+            string clientIPAddress = HttpContext.Request.Headers["X-Forwarded-For"];
+            if (clientIPAddress != null)
+            {
+                checkAccountRequestDTO.IP = clientIPAddress;
+            } 
 
             Console.WriteLine("Data IP : " + checkAccountRequestDTO.IP);
             object responseJson;

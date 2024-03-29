@@ -82,7 +82,7 @@ namespace API.KM58.Service
                                     Device = _targetSMS.Device,
                                     IP = _targetSMS.IP,
                                     FP = _targetSMS.FP,
-                                    AutoPoint = site.AutoPoint
+                                    AutoPoint = _targetSMS.AutoPoint
                                 };
 
                                  var CheckAccountRegisters = await _checkConditions.CheckAccountRegisters(accountRegistersDTO, site);
