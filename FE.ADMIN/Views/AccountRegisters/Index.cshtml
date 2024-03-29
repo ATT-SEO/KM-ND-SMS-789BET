@@ -119,6 +119,9 @@
 						<th>
 							Điểm thưởng
 						</th>
+						<th>
+							Duyệt
+						</th>
 						<th>T/gian yêu cầu</th>
 						<th>T/gian nhận thưởng</th>
 						@* <th style="width:215px">
@@ -172,6 +175,16 @@
 								</td>
 								<td>
 									@sms.Point
+								</td>
+								<td>
+									@if (@sms.AutoPoint)
+									{
+										<span>Tự động </span>
+									}
+									else
+									{
+										<span>Duyệt tay</span>
+									}
 								</td>
 								<td>
 									@(sms.CreatedTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "Null")

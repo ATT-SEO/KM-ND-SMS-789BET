@@ -30,7 +30,7 @@ namespace API.KM58.Controllers
         }
 
         [HttpGet]
-		public ResponseDTO Get([FromQuery] QueryParametersDTO parameters)
+		public async Task<ResponseDTO> Get([FromQuery] QueryParametersDTO parameters)
 		{
 			try
 			{
@@ -83,10 +83,10 @@ namespace API.KM58.Controllers
                     query = query.OrderByDescending(w => w.Id);
                 }
                 int skipCount = (parameters.Page - 1) * parameters.PageSize;
-				IEnumerable<SMS> SMSList = query
+				IEnumerable<SMS> SMSList = await query
 					.Skip(skipCount)
 					.Take(parameters.PageSize)
-					.ToList();
+					.ToListAsync();
 				int totalCount = query.Count();
 				var result = new
 				{

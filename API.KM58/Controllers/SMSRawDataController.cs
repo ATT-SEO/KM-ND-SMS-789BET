@@ -29,7 +29,7 @@ namespace API.KM58.Controllers
         }
 
         [HttpGet]
-        public ResponseDTO Get([FromQuery] QueryParametersDTO parameters)
+        public async Task<ResponseDTO> Get([FromQuery] QueryParametersDTO parameters)
         {
             try
             {
@@ -81,10 +81,10 @@ namespace API.KM58.Controllers
                     query = query.OrderByDescending(w => w.Id);
                 }
                 int skipCount = (parameters.Page - 1) * parameters.PageSize;
-                IEnumerable<SMSRawData> smsRawDatas = query
+                IEnumerable<SMSRawData> smsRawDatas = await query
                     .Skip(skipCount)
                     .Take(parameters.PageSize)
-                    .ToList();
+                    .ToListAsync();
                 int totalCount = query.Count();
                 var result = new
                 {
@@ -127,10 +127,10 @@ namespace API.KM58.Controllers
         {
             try
             {
-                List<SMSRawData> listSMS = _db.SMSRawData.Where(s => s.Device == Device)
+                List<SMSRawData> listSMS = await _db.SMSRawData.Where(s => s.Device == Device)
                 .OrderByDescending(w => w.CreatedTime)
                 .Take(Total)
-                .ToList();
+                .ToListAsync();
                 _response.Result = _mapper.Map<List<SMSRawDataDTO>>(listSMS);
             }
             catch (Exception Ex)

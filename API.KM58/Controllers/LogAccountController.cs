@@ -25,9 +25,8 @@ namespace API.KM58.Controllers
         }
         // GET: api/<LogAccountController>
         [HttpGet]
-        public ResponseDTO Get([FromQuery] QueryParametersDTO parameters)
+        public async Task<ResponseDTO> Get([FromQuery] QueryParametersDTO parameters)
         {
-            Console.WriteLine(JsonConvert.SerializeObject(parameters, Formatting.Indented));
             try
             {
                 var query = _db.LogAccounts.AsQueryable();
@@ -44,11 +43,11 @@ namespace API.KM58.Controllers
                     query = query.Where(w => w.Account == parameters.Account);
                 }
                 int skipCount = (parameters.Page - 1) * parameters.PageSize;
-                IEnumerable<LogAccount> LogAccountList = query
+                IEnumerable<LogAccount> LogAccountList = await query
                     .OrderByDescending(w => w.Id)
                     .Skip(skipCount)
                     .Take(parameters.PageSize)
-                    .ToList();
+                    .ToListAsync();
                 int totalCount = query.Count();
                 var result = new
                 {
@@ -92,11 +91,11 @@ namespace API.KM58.Controllers
                     query = query.Where(w => w.Account == parameters.Account);
                 }
                 int skipCount = (parameters.Page - 1) * parameters.PageSize;
-                List<LogAccount> LogAccountList = query
+                List<LogAccount> LogAccountList = await query
                     .OrderByDescending(w => w.Id)
                     .Skip(skipCount)
                     .Take(parameters.PageSize)
-                    .ToList();
+                    .ToListAsync();
                 int totalCount = query.Count();
                 var result = new
                 {
@@ -135,17 +134,17 @@ namespace API.KM58.Controllers
 
         [HttpGet]
         [Route("GetListByAccount/{Account}")]
-        public ResponseDTO GetListByAccount(string Account, int page = 1, int pageSize = 100)
+        public async Task<ResponseDTO> GetListByAccount(string Account, int page = 1, int pageSize = 100)
         {
             try
             {
                 int skipCount = (page - 1) * pageSize;
-                IEnumerable<LogAccount> logAccounts = _db.LogAccounts
+                IEnumerable<LogAccount> logAccounts = await _db.LogAccounts
                 .Where(w => w.Account == Account)
                 .OrderByDescending(w => w.Id)
                 .Skip(skipCount)
                 .Take(pageSize)
-                .ToList();
+                .ToListAsync();
                 int totalCount = _db.LogAccounts.Where(w => w.Account == Account).Count();
                 var result = new
                 {
