@@ -155,7 +155,14 @@ namespace API.KM58.Controllers
                 if (accountToUpdate != null)
                 {
                     accountToUpdate.Status = (int)accountRegistersDTO.Status;
-                    accountToUpdate.reason_deny = (accountRegistersDTO.reason_deny).ToString();
+                    if (accountRegistersDTO?.reason_deny != null)
+                    {
+                        accountToUpdate.reason_deny = (accountRegistersDTO.reason_deny).ToString();
+                    }
+                    else
+                    {
+                        accountToUpdate.reason_deny = "";
+                    }
                     accountToUpdate.handler = (accountRegistersDTO.handler).ToString();
 
                     _db.SaveChanges();
@@ -163,19 +170,19 @@ namespace API.KM58.Controllers
                     _response.Code = 200;
                     if((int)accountRegistersDTO.Status == 9)
                     {
-                        _response.Message = $"Tài khoản {accountRegistersDTO.Account} đã bị từ chối nhận thưởng khuyến mãi.";
-                        Log.Information($"TAI KHOAN || {accountRegistersDTO.Account} || {accountRegistersDTO.ProjectCode} || TỪ CHỐI NHẬN THƯỞNG");
+                        _response.Message = $"Tài khoản {accountToUpdate.Account} đã bị từ chối nhận thưởng khuyến mãi.";
+                        Log.Information($"TAI KHOAN || {accountToUpdate.Account} || {accountToUpdate.ProjectCode} || TỪ CHỐI NHẬN THƯỞNG");
 
                     }
                     if ((int)accountRegistersDTO.Status == 1)
                     {
-                        _response.Message = $"Tài khoản {accountRegistersDTO.Account} đã được cộng điểm khuyến mãi.";
-                        Log.Information($"TAI KHOAN || {accountRegistersDTO.Account} || {accountRegistersDTO.Point} ĐIỂM || CỘNG DIỂM THÀNH CÔNG");
+                        _response.Message = $"Tài khoản {accountToUpdate.Account} đã được cộng điểm khuyến mãi.";
+                        Log.Information($"TAI KHOAN || {accountToUpdate.Account} || {accountToUpdate.Point} ĐIỂM || CỘNG DIỂM THÀNH CÔNG");
                     }
                 }
                 else
                 {
-                    Log.Information($"ERROR TAI KHOAN || {accountRegistersDTO.Account} || {accountRegistersDTO.Point} ĐIỂM || CỘNG DIỂM THẤT BẠI");
+                    Log.Information($"ERROR TAI KHOAN || {accountToUpdate.Account} || {accountToUpdate.Point} ĐIỂM || CỘNG DIỂM THẤT BẠI");
                     _response.IsSuccess = false;
                     _response.Code = 500;
                     _response.Message = "Account not found.";

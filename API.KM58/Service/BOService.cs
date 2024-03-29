@@ -71,8 +71,9 @@ namespace API.KM58.Service
                 message.Content = JsonContent.Create(new Dictionary<string, object>
                 {
                     ["AccountsString"] = Account,
-                    ["Amount"] =  1, /// Point
-                    ["Audit"] =  1,  /// Round
+                    ["Amount"] = Point, /// Point
+                    ["Audit"] = (int)(Point * Round),
+                    ["Round"] = Round,/// Round
                     ["Memo"]  = Remarks,  // Nhãn dán dành cho bên mình
                     ["PortalMemo"] = Ecremarks, // hiển thị thông tiêu đề ở người chơi
                     ["TimeStamp"] = timeStamp,
@@ -129,7 +130,7 @@ namespace API.KM58.Service
                     ["site"] = siteDTO.Project,
                     ["accountATT"] = accountRegisters.Account,
                     ["point"] = accountRegisters.Point,
-                    ["audit"] = accountRegisters.Audit,
+                    ["audit"] = (int)(accountRegisters.Point * siteDTO.Round),
                     ["round"] = siteDTO.Round,
                     ["phone"] = accountRegisters.Sender,
                     ["portal_memo"] = siteDTO.Ecremarks,
@@ -190,7 +191,8 @@ namespace API.KM58.Service
                     ["site"] = siteDTO.Project,
                     ["accountATT"] = accountRegisters.Account,
                     ["point"] = accountRegisters.Point,
-                    ["audit"] = accountRegisters.Audit,
+                    //["audit"] = accountRegisters.Audit,
+                    ["audit"] = (int)(accountRegisters.Point * siteDTO.Round),
                     ["round"] = siteDTO.Round,
                     ["phone"] = accountRegisters.Sender,
                     ["portal_memo"] = siteDTO.Ecremarks,

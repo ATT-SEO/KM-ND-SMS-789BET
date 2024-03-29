@@ -19,7 +19,7 @@ namespace API.KM58.Model
         public string? UserPoint { get; set; }
         public string? IP { get; set; }
         public string? FP { get; set; }
-        public string? reason_deny { get; set; }
+        public string? reason_deny { get; set; } = null;
         public string? handler { get; set; }
         public string? Token { get; set; }
         public DateTime? CreatedTime { get; set; }
