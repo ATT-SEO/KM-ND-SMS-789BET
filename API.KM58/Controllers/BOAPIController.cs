@@ -4,6 +4,7 @@ using API.KM58.Model.DTO;
 using API.KM58.Service.IService;
 using API.KM58.Utility;
 using AutoMapper;
+using AutoMapper.Execution;
 using Hangfire.Storage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -88,6 +89,15 @@ namespace API.KM58.Controllers
                         _response.IsSuccess = false;
                         return _response;
                     }
+                    string MemberLevelSettingName = jsonResponseData.result?.detail?.Member?.MemberLevelSettingName;
+                    if (!MemberLevelSettingName.Contains("MD-1"))
+                    {
+                        Log.Information($"KIEM TRA TAI KHOAN || {_account} || {_project} || KHÔNG Ở NHÓM MẶC ĐỊNH");
+                        _response.Message = "Tài khoản của quý khách chưa đủ điều kiện nhận thưởng. !!!";
+                        _response.IsSuccess = false;
+                        _response.Code = 9032;
+                        return _response;
+                    }
                     if (oneSite.CheckBank == true)
                     {
                         var bankAccounts = jsonResponseData.result.bankAccount?.Accounts;
@@ -95,6 +105,15 @@ namespace API.KM58.Controllers
                         {
                             Log.Information($"KIEM TRA TAI KHOAN || {_account} || {_project} || KHÔNG CHƯA CẬP NHẬT NGÂN HÀNG");
                             _response.Message = "Tài khoản của quý khách chưa đủ điều kiện nhận thưởng. Vui lòng cập nhật thông tin ngân hàng để được nhận thưởng !!!";
+                            _response.IsSuccess = false;
+                            _response.Code = 9032;
+                            return _response;
+                        }
+                        var DepositTimes = (int)jsonResponseData.result?.transactionStatic?.DepositTimes;
+                        if (DepositTimes > 0)
+                        {
+                            Log.Information($"KIEM TRA TAI KHOAN || {_account} || {_project} || ĐÃ NẠP TIỀN KO ĐỦ DK NHẬN");
+                            _response.Message = "Tài khoản của quý khách đã thực hiện nạp tiền. Vui lòng xem lại điều kiện nhận thưởng. Cảm ơn quý khách !!!";
                             _response.IsSuccess = false;
                             _response.Code = 9032;
                             return _response;
