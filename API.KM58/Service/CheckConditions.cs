@@ -85,6 +85,8 @@ namespace API.KM58.Service
                                 Log.Information($"CỘNG TỰ ĐỘNG THÀNH CÔNG || {accountRegistersDTO.Account} || {accountRegistersDTO.Point} ĐIỂM || {accountRegistersDTO.ProjectCode}");
                                 var saveAddPointBO = await _boService.savePointBoAuto789BET(accountRegistersDTO, oneSite);
                                 createRegisters.UserPoint = "System";
+                                createRegisters.handler = "System";
+                                createRegisters.Status = 1;
                                 _response.Code = 200;
                                 _response.Message = "Nhận thưởng thành công.";
                             }
