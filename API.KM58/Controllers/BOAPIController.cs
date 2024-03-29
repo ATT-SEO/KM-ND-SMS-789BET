@@ -24,15 +24,17 @@ namespace API.KM58.Controllers
         private readonly AppDbContext _db;
         private readonly IBOService _boService;
         private readonly ICheckConditions _checkConditions;
-        private IMapper _mapper;
-        public BOAPIController(AppDbContext db, IBOService boService, IMapper mapper, ICheckConditions checkConditions)
+        private readonly IGoogleSheetService _googleSheet;
+		 
+		private IMapper _mapper;
+        public BOAPIController(AppDbContext db, IBOService boService, IMapper mapper, ICheckConditions checkConditions, IGoogleSheetService googleSheet)
         {
             _response = new ResponseDTO();
             _db = db;
             _mapper = mapper;
             _boService = boService;
             _checkConditions = checkConditions;
-
+            _googleSheet = googleSheet;
         }
 
         [HttpPost]
@@ -62,8 +64,9 @@ namespace API.KM58.Controllers
                                                                               /// check trùng FP và IP
                 var checkLogAccount = await _checkConditions.CheckLogAccount(logAccountDTO);
                 Log.Information($"KIEM TRA TAI KHOAN 2 ||  {checkLogAccount.IsSuccess} || {checkLogAccount.Code}");
+                var log_gg = _googleSheet.WriteToGoogleSheets(_account, logAccountDTO.IP, logAccountDTO.FP, checkLogAccount.Message);
 
-                if (checkLogAccount.IsSuccess == false)
+				if (checkLogAccount.IsSuccess == false)
                 {
                     _response.Message = "Dấu hiệu bất thường.Quý khách đã thực hiện nhiều tài khoản trong 1 thiết bị. Vui lòng xem lại hoặc liên hệ chúng tôi !!!";
                     _response.IsSuccess = false;
@@ -74,6 +77,7 @@ namespace API.KM58.Controllers
                 //JObject jsonResponseData = (JObject)JsonConvert.DeserializeObject(jsonAll.Result.ToString());
                 dynamic jsonResponseData = JsonConvert.DeserializeObject(jsonAll.Result.ToString());
                 //string accountNumber = jsonResponseData.result.bankAccount.Accounts[0].Account;
+
                 if ((int)jsonResponseData.status_code != 200)
                 {
                     _response.Message = "Thông tin tài khoản quý khách không đúng";
@@ -183,7 +187,9 @@ namespace API.KM58.Controllers
                                 UpdatedTime = DateTime.Now,
                             };
                             var checkAccountSMS = await _checkConditions.CheckAccountSMS(SmsDTO); // vừa check vừa tạo mới Account đăng ký KM
-                            return checkAccountSMS;
+							var log_gg3 = _googleSheet.WriteToGoogleSheets(_account, logAccountDTO.IP, logAccountDTO.FP, checkAccountSMS.Message);
+
+							return checkAccountSMS;
                         }
                     }
                     AccountRegistersDTO accountRegistersDTO = new AccountRegistersDTO();
