@@ -26,7 +26,7 @@ namespace FE.ADMIN.Controllers
             try
             {
                 ViewBag.LoginUser = _userDTO;
-                ResponseDTO _siteRes = await _site.GetByProjectCode(_userDTO.ProjectCode);
+                ResponseDTO _siteRes = await _site.GetByProjectCode("bo_789bet");
                 if (_siteRes!=null && _siteRes.IsSuccess)
                 {
                     return View(JsonConvert.DeserializeObject<List<SiteDTO>>(Convert.ToString(_siteRes.Result)));
@@ -58,7 +58,7 @@ namespace FE.ADMIN.Controllers
                 {
                     ViewBag.LoginUser = _userDTO;
                     //Link to ProjectCode Automatically
-                    siteDTO.Project = _userDTO.ProjectCode;
+                    siteDTO.Project = "bo_789bet";
                     ResponseDTO? res = await _site.CreateAsync(siteDTO);
                     if (res != null && res.IsSuccess)
                     {

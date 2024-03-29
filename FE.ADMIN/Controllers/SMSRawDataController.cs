@@ -30,7 +30,7 @@ namespace FE.ADMIN.Controllers
 			try
 			{
                 ViewBag.LoginUser = _userDTO;
-				parameters.ProjectCode = _userDTO.ProjectCode;
+				parameters.ProjectCode = "bo_789bet";
                 ResponseDTO? res = await _smsRawData.GetAllAsync(parameters);
 				if (res != null && res.IsSuccess)
 				{
@@ -46,7 +46,7 @@ namespace FE.ADMIN.Controllers
 						ViewBag.totalCount = totalCount;
 
                         List<PhoneNumberDTO>? phoneNumbers = new List<PhoneNumberDTO>();
-                        ResponseDTO? phoneDTO = await _phoneNumberService.GetListPhoneByProjectCode(_userDTO.ProjectCode);
+                        ResponseDTO? phoneDTO = await _phoneNumberService.GetListPhoneByProjectCode("bo_789bet");
                         if (phoneDTO != null && phoneDTO.IsSuccess)
                         {
                             phoneNumbers = JsonConvert.DeserializeObject<List<PhoneNumberDTO>>(Convert.ToString(phoneDTO.Result)!);

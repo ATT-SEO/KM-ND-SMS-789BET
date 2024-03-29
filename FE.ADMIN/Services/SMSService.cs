@@ -84,5 +84,16 @@ namespace FE.ADMIN.Services
 
 			return string.Join("&", keyValuePairs);
 		}
-	}
+
+        public async  Task<ResponseDTO?> GetAllAccountRegisters(QueryParametersDTO parameters)
+        {
+            string url = $"{SD.ApiKM58}/api/AccountRegisters?{ToQueryString(parameters)}";
+
+            return await _baseService.SendAsync(new RequestDTO()
+            {
+                APIType = SD.APIType.GET,
+                Url = url
+            });
+        }
+    }
 }

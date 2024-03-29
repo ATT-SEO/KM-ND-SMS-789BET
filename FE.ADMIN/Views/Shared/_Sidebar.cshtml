@@ -9,35 +9,30 @@
     <nav class="sidenav shadow-right sidenav-light">
         <div class="sidenav-menu">
             <div class="nav accordion" id="accordionSidenav">
-                
                 @if (User.Identity.IsAuthenticated)
                 {
                     <div class="sidenav-menu-heading">@LoginUser.ProjectCode Ver1.01</div>
                     @if (LoginUser.Role == "ADMIN")
                     {
-                        <a class="nav-link" asp-controller="Site" asp-action="Index">
-                            <div class="nav-link-icon"><i data-feather="globe"></i></div>
-                            Cài đặt khuyến mãi
-                        </a>
-
                         <a class="nav-link" asp-controller="PhoneNumber" asp-action="Index">
                             <div class="nav-link-icon"><i data-feather="grid"></i></div>
                             Cài đặt thiết bị
                         </a>
-
                         <a class="nav-link" asp-controller="LogAccount" asp-action="Index">
                             <div class="nav-link-icon"><i data-feather="bar-chart"></i></div>
                             Danh sách IP/FP Account
                         </a>
-                        
+                        <a class="nav-link" asp-controller="AccountRegisters" asp-action="Index">
+                            <div class="nav-link-icon"><i data-feather="mail"></i></div>
+                            Nhận thưởng thành công
+                        </a>
                         <a class="nav-link" asp-controller="SMS" asp-action="Index">
                             <div class="nav-link-icon"><i data-feather="mail"></i></div>
-                            Yêu cầu nhận thưởng
+                            Xác tin nhắn xác thực
                         </a>
-
                         <a class="nav-link" asp-controller="SMSRawData" asp-action="Index">
                             <div class="nav-link-icon"><i data-feather="mail"></i></div>
-                            Tin nhắn đến
+                            Tin nhắn đến hệ thống
                         </a>
                     }
                     @if (LoginUser.Role == "CUSTOMER")
@@ -46,15 +41,18 @@
                             <div class="nav-link-icon"><i data-feather="bar-chart"></i></div>
                             Danh sách IP/FP Account
                         </a>
-
+                        <a class="nav-link" asp-controller="AccountRegisters" asp-action="Index">
+                            <div class="nav-link-icon"><i data-feather="mail"></i></div>
+                            Nhận thưởng thành công
+                        </a>
                         <a class="nav-link" asp-controller="SMS" asp-action="Index">
                             <div class="nav-link-icon"><i data-feather="mail"></i></div>
-                            Yêu cầu nhận thưởng
+                            Xác tin nhắn xác thực
                         </a>
 
                         <a class="nav-link" asp-controller="SMSRawData" asp-action="Index">
                             <div class="nav-link-icon"><i data-feather="mail"></i></div>
-                            Tin nhắn đến
+                            Tin nhắn đến hệ thống
                         </a>
                     }
                 }

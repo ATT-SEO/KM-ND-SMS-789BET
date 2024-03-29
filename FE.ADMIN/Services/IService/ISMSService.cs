@@ -12,5 +12,6 @@ namespace FE.ADMIN.Services.IService
         Task<ResponseDTO?> GetOneSMSByID(int Id);
         Task<ResponseDTO?> EditAsync(SMSDTO sMSDTO);
         Task<ResponseDTO?> DeleteAsync(int id);
+        Task<ResponseDTO?> GetAllAccountRegisters(QueryParametersDTO parameters);
     }
 }

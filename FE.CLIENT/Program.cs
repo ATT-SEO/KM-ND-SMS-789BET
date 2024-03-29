@@ -34,11 +34,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 SD.ApiKM58 = builder.Configuration["ServiceURLs:ApiKM58"];
 
-builder.Services.Configure<ForwardedHeadersOptions>(options => {
-    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-    options.KnownNetworks.Clear();
-    options.KnownProxies.Clear();
-});
+//builder.Services.Configure<ForwardedHeadersOptions>(options => {
+//    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+//    options.KnownNetworks.Clear();
+//    options.KnownProxies.Clear();
+//});
 
 var app = builder.Build();
 

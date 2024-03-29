@@ -15,5 +15,9 @@
 		public int SearchStatus {get; set; }
 		public string? SortBy { get; set; }
         public string? SortDirection { get; set; }
-    }
+		public bool AutoPoint { get; set; }
+		public bool isSMS { get; set; }
+		public string? reason_deny { get; set; }
+		public string? handler { get; set; }
+	}
 }

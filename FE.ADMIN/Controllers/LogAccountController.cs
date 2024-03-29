@@ -30,7 +30,7 @@ namespace FE.ADMIN.Controllers
 			try
             {
                 ViewBag.LoginUser = _userDTO;
-                parameters.ProjectCode = _userDTO.ProjectCode;
+                parameters.ProjectCode = "bo_789bet";
                 ResponseDTO? res = await _logAccount.GetLogAccountListByProjectCode(parameters);
                 if (res != null && res.IsSuccess)
                 {
