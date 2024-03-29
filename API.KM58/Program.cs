@@ -27,8 +27,10 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<IBOService, BOService>();
+builder.Services.AddHttpClient<IGoogleSheetService, GoogleSheetService>();
 
 builder.Services.AddScoped<IBOService, BOService>();
+builder.Services.AddScoped<IGoogleSheetService, GoogleSheetService>();
 
 builder.Services.AddScoped<ICheckConditions, CheckConditions>();
 
