@@ -52,32 +52,6 @@ namespace FE.CLIENT.Controllers
             {
                 checkAccountRequestDTO.IP = clientIPAddress;
             } 
-
-            Console.WriteLine("Data IP : " + clientIPAddress);
-            object responseJson;
-            using (HttpClient httpClient = new HttpClient())
-            {
-                var response = await httpClient.GetStringAsync($"https://www.google.com/recaptcha/api/siteverify?secret={RecaptchaSecretKey}&response={recaptchaToken}");
-
-                var recaptchaResponse = JsonConvert.DeserializeObject<RecaptchaResponse>(response);
-                if (!recaptchaResponse.Success)
-                {
-                    responseJson = new
-                    {
-                        result = new
-                        {
-                            code = 250,
-                            message = "Qúy khách vui lòng kiểm tra lại điều kiện nhận thưởng hoặc vui load lại trang !!!"
-                        },
-                        success = true,
-                        error = "error",
-                        unAuthorizedRequest = false,
-                        __abp = false
-                    };
-                    return Json(responseJson);
-                }
-            }
-
 			if (!string.IsNullOrWhiteSpace(Account))
 			{
                 var userAccountInfo = await _boService.BoCheckUserAccount(checkAccountRequestDTO);
@@ -149,7 +123,6 @@ namespace FE.CLIENT.Controllers
                         return Json(_response);
                     }
                 }
-
             }
             _response.IsSuccess = false;
             _response.Code = 403;

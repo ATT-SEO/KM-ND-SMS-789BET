@@ -172,37 +172,57 @@ namespace API.KM58.Service
                 LogAccount logAccount1 = await _db.LogAccounts.FirstOrDefaultAsync(s => s.FP == logAccountDTO.FP);
                 if (logAccount1 == null)
                 {
-                    logAccountDTO.CreatedTime = DateTime.Now;
+					Log.Information($"SUCCESS SEVICE CheckLogAccount || {logAccountDTO.Account} || {logAccountDTO.Project} || IP:{logAccountDTO.IP} || FP:{logAccountDTO.FP}");
+					logAccountDTO.CreatedTime = DateTime.Now;
                     LogAccount logAccount = _mapper.Map<LogAccount>(logAccountDTO);
                     _db.LogAccounts.Add(logAccount);
                     _db.SaveChanges();
-                    _response.IsSuccess = true;
-                    _response.Code = 201;
-                    Log.Information($"SUCCESS SEVICE CheckLogAccount || {logAccountDTO.Account} || {logAccountDTO.Project} || IP:{logAccountDTO.IP} || FP:{logAccountDTO.FP}");
-                    return _response;
+                    //_response.IsSuccess = true;
+                    //_response.Code = 201;
+                   // return _response;
                 }
-                else
-                {
-                    AccountRegisters logAccount2 = await _db.AccountRegisters.FirstOrDefaultAsync(s =>  s.FP == logAccountDTO.FP && s.Status == 1 && s.ProjectCode == logAccountDTO.Project);
-                    if(logAccount2 != null)
-                    {
-                        if (logAccount2.Account != logAccountDTO.Account)
-                        {
-                            Log.Information($"ERROR SEVICE CheckLogAccount LẠM DỤNG || {logAccountDTO.Account} || {logAccountDTO.Project} || IP:{logAccountDTO.IP} || FP:{logAccountDTO.FP}");
-                            _response.IsSuccess = false;
-                            _response.Message = "Dấu hiệu bất thường.";
-                            return _response;
-                        }
-                    }
-                   
-                    Log.Information($"SUCCESS SEVICE CheckLogAccount CHECK N || {logAccountDTO.Account} || {logAccountDTO.Project} || IP:{logAccountDTO.IP} || FP:{logAccountDTO.FP}");
-                    _response.IsSuccess = true;
-                    _response.Code = 200;
-                    _response.Result = _mapper.Map<LogAccount>(logAccountDTO);
-                    return _response;
+				//else
+				//{
+				//    AccountRegisters logAccount2 = await _db.AccountRegisters.FirstOrDefaultAsync(s => s.FP == logAccountDTO.FP && s.Status == 1 && s.ProjectCode == logAccountDTO.Project);
+				//    if(logAccount2 != null)
+				//    {
+				//        if (logAccount2.Account != logAccountDTO.Account)
+				//        {
+				//            Log.Information($"ERROR SEVICE CheckLogAccount LẠM DỤNG || {logAccountDTO.Account} || {logAccountDTO.Project} || IP:{logAccountDTO.IP} || FP:{logAccountDTO.FP}");
+				//            _response.IsSuccess = false;
+				//            _response.Message = "Dấu hiệu bất thường.";
+				//            return _response;
+				//        }
+				//    }
 
+				//    Log.Information($"SUCCESS SEVICE CheckLogAccount CHECK N || {logAccountDTO.Account} || {logAccountDTO.Project} || IP:{logAccountDTO.IP} || FP:{logAccountDTO.FP}");
+				//    _response.IsSuccess = true;
+				//    _response.Code = 200;
+				//    _response.Result = _mapper.Map<LogAccount>(logAccountDTO);
+				//    return _response;
+
+				//}
+				//AccountRegisters logAccount2 = await _db.AccountRegisters.FirstOrDefaultAsync(s => s.FP == logAccountDTO.FP && s.Status == 1 && s.ProjectCode == logAccountDTO.Project);
+
+				AccountRegisters logAccount2 = await _db.AccountRegisters.FirstOrDefaultAsync(s => s.FP == logAccountDTO.FP);
+				if (logAccount2 != null)
+				{
+					if (logAccount2.Account != logAccountDTO.Account)
+					{
+						Log.Information($"ERROR SEVICE CheckLogAccount LẠM DỤNG || {logAccountDTO.Account} || {logAccountDTO.Project} || IP:{logAccountDTO.IP} || FP:{logAccountDTO.FP}");
+						_response.IsSuccess = false;
+						_response.Message = "Dấu hiệu bất thường.";
+						return _response;
+					}
                 }
-            }
+				Log.Information($"SUCCESS SEVICE CheckLogAccount CHECK N || {logAccountDTO.Account} || {logAccountDTO.Project} || IP:{logAccountDTO.IP} || FP:{logAccountDTO.FP}");
+				_response.IsSuccess = true;
+				_response.Code = 200;
+				_response.Result = _mapper.Map<LogAccount>(logAccountDTO);
+				return _response;
+				
+			
+			}
             catch (Exception ex)
             {
                 Log.Information($"ERROR SEVICE CheckLogAccount || {logAccountDTO.Account} || {logAccountDTO.Project} || {ex.Message}");

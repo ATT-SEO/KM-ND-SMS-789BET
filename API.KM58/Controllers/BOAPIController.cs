@@ -25,9 +25,9 @@ namespace API.KM58.Controllers
         private readonly IBOService _boService;
         private readonly ICheckConditions _checkConditions;
         private readonly IGoogleSheetService _googleSheet;
-		 
 		private IMapper _mapper;
-        public BOAPIController(AppDbContext db, IBOService boService, IMapper mapper, ICheckConditions checkConditions, IGoogleSheetService googleSheet)
+		private const string RecaptchaSecretKey = "6Lfrm6MpAAAAABXxe8r7X5Byy6V6LN3S4Yf44BqV";
+		public BOAPIController(AppDbContext db, IBOService boService, IMapper mapper, ICheckConditions checkConditions, IGoogleSheetService googleSheet)
         {
             _response = new ResponseDTO();
             _db = db;
@@ -43,13 +43,32 @@ namespace API.KM58.Controllers
         {
             try
             {
-                string _account = logAccountDTO.Account.ToString();
+				string recaptchaToken = logAccountDTO.RecaptchaToken;
+
+				object responseJson;
+				using (HttpClient httpClient = new HttpClient())
+				{
+					var response = await httpClient.GetStringAsync($"https://www.google.com/recaptcha/api/siteverify?secret={RecaptchaSecretKey}&response={recaptchaToken}");
+
+					var recaptchaResponse = JsonConvert.DeserializeObject<RecaptchaResponse>(response);
+					if (!recaptchaResponse.Success)
+					{
+						_response.Message = "Hệ thống đang quá tải. Quý khách vui lòng quay lại sau!!!";
+						_response.IsSuccess = false;
+						_response.Code = 9034;
+						return _response;
+					}
+				
+				}
+
+				string _account = logAccountDTO.Account.ToString();
                 string _project = logAccountDTO.Project.ToString();
                 if (_project == "")
                 {
                     _response.Message = "Hệ thông đang dừng hoạt động bảo trì. Quý khách vui lòng quay lại sau !!!";
                     _response.IsSuccess = false;
-                    return _response;
+					_response.Code = 9034;
+					return _response;
                 }
 
                 Site oneSite = await _db.Sites.Where(s => s.Project == _project).FirstOrDefaultAsync();
@@ -57,7 +76,8 @@ namespace API.KM58.Controllers
                 {
                     _response.Message = "Hệ thông đang dừng hoạt động bảo trì. Quý khách vui lòng quay lại sau !!!";
                     _response.IsSuccess = false;
-                    return _response;
+					_response.Code = 9034;
+					return _response;
                 }
                 Random rnd = new Random();
                 int Point = rnd.Next(oneSite.MinPoint, oneSite.MaxPoint + 1); /// điểm random
