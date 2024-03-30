@@ -101,7 +101,7 @@ namespace FE.CLIENT.Controllers
 						{
                             _response.IsSuccess = true;
                             _response.Code = 200;
-							_response.Message = $"Quý khách đã nhận thưởng thành công! \n Khuyến mãi: 789BET \n Số điểm: {jsonData.point} \n Thời gian: {jsonData.createdTime.Value.ToString("HH:mm:ss")} ngày {jsonData.createdTime.Value.ToString("dd/MM/yyyy")}";
+							_response.Message = $"Quý khách {Account} đã nhận thưởng thành công! \n Khuyến mãi: 789BET \n Số điểm: {jsonData.point} \n Thời gian: {jsonData.createdTime.Value.ToString("HH:mm:ss")} ngày {jsonData.createdTime.Value.ToString("dd/MM/yyyy")}";
                             //_response.Result = jsonData;
 							 return Json(_response);
                         }else if(jsonData.status == 0)

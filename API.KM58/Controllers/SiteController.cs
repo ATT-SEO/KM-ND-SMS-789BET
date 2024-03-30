@@ -123,6 +123,7 @@ namespace API.KM58.Controllers
         {
             try
             {
+                Log.Information($"UPDATE DATA SITE  || DATA : {JsonConvert.SerializeObject(siteDTO)} ");
                 //DateTimeOffset timeOffset = new DateTimeOffset(DateTime.UtcNow);
                 //long timeStamp = timeOffset.ToUnixTimeMilliseconds();
                 //Console.WriteLine(timeStamp);

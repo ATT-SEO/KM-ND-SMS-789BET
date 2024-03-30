@@ -61,7 +61,9 @@ namespace API.KM58.Controllers
                 }
                 Random rnd = new Random();
                 int Point = rnd.Next(oneSite.MinPoint, oneSite.MaxPoint + 1); /// điểm random
-                                                                              /// check trùng FP và IP
+                Log.Information($"KIEM TRA TAI KHOAN DIEM RANDOM {oneSite.MinPoint} ---- {oneSite.MaxPoint} || {_account} ||  {Point}");
+
+                /// check trùng FP và IP
                 var checkLogAccount = await _checkConditions.CheckLogAccount(logAccountDTO);
                 Log.Information($"KIEM TRA TAI KHOAN 2 ||  {checkLogAccount.IsSuccess} || {checkLogAccount.Code}");
                 var log_gg = _googleSheet.WriteToGoogleSheets(_account, logAccountDTO.IP, logAccountDTO.FP, checkLogAccount.Message);
@@ -107,6 +109,7 @@ namespace API.KM58.Controllers
                         var bankAccounts = jsonResponseData.result.bankAccount?.Accounts;
                         if (bankAccounts == null || bankAccounts.Count <= 0)
                         {
+                            var log_gg3 = _googleSheet.WriteToGoogleSheets(_account, logAccountDTO.IP, logAccountDTO.FP, "CHƯA CẬP NHẬT NGÂN HÀNG");
                             Log.Information($"KIEM TRA TAI KHOAN || {_account} || {_project} || KHÔNG CHƯA CẬP NHẬT NGÂN HÀNG");
                             _response.Message = "Tài khoản của quý khách chưa đủ điều kiện nhận thưởng. Vui lòng cập nhật thông tin ngân hàng để được nhận thưởng !!!";
                             _response.IsSuccess = false;
@@ -116,6 +119,8 @@ namespace API.KM58.Controllers
                         var DepositTimes = (int)jsonResponseData.result?.transactionStatic?.DepositTimes;
                         if (DepositTimes > 0)
                         {
+                            var log_gg3 = _googleSheet.WriteToGoogleSheets(_account, logAccountDTO.IP, logAccountDTO.FP, "ĐÃ NẠP TIỀN KO ĐỦ DK NHẬN");
+
                             Log.Information($"KIEM TRA TAI KHOAN || {_account} || {_project} || ĐÃ NẠP TIỀN KO ĐỦ DK NHẬN");
                             _response.Message = "Tài khoản của quý khách đã thực hiện nạp tiền. Vui lòng xem lại điều kiện nhận thưởng. Cảm ơn quý khách !!!";
                             _response.IsSuccess = false;
@@ -127,6 +132,7 @@ namespace API.KM58.Controllers
                     {
                         if (jsonResponseData.result.detail?.Member?.Mobile == null)
                         {
+                            var log_gg3 = _googleSheet.WriteToGoogleSheets(_account, logAccountDTO.IP, logAccountDTO.FP, "KHÔNG CHƯA CẬP NHẬT SỐ ĐIỆN THOẠI");
                             Log.Information($"KIEM TRA TAI KHOAN || {_account} || {_project} || KHÔNG CHƯA CẬP NHẬT SỐ ĐIỆN THOẠI");
                             _response.Message = "Tài khoản của quý khách chưa đủ điều kiện nhận thưởng. Vui lòng cập nhật thêm thông tin liên hệ ( số điện thoại )";
                             _response.IsSuccess = false;
@@ -187,8 +193,6 @@ namespace API.KM58.Controllers
                                 UpdatedTime = DateTime.Now,
                             };
                             var checkAccountSMS = await _checkConditions.CheckAccountSMS(SmsDTO); // vừa check vừa tạo mới Account đăng ký KM
-							var log_gg3 = _googleSheet.WriteToGoogleSheets(_account, logAccountDTO.IP, logAccountDTO.FP, checkAccountSMS.Message);
-
 							return checkAccountSMS;
                         }
                     }
