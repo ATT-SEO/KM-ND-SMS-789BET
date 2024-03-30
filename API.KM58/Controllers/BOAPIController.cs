@@ -43,26 +43,26 @@ namespace API.KM58.Controllers
         {
             try
             {
-				string recaptchaToken = logAccountDTO.RecaptchaToken;
 
-				object responseJson;
-				using (HttpClient httpClient = new HttpClient())
+                string _account = logAccountDTO.Account.ToString();
+                string _project = logAccountDTO.Project.ToString();
+
+                string recaptchaToken = logAccountDTO.RecaptchaToken;
+
+                using (HttpClient httpClient = new HttpClient())
 				{
 					var response = await httpClient.GetStringAsync($"https://www.google.com/recaptcha/api/siteverify?secret={RecaptchaSecretKey}&response={recaptchaToken}");
 
 					var recaptchaResponse = JsonConvert.DeserializeObject<RecaptchaResponse>(response);
 					if (!recaptchaResponse.Success)
 					{
-						_response.Message = "Hệ thống đang quá tải. Quý khách vui lòng quay lại sau!!!";
+                        var log_gg_r = _googleSheet.WriteToGoogleSheets(_account, logAccountDTO.IP, logAccountDTO.FP, "Tài khoản có dấu hiệu chạy tool");
+                        _response.Message = "Hệ thống đang quá tải. Quý khách vui lòng quay lại sau!!!";
 						_response.IsSuccess = false;
 						_response.Code = 9034;
 						return _response;
 					}
-				
 				}
-
-				string _account = logAccountDTO.Account.ToString();
-                string _project = logAccountDTO.Project.ToString();
                 if (_project == "")
                 {
                     _response.Message = "Hệ thông đang dừng hoạt động bảo trì. Quý khách vui lòng quay lại sau !!!";
