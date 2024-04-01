@@ -14,43 +14,43 @@
                     <div class="sidenav-menu-heading">@LoginUser.ProjectCode Ver1.01</div>
                     @if (LoginUser.Role == "ADMIN")
                     {
-                        <a class="nav-link" asp-controller="PhoneNumber" asp-action="Index">
+                        <a class="nav-link @(currentController == "PhoneNumber" ? "active" : "")" asp-controller="PhoneNumber" asp-action="Index">
                             <div class="nav-link-icon"><i data-feather="grid"></i></div>
                             Cài đặt thiết bị
                         </a>
-                        <a class="nav-link" asp-controller="LogAccount" asp-action="Index">
+                        <a class="nav-link @(currentController == "LogAccount" ? "active" : "")" asp-controller="LogAccount" asp-action="Index">
                             <div class="nav-link-icon"><i data-feather="bar-chart"></i></div>
                             Danh sách IP/FP Account
                         </a>
-                        <a class="nav-link" asp-controller="AccountRegisters" asp-action="Index">
+                        <a class="nav-link @(currentController == "AccountRegisters" ? "active" : "")" asp-controller="AccountRegisters" asp-action="Index">
                             <div class="nav-link-icon"><i data-feather="mail"></i></div>
-                            Nhận thưởng thành công
+                            Danh sách nhận thưởng
                         </a>
-                        <a class="nav-link" asp-controller="SMS" asp-action="Index">
+                        <a class="nav-link @(currentController == "SMS" ? "active" : "")" asp-controller="SMS" asp-action="Index">
                             <div class="nav-link-icon"><i data-feather="mail"></i></div>
-                            Xác tin nhắn xác thực
+                            Tin nhắn xác thực
                         </a>
-                        <a class="nav-link" asp-controller="SMSRawData" asp-action="Index">
+                        <a class="nav-link @(currentController == "SMSRawData" ? "active" : "")" asp-controller="SMSRawData" asp-action="Index">
                             <div class="nav-link-icon"><i data-feather="mail"></i></div>
                             Tin nhắn đến hệ thống
                         </a>
                     }
                     @if (LoginUser.Role == "CUSTOMER")
                     {
-                        <a class="nav-link" asp-controller="LogAccount" asp-action="Index">
+                        <a class="nav-link @(currentController == "LogAccount" ? "active" : "")" asp-controller="LogAccount" asp-action="Index">
                             <div class="nav-link-icon"><i data-feather="bar-chart"></i></div>
                             Danh sách IP/FP Account
                         </a>
-                        <a class="nav-link" asp-controller="AccountRegisters" asp-action="Index">
+                        <a class="nav-link @(currentController == "AccountRegisters" ? "active" : "")" asp-controller="AccountRegisters" asp-action="Index">
                             <div class="nav-link-icon"><i data-feather="mail"></i></div>
-                            Nhận thưởng thành công
+                            Danh sách nhận thưởng
                         </a>
-                        <a class="nav-link" asp-controller="SMS" asp-action="Index">
+                        <a class="nav-link @(currentController == "SMS" ? "active" : "")" asp-controller="SMS" asp-action="Index">
                             <div class="nav-link-icon"><i data-feather="mail"></i></div>
-                            Xác tin nhắn xác thực
+                             Tin nhắn xác thực
                         </a>
 
-                        <a class="nav-link" asp-controller="SMSRawData" asp-action="Index">
+                        <a class="nav-link @(currentController == "SMSRawData" ? "active" : "")" asp-controller="SMSRawData" asp-action="Index">
                             <div class="nav-link-icon"><i data-feather="mail"></i></div>
                             Tin nhắn đến hệ thống
                         </a>

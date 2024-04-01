@@ -50,10 +50,10 @@
 							<input class="form-control" type="text" name="ProjectCode" value="bo_789bet">
 						</div>
 						<div class="col-2">
-							<label class="small mb-1" for="SearchStatus">Trạng thái:</label>
-							<select class="form-control" id="SearchStatus" name="SearchStatus">
+							<label class="small mb-1" for="Status">Trạng thái:</label>
+							<select class="form-control" id="Status" name="Status">
 								<option value=""> Tất cả</option>
-								<option value="0">Đợi phát</option>
+								<option value="00">Đợi phát</option>
 								<option value="1">Đã nhận</option>
 								<option value="9">Từ chối</option>
 							</select>
@@ -122,7 +122,8 @@
 						<th>
 							Duyệt
 						</th>
-						<th>T/gian yêu cầu</th>
+						<th>Người duyệt</th>
+						<th>Lý do từ chối</th>
 						<th>T/gian nhận thưởng</th>
 						@* <th style="width:215px">
 							Thao tác
@@ -187,8 +188,10 @@
 									}
 								</td>
 								<td>
-									@(sms.CreatedTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "Null")
-
+									@(sms.handler ?? "Null")
+								</td>
+								<td>
+									@(sms.reason_deny ?? "Null")
 								</td>
 								<td>
 									@(sms.UpdatedTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "Null")
@@ -208,7 +211,7 @@
 				<ul class="pagination">
 					@if (currentPage > 1)
 					{
-						<li class="page-item"><a class="page-link" href="@Url.Action("Index", new { page = 1, pageSize = pageSize, Account = Context.Request.Query["Account"], Sender = Context.Request.Query["Sender"], Content = Context.Request.Query["Content"], ProjectCode = Context.Request.Query["ProjectCode"], SearchStatus = Context.Request.Query["SearchStatus"], SortBy = Context.Request.Query["SortBy"], SortDirection = Context.Request.Query["SortDirection"] })">1</a></li>
+						<li class="page-item"><a class="page-link" href="@Url.Action("Index", new { page = 1, pageSize = pageSize, Account = Context.Request.Query["Account"], Sender = Context.Request.Query["Sender"], Content = Context.Request.Query["Content"], ProjectCode = Context.Request.Query["ProjectCode"], Status = Context.Request.Query["Status"], SortBy = Context.Request.Query["SortBy"], SortDirection = Context.Request.Query["SortDirection"] })">1</a></li>
 						@if (currentPage > 3)
 						{
 							<li class="page-item disabled"><span class="page-link">...</span></li>
@@ -219,7 +222,7 @@
 					{
 						if (i > currentPage - 2 && i < currentPage + 2)
 						{
-							<li class="page-item"><a class="@(i == currentPage ? "active" : "") page-link" href="@Url.Action("Index", new { page = i, pageSize = pageSize, Account = Context.Request.Query["Account"], Sender = Context.Request.Query["Sender"], Content = Context.Request.Query["Content"], ProjectCode = Context.Request.Query["ProjectCode"], SearchStatus = Context.Request.Query["SearchStatus"], SortBy = Context.Request.Query["SortBy"], SortDirection = Context.Request.Query["SortDirection"] })">@i</a></li>
+							<li class="page-item"><a class="@(i == currentPage ? "active" : "") page-link" href="@Url.Action("Index", new { page = i, pageSize = pageSize, Account = Context.Request.Query["Account"], Sender = Context.Request.Query["Sender"], Content = Context.Request.Query["Content"], ProjectCode = Context.Request.Query["ProjectCode"], Status = Context.Request.Query["Status"], SortBy = Context.Request.Query["SortBy"], SortDirection = Context.Request.Query["SortDirection"] })">@i</a></li>
 						}
 					}
 
@@ -229,7 +232,7 @@
 						{
 							<li class="page-item disabled"><span class="page-link">...</span></li>
 						}
-						<li class="page-item"><a class="page-link" href="@Url.Action("Index", new { page = totalPages, pageSize = pageSize, Account = Context.Request.Query["Account"], Sender = Context.Request.Query["Sender"], Content = Context.Request.Query["Content"], ProjectCode = Context.Request.Query["ProjectCode"], SearchStatus = Context.Request.Query["SearchStatus"], SortBy = Context.Request.Query["SortBy"], SortDirection = Context.Request.Query["SortDirection"] })">@totalPages</a></li>
+						<li class="page-item"><a class="page-link" href="@Url.Action("Index", new { page = totalPages, pageSize = pageSize, Account = Context.Request.Query["Account"], Sender = Context.Request.Query["Sender"], Content = Context.Request.Query["Content"], ProjectCode = Context.Request.Query["ProjectCode"], Status = Context.Request.Query["Status"], SortBy = Context.Request.Query["SortBy"], SortDirection = Context.Request.Query["SortDirection"] })">@totalPages</a></li>
 					}
 				</ul>
 			</nav>
