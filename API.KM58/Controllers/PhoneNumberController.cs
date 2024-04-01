@@ -146,7 +146,7 @@ namespace API.KM58.Controllers
             try
             {
 
-                Site existingSite = await _db.Sites.FirstOrDefaultAsync(s => s.Id == phoneNumberDTO.Id);
+                PhoneNumber existingSite = await _db.PhoneNumbers.Where(s => s.Id == phoneNumberDTO.Id).FirstOrDefaultAsync();
                 phoneNumberDTO.CreatedTime = existingSite.CreatedTime;
                 phoneNumberDTO.UpdatedTime = DateTime.Now; 
                 PhoneNumber phoneNumber = _mapper.Map<PhoneNumber>(phoneNumberDTO);
