@@ -16,8 +16,8 @@ namespace API.KM58
                 config.CreateMap<SMS, SMSDTO>().ReverseMap();
                 config.CreateMap<SMSRawData, SMSRawDataDTO>().ReverseMap();
                 config.CreateMap<AccountRegisters, AccountRegistersDTO>().ReverseMap();
-
-            });
+				config.CreateMap<Agent, AgentDTO>().ReverseMap();
+			});
             return mappingConfig;
         }
     }

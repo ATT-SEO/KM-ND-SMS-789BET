@@ -17,7 +17,8 @@ namespace API.KM58.Model.DTO
         public int Point { get; set; }
         public string? IP { get; set; }
         public string? FP { get; set; }
-        public DateTime? CreatedTime { get; set; }
+		public string? AgentText { get; set; }
+		public DateTime? CreatedTime { get; set; }
         public DateTime? SiteTime { get; set; }
         public DateTime? UpdatedTime { get; set; }
 

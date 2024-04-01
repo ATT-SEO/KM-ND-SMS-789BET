@@ -31,7 +31,9 @@ namespace API.KM58.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Account")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AgentText")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Audit")
@@ -88,6 +90,48 @@ namespace API.KM58.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AccountRegisters");
+                });
+
+            modelBuilder.Entity("API.KM58.Model.Agent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Admin")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MaxPoint")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinPoint")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SiteID")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SiteID");
+
+                    b.ToTable("Agents");
                 });
 
             modelBuilder.Entity("API.KM58.Model.LogAccount", b =>
@@ -163,6 +207,9 @@ namespace API.KM58.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Account")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AgentText")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("AutoPoint")
@@ -317,6 +364,17 @@ namespace API.KM58.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sites");
+                });
+
+            modelBuilder.Entity("API.KM58.Model.Agent", b =>
+                {
+                    b.HasOne("API.KM58.Model.Site", "Site")
+                        .WithMany()
+                        .HasForeignKey("SiteID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Site");
                 });
 
             modelBuilder.Entity("API.KM58.Model.PhoneNumber", b =>

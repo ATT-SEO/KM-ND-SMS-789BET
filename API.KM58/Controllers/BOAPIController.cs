@@ -43,26 +43,26 @@ namespace API.KM58.Controllers
         {
             try
             {
-				string recaptchaToken = logAccountDTO.RecaptchaToken;
 
-				object responseJson;
-				using (HttpClient httpClient = new HttpClient())
+                string _account = logAccountDTO.Account.ToString();
+                string _project = logAccountDTO.Project.ToString();
+
+                string recaptchaToken = logAccountDTO.RecaptchaToken;
+
+                using (HttpClient httpClient = new HttpClient())
 				{
 					var response = await httpClient.GetStringAsync($"https://www.google.com/recaptcha/api/siteverify?secret={RecaptchaSecretKey}&response={recaptchaToken}");
 
 					var recaptchaResponse = JsonConvert.DeserializeObject<RecaptchaResponse>(response);
 					if (!recaptchaResponse.Success)
 					{
-						_response.Message = "Hệ thống đang quá tải. Quý khách vui lòng quay lại sau!!!";
+                        var log_gg_r = _googleSheet.WriteToGoogleSheets(_account, logAccountDTO.IP, logAccountDTO.FP, "Tài khoản có dấu hiệu chạy tool");
+                        _response.Message = "Hệ thống đang quá tải. Quý khách vui lòng quay lại sau!!!";
 						_response.IsSuccess = false;
 						_response.Code = 9034;
 						return _response;
 					}
-				
 				}
-
-				string _account = logAccountDTO.Account.ToString();
-                string _project = logAccountDTO.Project.ToString();
                 if (_project == "")
                 {
                     _response.Message = "Hệ thông đang dừng hoạt động bảo trì. Quý khách vui lòng quay lại sau !!!";
@@ -82,9 +82,11 @@ namespace API.KM58.Controllers
                 Random rnd = new Random();
                 int Point = rnd.Next(oneSite.MinPoint, oneSite.MaxPoint + 1); /// điểm random
                 Log.Information($"KIEM TRA TAI KHOAN DIEM RANDOM {oneSite.MinPoint} ---- {oneSite.MaxPoint} || {_account} ||  {Point}");
+                string AgentText = null;
 
-                /// check trùng FP và IP
-                var checkLogAccount = await _checkConditions.CheckLogAccount(logAccountDTO);
+
+				/// check trùng FP và IP
+				var checkLogAccount = await _checkConditions.CheckLogAccount(logAccountDTO);
                 Log.Information($"KIEM TRA TAI KHOAN 2 ||  {checkLogAccount.IsSuccess} || {checkLogAccount.Code}");
                 var log_gg = _googleSheet.WriteToGoogleSheets(_account, logAccountDTO.IP, logAccountDTO.FP, checkLogAccount.Message);
 
@@ -115,7 +117,8 @@ namespace API.KM58.Controllers
                         _response.IsSuccess = false;
                         return _response;
                     }
-                    string MemberLevelSettingName = jsonResponseData.result?.detail?.Member?.MemberLevelSettingName;
+                    _account = jsonResponseData.result?.detail?.Member?.Account;
+					string MemberLevelSettingName = jsonResponseData.result?.detail?.Member?.MemberLevelSettingName;
                     if (!MemberLevelSettingName.Contains("MD-1"))
                     {
                         Log.Information($"KIEM TRA TAI KHOAN || {_account} || {_project} || KHÔNG Ở NHÓM MẶC ĐỊNH");
@@ -124,7 +127,23 @@ namespace API.KM58.Controllers
                         _response.Code = 9032;
                         return _response;
                     }
-                    if (oneSite.CheckBank == true)
+
+                    // check dai ly account 
+                    string Agent = jsonResponseData.result?.franchisee?.Account;
+                    if(Agent != null )
+                    {
+                        AgentText = Agent;
+						Agent oneAgent = await _db.Agents.AsNoTracking().Where(s=> s.Name == Agent && s.SiteID == oneSite.Id).FirstOrDefaultAsync();
+                        if(oneAgent != null )
+                        {
+                            Point = rnd.Next(oneAgent.MinPoint, oneAgent.MaxPoint + 1);
+							AgentText = $" {oneAgent.Name} | {oneAgent.MinPoint} - {oneAgent.MaxPoint}";
+                        }
+						Log.Information($"KIEM TRA ĐẠI LÝ || {_account} || {AgentText} || {Point} ĐIỂM");
+					}
+
+					// check ngan hang 
+					if (oneSite.CheckBank == true)
                     {
                         var bankAccounts = jsonResponseData.result.bankAccount?.Accounts;
                         if (bankAccounts == null || bankAccounts.Count <= 0)
@@ -209,7 +228,8 @@ namespace API.KM58.Controllers
                                 Status = false,
                                 FP = logAccountDTO.FP,
                                 IP = logAccountDTO.IP,
-                                CreatedTime = DateTime.Now,
+								AgentText = AgentText, 
+								CreatedTime = DateTime.Now,
                                 UpdatedTime = DateTime.Now,
                             };
                             var checkAccountSMS = await _checkConditions.CheckAccountSMS(SmsDTO); // vừa check vừa tạo mới Account đăng ký KM
@@ -221,6 +241,7 @@ namespace API.KM58.Controllers
                     accountRegistersDTO.Status = 0;
                     accountRegistersDTO.isSMS = false;
                     accountRegistersDTO.Point = Point;
+                    accountRegistersDTO.AgentText = AgentText;
                     accountRegistersDTO.AutoPoint = oneSite.AutoPoint;
                     accountRegistersDTO.ProjectCode = oneSite.Project;
                     accountRegistersDTO.FP = logAccountDTO.FP;

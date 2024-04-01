@@ -22,7 +22,8 @@ namespace API.KM58.Model
         public string? reason_deny { get; set; } = null;
         public string? handler { get; set; }
         public string? Token { get; set; }
-        public DateTime? CreatedTime { get; set; }
+		public string? AgentText { get; set; }
+		public DateTime? CreatedTime { get; set; }
         public DateTime? UpdatedTime { get; set; }
 
     }

@@ -19,7 +19,8 @@
         public string? reason_deny { get; set; }
 		public string? handler { get; set; }
 		public string? Token { get; set; }
-        public DateTime? CreatedTime { get; set; }
+		public string? AgentText { get; set; }
+		public DateTime? CreatedTime { get; set; }
         public DateTime? UpdatedTime { get; set; }
     }
 }

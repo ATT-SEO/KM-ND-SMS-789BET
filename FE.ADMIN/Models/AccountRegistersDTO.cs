@@ -17,7 +17,9 @@
         public string? IP { get; set; }
         public string? FP { get; set; }
         public string? reason_deny { get; set; }
-        public string? Token { get; set; }
+		public string? handler { get; set; }
+		public string? AgentText { get; set; }
+		public string? Token { get; set; }
         public DateTime? CreatedTime { get; set; }
         public DateTime? UpdatedTime { get; set; }
     }

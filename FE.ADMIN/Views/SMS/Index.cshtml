@@ -7,7 +7,7 @@
 }
 <div class="card mb-4">
 	<div class="card-header">
-		Lịch sử phát thưởng
+		Xác thực tin nhắn đến (nếu thỏa mãn điều kiện thì cho qua đến danh sách nhận thưởng)
 	</div>
 	<div class="card-body">
 		<div class="row form-search mb-4">
@@ -98,11 +98,9 @@
 						<th>
 							Trạng thái
 						</th>
-						<th>
-							Điểm thưởng
-						</th>
+
+						<th>Đại lý</th>
 						<th>T/gian yêu cầu</th>
-						<th>T/gian nhận thưởng</th>
 						@* <th style="width:215px">
 							Thao tác
 						</th> *@
@@ -149,11 +147,7 @@
 									}
 								</td>
 								<td>
-									@sms.Point
-								</td>
-								<td>
-									@(sms.SiteTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "Null")
-
+									@sms.AgentText
 								</td>
 								<td>
 									@(sms.CreatedTime?.ToString("dd/MM/yyyy HH:mm:ss") ?? "Null")

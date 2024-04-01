@@ -70,6 +70,25 @@ namespace API.KM58.Service
                         // cộng điểm thẳng lên BO Nếu đang là cộng điểm tự động
                         if (oneSite.Project == "bo_789bet")
                         {
+
+                            AccountRegisters logAccount2 = await _db.AccountRegisters.FirstOrDefaultAsync(s => s.FP == accountRegistersDTO.FP);
+                            if (logAccount2 != null)
+                            {
+                                if (logAccount2.Account != accountRegistersDTO.Account)
+                                {
+                                    Log.Information($"ERROR SEVICE CheckLogAccount LẠM DỤNG HANG LOAT || {accountRegistersDTO.Account} || {accountRegistersDTO.ProjectCode} || IP:{accountRegistersDTO.IP} || FP:{accountRegistersDTO.FP}");
+
+                                    createRegisters.Status = 9;
+                                    await _db.AccountRegisters.AddAsync(createRegisters);
+                                    await _db.SaveChangesAsync();
+                                    _response.Result = _mapper.Map<AccountRegisters>(createRegisters);
+                                    _response.IsSuccess = false;
+                                    _response.Code = 9034;
+                                    _response.Message = "Tài khoản của quý khách không được nhận khuyến mãi này. Vui lòng thử các khuyến mãi khác.";
+                                    return _response;
+                                }
+                            }
+
                             var addPointBO = await _boService.addPointBo789BET(oneSite.Project, accountRegistersDTO.Account, accountRegistersDTO.Point, oneSite.Round , oneSite.Remarks, oneSite.Ecremarks);
                             Log.Information($"CONG TU DONG LEN BO " + addPointBO.IsSuccess);
 

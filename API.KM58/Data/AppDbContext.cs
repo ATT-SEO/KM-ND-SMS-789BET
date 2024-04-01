@@ -15,8 +15,9 @@ namespace API.KM58.Data
         public DbSet<LogAccount> LogAccounts { get; set; }
         public DbSet<SMSRawData> SMSRawData { get; set; }
         public DbSet<AccountRegisters> AccountRegisters { get; set; }
+		public DbSet<Agent> Agents { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
         }

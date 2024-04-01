@@ -5,19 +5,20 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Serilog;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace API.KM58.Controllers
 {
-    [Route("api/PhoneNumber")]
+    [Route("api/Agent")]
     [ApiController]
-    public class PhoneNumberController : ControllerBase
+    public class AgentController : ControllerBase
     {
         private readonly AppDbContext _db;
         private ResponseDTO _response;
         private IMapper _mapper;
-        public PhoneNumberController(AppDbContext db, IMapper mapper)
+        public AgentController(AppDbContext db, IMapper mapper)
         {
             _db = db;
             _mapper = mapper;
@@ -29,10 +30,10 @@ namespace API.KM58.Controllers
         {
             try
             {
-                List<PhoneNumber> phoneNumbers = await _db.PhoneNumbers.Include(u => u.Site).ToListAsync();
-                _response.Result = _mapper.Map<List<PhoneNumberDTO>>(phoneNumbers);
+                List<Agent> agents = await _db.Agents.Include(u => u.Site).ToListAsync();
+                _response.Result = _mapper.Map<List<AgentDTO>>(agents);
                 _response.Code = 200;
-                _response.TotalCount = phoneNumbers.Count;
+                _response.TotalCount = agents.Count;
             }
             catch (Exception ex)
             {
@@ -48,8 +49,8 @@ namespace API.KM58.Controllers
         {
             try
             {
-                PhoneNumber phoneNumber = await _db.PhoneNumbers.Include(u => u.Site).Where(s => s.Id == id).FirstOrDefaultAsync();
-                _response.Result = _mapper.Map<PhoneNumberDTO>(phoneNumber);
+                Agent agent = await _db.Agents.Include(u => u.Site).Where(s => s.Id == id).FirstOrDefaultAsync();
+                _response.Result = _mapper.Map<AgentDTO>(agent);
                 _response.Code = 200;
                 _response.TotalCount = 1;
             }
@@ -62,13 +63,13 @@ namespace API.KM58.Controllers
         }
 
         [HttpGet]
-        [Route("GetByNumber/{Number}")]
-        public async Task<ResponseDTO> GetByNumber(string Number)
+        [Route("GetByName/{Name}")]
+        public async Task<ResponseDTO> GetByName(string Name)
         {
             try
             {
-                PhoneNumber phoneNumber = await _db.PhoneNumbers.Include(u => u.Site).Where(s => s.Status == true && s.Number == Number).FirstOrDefaultAsync();
-                _response.Result = _mapper.Map<PhoneNumberDTO>(phoneNumber);
+                Agent agent = await _db.Agents.AsNoTracking().Include(u => u.Site).Where(s => s.Status == true && s.Name == Name).FirstOrDefaultAsync();
+                _response.Result = _mapper.Map<AgentDTO>(agent);
                 _response.Code = 200;
                 _response.TotalCount = 1;
             }
@@ -81,15 +82,15 @@ namespace API.KM58.Controllers
         }
 
         [HttpGet]
-        [Route("GetListPhoneBySiteID/{SiteID}")]
-        public async Task<ResponseDTO> GetListPhoneBySiteID(int SiteID)
+        [Route("GetListAgentBySiteID/{SiteID}")]
+        public async Task<ResponseDTO> GetListAgentBySiteID(int SiteID)
         {
             try
             {
-                List<PhoneNumber> phoneNumbers = await _db.PhoneNumbers.Include(u => u.Site).Where(u => u.SiteID == SiteID).ToListAsync();
-                _response.Result = _mapper.Map<List<PhoneNumberDTO>>(phoneNumbers);
+                List<Agent> agents = await _db.Agents.Include(u => u.Site).Where(u => u.SiteID == SiteID).ToListAsync();
+                _response.Result = _mapper.Map<List<AgentDTO>>(agents);
                 _response.Code = 200;
-                _response.TotalCount = phoneNumbers.Count;
+                _response.TotalCount = agents.Count;
             }
             catch (Exception Ex)
             {
@@ -100,16 +101,16 @@ namespace API.KM58.Controllers
         }
 
         [HttpGet]
-        [Route("GetListPhoneByProjectCode/{ProjectCode}")]
-        public async Task<ResponseDTO> GetListPhoneByProjectCode(string ProjectCode)
+        [Route("GetListAgentByProjectCode/{ProjectCode}")]
+        public async Task<ResponseDTO> GetListAgentByProjectCode(string ProjectCode)
         {
             try
             {
                 Console.WriteLine(ProjectCode + "*****************");
-                List<PhoneNumber> phoneNumbers = await _db.PhoneNumbers.Include(u => u.Site).Where(u => u.Site.Project == ProjectCode).ToListAsync();
-                _response.Result = _mapper.Map<List<PhoneNumberDTO>>(phoneNumbers);
+                List<Agent> agents = await _db.Agents.Include(u => u.Site).Where(u => u.Site.Project == ProjectCode).ToListAsync();
+                _response.Result = _mapper.Map<List<AgentDTO>>(agents);
                 _response.Code = 200;
-                _response.TotalCount = phoneNumbers.Count;
+                _response.TotalCount = agents.Count;
             }
             catch (Exception Ex)
             {
@@ -120,16 +121,17 @@ namespace API.KM58.Controllers
         }
 
         [HttpPost]
-        public ResponseDTO Post([FromBody] PhoneNumber phoneNumberDTO)
+        public ResponseDTO Post([FromBody] Agent agentDTO)
         {
             try
             {
-                phoneNumberDTO.CreatedTime = DateTime.Now;
-                phoneNumberDTO.UpdatedTime = DateTime.Now;
-                PhoneNumber phoneNumber = _mapper.Map<PhoneNumber>(phoneNumberDTO);
-                _db.PhoneNumbers.Add(phoneNumberDTO);
+				Log.Information($"CREATE DATA AGENT  || DATA : {JsonConvert.SerializeObject(agentDTO)} ");
+				agentDTO.CreatedTime = DateTime.Now;
+                agentDTO.UpdatedTime = DateTime.Now;
+                Agent agent = _mapper.Map<Agent>(agentDTO);
+                _db.Agents.Add(agentDTO);
                 _db.SaveChanges();
-                _response.Result = _mapper.Map<PhoneNumber>(phoneNumber);
+                _response.Result = _mapper.Map<Agent>(agent);
                 _response.Code = 200;
             }
             catch (Exception ex)
@@ -141,16 +143,17 @@ namespace API.KM58.Controllers
         }
 
         [HttpPut]
-        public async Task<ResponseDTO> Put([FromBody] PhoneNumber phoneNumberDTO)
+        public async Task<ResponseDTO> Put([FromBody] Agent agentDTO)
         {
             try
             {
-                
-                PhoneNumber existingSite = await _db.PhoneNumbers.AsNoTracking().Where(s => s.Id == phoneNumberDTO.Id).FirstOrDefaultAsync();
-                phoneNumberDTO.CreatedTime = existingSite.CreatedTime;
-                phoneNumberDTO.UpdatedTime = DateTime.Now; 
-                PhoneNumber phoneNumber = _mapper.Map<PhoneNumber>(phoneNumberDTO);
-                _db.PhoneNumbers.Update(phoneNumber);
+				Log.Information($"UPDATE DATA AGENT  || DATA : {JsonConvert.SerializeObject(agentDTO)} ");
+
+				Agent existingSite = await _db.Agents.AsNoTracking().Where(s => s.Id == agentDTO.Id).FirstOrDefaultAsync();
+                agentDTO.CreatedTime = existingSite.CreatedTime;
+                agentDTO.UpdatedTime = DateTime.Now; 
+                Agent agent = _mapper.Map<Agent>(agentDTO);
+                _db.Agents.Update(agent);
                 _db.SaveChanges();
                 _response.Code = 200;
 
@@ -169,8 +172,10 @@ namespace API.KM58.Controllers
         {
             try
             {
-                PhoneNumber phoneNumber = _db.PhoneNumbers.First(u => u.Id == Id);
-                _db.PhoneNumbers.Remove(phoneNumber);
+				Log.Information($"CREATE DATA AGENT  || DATA : {DateTime.Now} ");
+
+				Agent agent = _db.Agents.First(u => u.Id == Id);
+                _db.Agents.Remove(agent);
                 _db.SaveChanges();
                 _response.Code = 200;
                 _response.IsSuccess = true;

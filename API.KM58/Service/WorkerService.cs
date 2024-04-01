@@ -80,11 +80,11 @@ namespace API.KM58.Service
                                     Sender = _targetSMS.Sender,
                                     Content = _targetSMS.Content,
                                     Device = _targetSMS.Device,
-                                    IP = _targetSMS.IP,
+									AgentText = _targetSMS.AgentText,
+									IP = _targetSMS.IP,
                                     FP = _targetSMS.FP,
                                     AutoPoint = _targetSMS.AutoPoint
                                 };
-
                                  var CheckAccountRegisters = await _checkConditions.CheckAccountRegisters(accountRegistersDTO, site);
                                  Log.Information(" KTRA CheckAccountRegisters AUTO CHECK SMS  ||   [" + JsonConvert.SerializeObject(@CheckAccountRegisters) + "]");
                                 //if (site.AutoPoint == true)
